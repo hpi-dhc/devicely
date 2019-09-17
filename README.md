@@ -1,0 +1,1 @@
+Package containing `readers` for reading files from different devices (e. g. empatica, faros, everion, etc.).
