@@ -57,3 +57,7 @@ class SpacelabsReader:
         self.data = self.data[order]
         self.data.set_index('datetime', inplace=True, verify_integrity=True)
         self.data.index = self.data.index.shift(periods=-timeshift, freq='1H')
+
+    def set_window(self, window_size):
+        self.data['window_start'] = self.data.index - window_size // 2
+        self.data['window_end'] = self.data.index + window_size // 2
