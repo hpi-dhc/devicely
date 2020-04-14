@@ -26,6 +26,7 @@ REQUIRED = [
     'numpy',
     'pandas',
     'scipy',
+    'pyedflib'
 ]
 
 # What packages are optional?
