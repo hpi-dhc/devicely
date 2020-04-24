@@ -63,5 +63,5 @@ class SpacelabsReader:
             self.data['window_start'] = self.data.index - window_size // 2
             self.data['window_end'] = self.data.index + window_size // 2
         elif (type == 'bfill'):
-            self.data['window_start'] = self.data.index - window_size // 2
+            self.data['window_start'] = self.data.index - window_size
             self.data['window_end'] = self.data.index
