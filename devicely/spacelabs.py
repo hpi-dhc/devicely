@@ -44,7 +44,7 @@ class SpacelabsReader:
 
         days = pd.DataFrame.from_dict(new, orient='index', columns=['days'])
 
-        # Updating timestamp
+        # Updating Timestamp
         days = pd.DataFrame.from_dict(new, orient='index', columns=['days'])
         self.data = pd.concat([self.data, days], axis=1, sort=False, join='inner')
         diff = self.data['days'].apply(np.ceil).apply(lambda x: pd.Timedelta(x, unit='D'))

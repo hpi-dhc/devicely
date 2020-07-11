@@ -15,18 +15,18 @@ class FarosReader:
 
         with pyedflib.EdfReader(self.filelist['edf']) as f:
 
-            # read EDF file into a dictionary, keys: signal_labels 
-            n = f.signals_in_file    # get num of signal types
-            signal_labels = f.getSignalLabels()   # get labels for types of signals
+            # read EDF file into a dictionary, keys: signal_labels
+            n = f.signals_in_file # get num of signal types
+            signal_labels = f.getSignalLabels() # get labels for types of signals
             raw_sample_freqs = f.getSampleFrequencies()
             start_ts = (f.getStartdatetime() - datetime.fromtimestamp(timeshift)).total_seconds()
 
-            raw_data = dict.fromkeys(signal_labels)   # the signals has difference sizes, therefore put into a dictionary
+            raw_data = dict.fromkeys(signal_labels) # the signals have difference sizes, therefore put into a dictionary
             for i in np.arange(n):
                 raw_data[signal_labels[i]] = f.readSignal(i)
 
         raw_data['acc_mag'] = np.linalg.norm([raw_data['Accelerometer_X'], raw_data['Accelerometer_Y'], raw_data['Accelerometer_Z']], axis=0)
-        
+
         sample_freqs = {}
         for i in range(len(signal_labels)):
             sample_freqs[signal_labels[i]] = raw_sample_freqs[i]
