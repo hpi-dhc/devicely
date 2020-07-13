@@ -7,11 +7,11 @@ class SpacelabsReader:
         # Metadata Definition
         metadata = pd.read_csv(path, nrows=3, header=None, names=['info'])
         metadata = metadata.loc[metadata['info'] != '0']
-        subject = metadata.loc[[0]]['info'].item()
-        date = metadata.iloc[[1]]['info'].item()
+        subject = metadata.loc[[0]]['info'].values.item()
+        date = metadata.iloc[[1]]['info'].values.item()
 
         # Column Names
-        names = ['hour','minutes','SYS(mmHg)','DIA(mmHg)','x','y','error','z','biking_timepoint']
+        names = ['hour','minutes','SYS(mmHg)','DIA(mmHg)','x','y','error','z','stress_test']
 
         # Reading File
         self.data = pd.read_csv(path, sep=',', skiprows=51, skipfooter=1, header=None,
@@ -30,7 +30,7 @@ class SpacelabsReader:
         # Adjusting Timestamp
         self.data['time'] = pd.to_datetime(self.data['time'], format='%H %M').dt.time
         self.data['date'] = pd.to_datetime(self.data['date'], format='%d.%m.%Y').dt.date
-        self.data['datetime'] = self.data.apply(lambda x : pd.datetime.combine(x['date'], x['time']),1)
+        self.data['datetime'] = self.data.apply(lambda x : pd.datetime.combine(x['date'], x['time']), 1)
 
         # Adjusting Date
         count = 0
@@ -52,7 +52,7 @@ class SpacelabsReader:
         self.data['date'] = self.data['datetime'].dt.date
         self.data.drop(['days'], axis=1, inplace=True)
 
-        order = ['datetime','date','time','subject','SYS(mmHg)','DIA(mmHg)','x','y','z','error','biking_timepoint']
+        order = ['datetime','date','time','subject','SYS(mmHg)','DIA(mmHg)','x','y','z','error','stress_test']
 
         self.data = self.data[order]
         self.data.set_index('datetime', inplace=True, verify_integrity=True)
