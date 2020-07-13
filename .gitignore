@@ -12,7 +12,7 @@
 ### Linux ###
 *~
 
-# temporary files which can be created if a process still has a handle open of a deleted file
+# Temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
 # KDE directory preferences
@@ -118,8 +118,6 @@ docs/_build/
 # PyBuilder
 target/
 
-# Jupyter Notebook
-
 # IPython
 profile_default/
 ipython_config.py
@@ -168,7 +166,7 @@ dmypy.json
 .pyre/
 
 ### VisualStudioCode ###
-.vscode/*
+.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -202,5 +200,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Optional folders
+data/
 
 # End of https://www.gitignore.io/api/macos,linux,python,windows,jupyternotebook,visualstudiocode
