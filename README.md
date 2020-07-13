@@ -12,7 +12,7 @@ Biovotion Everion (Firmware 03.06)
 
 [Link](https://www.biovotion.com/everion/)
 
-1-lead ECG monitor Faros™180 from Bittium (Firmware 3.5.1)
+1-lead ECG monitor Faros<sup>TM</sup> 180 from Bittium (Firmware 3.5.1)
 
 [Link](https://shop.bittium.com/product/36/bittium-faros-180-solution-pack)
 
