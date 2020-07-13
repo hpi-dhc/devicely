@@ -15,10 +15,10 @@ from setuptools import find_packages, setup, Command
 NAME = 'Devicely'
 DESCRIPTION = 'Read multiple signals from different sources.'
 URL = None
-EMAIL = 'felix.musmann@student.hpi.de'
-AUTHOR = 'Felix Musmann'
+EMAIL = 'felix.musmann@student.hpi.de, ariane.morassi-sasso@hpi.de'
+AUTHOR = 'Felix Musmann, Ariane Morassi Sasso'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '0.1.6'
+VERSION = '0.1.7'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
