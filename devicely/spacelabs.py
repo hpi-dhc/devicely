@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import datetime as dt
 
 class SpacelabsReader:
 
@@ -30,7 +31,7 @@ class SpacelabsReader:
         # Adjusting Timestamp
         self.data['time'] = pd.to_datetime(self.data['time'], format='%H %M').dt.time
         self.data['date'] = pd.to_datetime(self.data['date'], format='%d.%m.%Y').dt.date
-        self.data['datetime'] = self.data.apply(lambda x : pd.datetime.combine(x['date'], x['time']), 1)
+        self.data['datetime'] = self.data.apply(lambda x : dt.datetime.combine(x['date'], x['time']), 1)
 
         # Adjusting Date
         count = 0
@@ -47,7 +48,7 @@ class SpacelabsReader:
         # Updating Timestamp
         days = pd.DataFrame.from_dict(new, orient='index', columns=['days'])
         self.data = pd.concat([self.data, days], axis=1, sort=False, join='inner')
-        diff = self.data['days'].apply(np.ceil).apply(lambda x: pd.Timedelta(x, unit='D'))
+        diff = self.data['days'].apply(np.ceil).apply(lambda x: dt.timedelta(days=x))
         self.data['datetime'] = self.data['datetime'] + diff
         self.data['date'] = self.data['datetime'].dt.date
         self.data.drop(['days'], axis=1, inplace=True)
