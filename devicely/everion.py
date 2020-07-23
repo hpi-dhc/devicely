@@ -115,7 +115,13 @@ class EverionReader:
         raw_signals = pd.read_csv(self.filelist['signals'])
         raw_signals = raw_signals.drop_duplicates()
 
+        min_count_dict = {}
+        count_ts_dict = {}
         data = pd.DataFrame()
+        sub_df = raw_signals.loc[raw_signals['tag'] == self.selected_signal_tags[0]]
+        for ts in raw_signals['time'].unique():
+            min_count_dict[ts] = sub_df.loc[sub_df['time'] == ts].loc[:, 'count'].min()
+            count_ts_dict[ts] = sub_df.loc[sub_df['time'] == ts].loc[:, 'count'].max() - min_count_dict[ts] + 1
         for tag in np.sort(raw_signals['tag'].unique()):
             if tag not in self.selected_signal_tags:
                 continue
@@ -131,7 +137,7 @@ class EverionReader:
                 sub_df.loc[:, tag_name] = sub_df['values'].apply(lambda val: val[:val.find(';')]).astype(float)
             else:
                 sub_df.loc[:, tag_name] = sub_df['values'].astype(float)
-            sub_df.loc[:, 'time'] = pd.to_datetime(sub_df.loc[:, 'time'], unit='s')
+            sub_df.loc[:, 'time'] = pd.to_datetime(sub_df.apply(lambda x: x['time'] + (x['count'] - min_count_dict[x['time']]) / count_ts_dict[x['time']], axis=1), unit='s')
             if sub_df.empty or (sub_df[tag_name] == 0).all():
                 continue
             sub_df = sub_df.set_index('time', verify_integrity=True)
