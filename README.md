@@ -57,9 +57,9 @@ faros.data.head()
 
 Reading Biovotion Everion Data
 
-The parameter `Raw` is set to `True` but can be set to `False` in case processed data is being read.
+The method detects automatically if the `sensors` file is present or not.
 ```
-everion = devicely.EverionReader(everion_folder_path, raw=True)
+everion = devicely.EverionReader(everion_folder_path)
 everion.data.head()
 ```
 

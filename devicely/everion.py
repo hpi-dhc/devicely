@@ -69,7 +69,7 @@ class EverionReader:
 
     ACC_NAMES = ['accx_data', 'accy_data', 'accz_data']
 
-    def __init__(self, path, raw=True, signal_tags=None, sensor_tags=None, feature_tags=None):
+    def __init__(self, path, signal_tags=None, sensor_tags=None, feature_tags=None):
         self.init_filelist(path)
 
         if signal_tags is not None:
@@ -81,7 +81,7 @@ class EverionReader:
         data_features = self.read_features()
 
         # Raw data is contained in the the sensor file
-        if raw:
+        if 'sensors' in self.filelist:
             if sensor_tags is not None:
                 self.selected_sensor_tags = sensor_tags
             data_sensors = self.read_sensors()
@@ -99,12 +99,17 @@ class EverionReader:
     def init_filelist(self, path):
         self.filelist = {
             'signals': glob.glob(path+r'/*signals*').pop(),
-            'sensors': glob.glob(path+r'/*sensor*').pop(),
             'aggregates': glob.glob(path+r'/*aggregates*').pop(),
             'analytics': glob.glob(path+r'/*analytics_events*').pop(),
             'events': glob.glob(path+r'/*everion_events*').pop(),
             'features': glob.glob(path+r'/*features*').pop()
         }
+
+        try:
+            self.filelist['sensors'] = glob.glob(path+r'/*sensor*').pop()
+            print('Reading processed and raw data.')
+        except IndexError:
+            print('No sensors file. Reading processed data only.')
 
     def read_signals(self):
         raw_signals = pd.read_csv(self.filelist['signals'])
