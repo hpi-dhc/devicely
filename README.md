@@ -63,6 +63,7 @@ everion = devicely.EverionReader(everion_folder_path)
 everion.data.head()
 ```
 
+
 Reading Spacelabs Data
 
 The column `stress_test` was created for adding information on when a stress test happened.
@@ -78,6 +79,15 @@ spacelabs = devicely.SpacelabsReader(spacelabs_folder_path)
 spacelabs.set_window(timedelta(seconds=30), 'bfill')
 spacelabs.data.head()
 ```
+
+
+Reading Shimmer GSR Plus Data
+
+Please define your `csv` delimiter (e. g `,` `;` `\t`)
+```
+shimmer_plus = devicely.ShimmerPlusReader(shimmer_file_path, delimiter=';')
+```
+
 
 To run a notebook with examples:
 ```
