@@ -83,7 +83,7 @@ spacelabs.data.head()
 
 Reading Shimmer GSR Plus Data
 
-Please define your `csv` delimiter (e. g `,` `;` `\t`)
+Please define your `csv` delimiter (e. g. `,` `;` `\t`)
 ```
 shimmer_plus = devicely.ShimmerPlusReader(shimmer_file_path, delimiter=';')
 shimmer_plus.data.head()
