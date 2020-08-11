@@ -4,7 +4,7 @@ import datetime as dt
 
 class ShimmerPlusReader:
 
-    def __init__(self, path, delimiter):
+    def __init__(self, path, delimiter, timeshift=0):
         self.data = pd.read_csv(path, sep=delimiter, skiprows=1)
         self.data = self.data.dropna(axis=1, how='all')
         self.units = self.data.iloc[0] # saving self.data units
@@ -24,3 +24,5 @@ class ShimmerPlusReader:
                 self.data['Shimmer_40AC_Accel_LN_X_CAL'].astype(float),
                 self.data['Shimmer_40AC_Accel_LN_Y_CAL'].astype(float),
                 self.data['Shimmer_40AC_Accel_LN_Z_CAL'].astype(float)], axis=0)
+            # Calculating timeshift
+            self.data.index = self.data.index.shift(periods=-timeshift, freq='1H')

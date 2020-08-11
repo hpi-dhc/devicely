@@ -24,6 +24,10 @@ Tags (obtained from the app: TimeStamp for Android Version 1.36)
 
 [Link](https://play.google.com/store/apps/details?id=gj.timestamp&hl=en)
 
+Shimmer Consensys GSR (Shimmer3 GSR Development Kit)
+
+[Link](https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab)
+
 To use the package, after cloning this repository:
 
 ```
@@ -81,9 +85,9 @@ spacelabs.data.head()
 ```
 
 
-Reading Shimmer GSR Plus Data
+Reading Shimmer Consensys GSR (Shimmer3 GSR Development Kit)
 
-Please define your `csv` delimiter (e. g. `,` `;` `\t`)
+Please define your `csv` delimiter (e. g. `,` `;` `\t`) and `timeshift` if applicable
 ```
 shimmer_plus = devicely.ShimmerPlusReader(shimmer_file_path, delimiter=';')
 shimmer_plus.data.head()
