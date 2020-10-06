@@ -1,7 +1,9 @@
 import datetime
+import operator
 import os
 import re
 import random
+from functools import reduce
 
 import numpy as np
 import pandas as pd
@@ -15,7 +17,6 @@ class EmpaticaReader:
 
     def __init__(self, path):
         self.init_filelist(path)
-        self.signals = {}
         self.start_times = {}
         self.sample_freqs = {}
 
@@ -31,6 +32,8 @@ class EmpaticaReader:
             self.IBI = None
             print("IBI file is empty.")
 
+        self._update_joined_dataframe()
+
     def write(self, path):
         empatica_dir_path = os.path.join(path, 'Empatica')
         os.mkdir(empatica_dir_path)
@@ -43,7 +46,7 @@ class EmpaticaReader:
             self._write_ibi(empatica_dir_path)
 
     def _read_signal(self, signal_name):
-        raw_signal_data = pd.read_csv(self.filelist[signal_name], header=None)
+        raw_signal_data = pd.read_csv(self.filelist[signal_name], header=None, float_precision='round_trip')
         self.start_times[signal_name] = pd.Timestamp(raw_signal_data.iloc[0, 0], unit='s')
         self.sample_freqs[signal_name] = raw_signal_data.iloc[1, 0]
         return pd.DataFrame({signal_name: raw_signal_data.iloc[2:, 0]})
@@ -52,7 +55,7 @@ class EmpaticaReader:
         signal_name = dataframe.columns[0]
         file_path = os.path.join(dir_path, f"{signal_name.upper()}.csv")
         with open(file_path, 'w') as f:
-            f.write(f"{str(self.start_times[signal_name].value / 10**9)}\n")
+            f.write(f"{str(self.start_times[signal_name].value / 10 ** 9)}\n")
             f.write(f"{str(self.sample_freqs[signal_name])}\n")
             f.write('\n'.join([str(x) for x in dataframe[signal_name]]))
 
@@ -68,13 +71,15 @@ class EmpaticaReader:
             axis=0)
         self.sample_freqs['acc_mag'] = self.sample_freqs['acc_x']
         self.start_times['acc_mag'] = self.start_times['acc_x']
+        self.sample_freqs['acc'] = self.sample_freqs['acc_x']
+        self.start_times['acc'] = self.start_times['acc_x']
 
         return pd.DataFrame(signal_dict)
 
     def _write_acc(self, dir_path):
         file_path = os.path.join(dir_path, "ACC.csv")
         with open(file_path, 'w') as f:
-            f.write(', '.join([str(self.start_times[axis].value / 10**9) for axis in self.acc_names]) + '\n')
+            f.write(', '.join([str(self.start_times[axis].value / 10 ** 9) for axis in self.acc_names]) + '\n')
             f.write(f"{self.sample_freqs['acc_x']}, {self.sample_freqs['acc_y']}, {self.sample_freqs['acc_z']}\n")
             f.write(self.ACC.drop(columns='acc_mag').to_csv(header=None, index=None))
 
@@ -89,33 +94,42 @@ class EmpaticaReader:
     def _write_ibi(self, dir_path):
         file_path = os.path.join(dir_path, "IBI.csv")
         with open(file_path, 'w') as f:
-            f.write(f"{self.start_times['ibi'].value / 10**9}, IBI\n")
-            timedeltas = pd.to_numeric(self.IBI['timedeltas']) / 10**9
-            ibis = pd.to_numeric(self.IBI['ibis']) / 10 ** 9
+            f.write(f"{self.start_times['ibi'].value / 10e9}, IBI\n")
+            timedeltas = pd.to_numeric(self.IBI['timedeltas']) / 10e9
+            ibis = pd.to_numeric(self.IBI['ibis']) / 10e9
             f.write(pd.concat([timedeltas, ibis], axis=1).to_csv(index=None, header=None))
 
-    def timeshift(self, value=None):
-        if value is None:
+    def timeshift(self, shift='random'):
+        if shift == 'random':
             one_month = pd.Timedelta('30 days').value
             two_years = pd.Timedelta('730 days').value
             random_timedelta = pd.Timedelta(random.uniform(one_month, two_years))
             for signal_name in self.start_times.keys():
                 self.start_times[signal_name] -= random_timedelta
-        if isinstance(value, pd.Timestamp):
+        if isinstance(shift, pd.Timestamp):
             for signal_name in self.start_times.keys():
-                self.start_times[signal_name] = value
-        if isinstance(value, pd.Timedelta):
+                self.start_times[signal_name] = shift
+        if isinstance(shift, pd.Timedelta):
             for signal_name in self.start_times.keys():
-                self.start_times[signal_name] += value
+                self.start_times[signal_name] += shift
 
-    def get_dataframe(self, signal_names, signals, sample_freqs, start_times, ibi_data=None):
-        df = create_df(signal_names, signals, sample_freqs, start_times)
-        if ibi_data is not None:
-            ibi_timestamps = list(map(lambda x: ibi_data["start_time"] + x, ibi_data["timedeltas"]))
-            df_ibi = pd.DataFrame({'ibi': ibi_data["ibis"]}, index=ibi_timestamps)
-            df = df.join(df_ibi, how='outer')
+        self._update_joined_dataframe()
 
-        return df
+    def _update_joined_dataframe(self):
+        raw_data = {
+            'acc': self.ACC.copy(),
+            'bvp': self.BVP.copy(),
+            'eda': self.EDA.copy(),
+            'hr': self.HR.copy(),
+            'temp': self.TEMP.copy()
+        }
+        for signal_name in raw_data.keys():
+            sample_interval_length = int(1e9 / self.sample_freqs[signal_name])
+            timerange = pd.date_range(start=self.start_times[signal_name], periods=len(raw_data[signal_name]),
+                                      freq=f"{sample_interval_length}N")
+            raw_data[signal_name].index = timerange
+
+        self.joined_dataframe = reduce(lambda df1, df2: df1.join(df2, how='outer', sort=True), raw_data.values())
 
     def init_filelist(self, path):
         self.filelist = {
