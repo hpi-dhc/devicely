@@ -1,3 +1,5 @@
+## Description
+
 Package containing `readers` for reading files from different devices.
 
 For a sample dataset go to: https://doi.org/10.6084/m9.figshare.12646217
@@ -27,6 +29,8 @@ Tags (obtained from the app: TimeStamp for Android Version 1.36)
 Shimmer Consensys GSR (Shimmer3 GSR Development Kit)
 
 [Link](https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab)
+
+## Usage
 
 To use the package, after cloning this repository:
 
@@ -102,3 +106,15 @@ pipenv run jupyter notebook
 ```
 
 And open `example.ipynb`
+
+
+## Contributors
+
+```
+* Ariane Sasso
+* Arpita Kappattanavar
+* Bjarne Pfitzner
+* Felix Musmann
+* Jost Morgenstern
+* Lin Zhou
+```
