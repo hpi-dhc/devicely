@@ -35,7 +35,7 @@ class EmpaticaReader:
         self._update_joined_dataframe()
 
     def write(self, path):
-        empatica_dir_path = os.path.join(path, 'Empatica')
+        empatica_dir_path = os.path.join(path, 'Empatica_test_data')
         os.mkdir(empatica_dir_path)
         self._write_signal(empatica_dir_path, self.BVP)
         self._write_signal(empatica_dir_path, self.EDA)
@@ -46,10 +46,11 @@ class EmpaticaReader:
             self._write_ibi(empatica_dir_path)
 
     def _read_signal(self, signal_name):
-        raw_signal_data = pd.read_csv(self.filelist[signal_name], header=None, float_precision='round_trip')
-        self.start_times[signal_name] = pd.Timestamp(raw_signal_data.iloc[0, 0], unit='s')
-        self.sample_freqs[signal_name] = raw_signal_data.iloc[1, 0]
-        return pd.DataFrame({signal_name: raw_signal_data.iloc[2:, 0]})
+        with open(self.filelist[signal_name]) as f:
+            self.start_times[signal_name] = pd.Timestamp(float(f.readline()), unit='s')
+            self.sample_freqs[signal_name] = float(f.readline())
+            df = pd.read_csv(f, names=[signal_name])
+            return df
 
     def _write_signal(self, dir_path, dataframe):
         signal_name = dataframe.columns[0]
@@ -60,21 +61,14 @@ class EmpaticaReader:
             f.write('\n'.join([str(x) for x in dataframe[signal_name]]))
 
     def _read_acc(self):
-        raw_signal_data = pd.read_csv(self.filelist['acc'], header=None)
-        signal_dict = dict()
-        for index, axis in enumerate(self.acc_names):
-            self.start_times[axis] = pd.Timestamp(raw_signal_data.iloc[0, index], unit='s')
-            self.sample_freqs[axis] = raw_signal_data.iloc[1, index]
-            signal_dict[axis] = raw_signal_data.iloc[2:, index]
-        signal_dict['acc_mag'] = np.linalg.norm(
-            [signal_dict['acc_x'], signal_dict['acc_y'], signal_dict['acc_z']],
-            axis=0)
-        self.sample_freqs['acc_mag'] = self.sample_freqs['acc_x']
-        self.start_times['acc_mag'] = self.start_times['acc_x']
-        self.sample_freqs['acc'] = self.sample_freqs['acc_x']
-        self.start_times['acc'] = self.start_times['acc_x']
-
-        return pd.DataFrame(signal_dict)
+        with open(self.filelist['acc']) as f:
+            start_times = [pd.Timestamp(float(x), unit='s') for x in f.readline().split(', ')]
+            sample_freqs = [float(x) for x in f.readline().split(', ')]
+            self.start_times['acc'] = start_times[0]
+            self.sample_freqs['acc'] = sample_freqs[0]
+            df = pd.read_csv(f, names=['acc_x', 'acc_y', 'acc_z'])
+            df['acc_mag'] = np.linalg.norm(df.to_numpy(), axis=1)
+            return df
 
     def _write_acc(self, dir_path):
         file_path = os.path.join(dir_path, "ACC.csv")
@@ -84,12 +78,12 @@ class EmpaticaReader:
             f.write(self.ACC.drop(columns='acc_mag').to_csv(header=None, index=None))
 
     def _read_ibi(self):
-        raw_ibi_data = pd.read_csv(self.filelist['ibi'], header=None)
-        self.start_times['ibi'] = pd.Timestamp(raw_ibi_data.iloc[0, 0], unit='s')
-        return pd.DataFrame({
-            "timedeltas": pd.to_timedelta(raw_ibi_data.iloc[1:, 0], unit='s'),
-            "ibis": pd.to_timedelta(raw_ibi_data.iloc[1:, 1].astype('float'), unit='s')
-        })
+        to_timedelta = lambda x: (pd.Timedelta(float(x), unit='s'))
+
+        with open(self.filelist['ibi']) as f:
+            self.start_times['ibi'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
+            df = pd.read_csv(f, names=['timedeltas', 'ibis'], converters={0: to_timedelta, 1: to_timedelta})
+            return df
 
     def _write_ibi(self, dir_path):
         file_path = os.path.join(dir_path, "IBI.csv")
