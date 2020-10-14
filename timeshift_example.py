@@ -22,5 +22,5 @@ print(empatica.joined_dataframe)
 #empatica.timeshift()
 os.mkdir('new_path')
 empatica.write('new_path')
-write_path = 'new_path/Empatica_test_data'
+write_path = 'new_path/Empatica_test_data_read'
 print(test_empatica_correctness(read_path, write_path))

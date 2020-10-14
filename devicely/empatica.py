@@ -35,15 +35,15 @@ class EmpaticaReader:
         self._update_joined_dataframe()
 
     def write(self, path):
-        empatica_dir_path = os.path.join(path, 'Empatica_test_data')
-        os.mkdir(empatica_dir_path)
-        self._write_signal(empatica_dir_path, self.BVP)
-        self._write_signal(empatica_dir_path, self.EDA)
-        self._write_signal(empatica_dir_path, self.HR)
-        self._write_signal(empatica_dir_path, self.TEMP)
-        self._write_acc(empatica_dir_path)
+        if not os.path.exists(path):
+            os.mkdir(path)
+        self._write_signal(path, self.BVP)
+        self._write_signal(path, self.EDA)
+        self._write_signal(path, self.HR)
+        self._write_signal(path, self.TEMP)
+        self._write_acc(path)
         if self.IBI is not None:
-            self._write_ibi(empatica_dir_path)
+            self._write_ibi(path)
 
     def _read_signal(self, signal_name):
         with open(self.filelist[signal_name]) as f:
@@ -73,8 +73,10 @@ class EmpaticaReader:
     def _write_acc(self, dir_path):
         file_path = os.path.join(dir_path, "ACC.csv")
         with open(file_path, 'w') as f:
-            f.write(', '.join([str(self.start_times[axis].value / 10 ** 9) for axis in self.acc_names]) + '\n')
-            f.write(f"{self.sample_freqs['acc_x']}, {self.sample_freqs['acc_y']}, {self.sample_freqs['acc_z']}\n")
+            start_time_as_string = str(self.start_times['acc'].value / 10 ** 9)
+            sample_freq_as_string = str(self.sample_freqs['acc'])
+            f.write(', '.join([start_time_as_string] * 3) + '\n')
+            f.write(', '.join([sample_freq_as_string] * 3) + '\n')
             f.write(self.ACC.drop(columns='acc_mag').to_csv(header=None, index=None))
 
     def _read_ibi(self):
@@ -88,9 +90,9 @@ class EmpaticaReader:
     def _write_ibi(self, dir_path):
         file_path = os.path.join(dir_path, "IBI.csv")
         with open(file_path, 'w') as f:
-            f.write(f"{self.start_times['ibi'].value / 10e9}, IBI\n")
-            timedeltas = pd.to_numeric(self.IBI['timedeltas']) / 10e9
-            ibis = pd.to_numeric(self.IBI['ibis']) / 10e9
+            f.write(f"{self.start_times['ibi'].value / 1e9}, IBI\n")
+            timedeltas = pd.to_numeric(self.IBI['timedeltas']) / 1e9
+            ibis = pd.to_numeric(self.IBI['ibis']) / 1e9
             f.write(pd.concat([timedeltas, ibis], axis=1).to_csv(index=None, header=None))
 
     def timeshift(self, shift='random'):
