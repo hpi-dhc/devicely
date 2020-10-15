@@ -65,6 +65,49 @@ class EmpaticaTestCase(unittest.TestCase):
                      23.69, 23.69, 23.65, 23.65, 23.65, 23.65]
         })
 
+    def test_basic_read(self):
+        self._test_empatica_reader_contents(self.start_times, self.sample_freqs, self.acc_df, self.bvp_df, self.eda_df,
+                                            self.hr_df, self.ibi_df, self.temp_df)
+
+    def test_basic_write(self):
+        self.empatica_reader.write(self.WRITE_PATH)
+        self._test_written_path_contents(self.WRITE_PATH, self.start_times, self.sample_freqs,
+                                         self.acc_df.drop(columns=['acc_mag']), self.bvp_df,
+                                         self.eda_df, self.hr_df, self.ibi_df, self.temp_df)
+        shutil.rmtree(self.WRITE_PATH)
+
+    def test_timeshift_with_timestamp_as_parameter(self):
+        timestamp = pd.Timestamp('23 April 2009, 4am')
+        shifted_start_times = {signal_name: timestamp for signal_name in self.start_times.keys()}
+        self.empatica_reader.timeshift(timestamp)
+        self._test_empatica_reader_contents(shifted_start_times, self.sample_freqs, self.acc_df, self.bvp_df,
+                                            self.eda_df,
+                                            self.hr_df, self.ibi_df, self.temp_df)
+
+    def test_timeshift_with_timedelta_as_parameter(self):
+        timedelta = pd.Timedelta('42 days, 420 hours, 69 seconds')
+        shifted_start_times = {signal_name: timestamp + timedelta for signal_name, timestamp in
+                               self.start_times.items()}
+        self.empatica_reader.timeshift(timedelta)
+        self._test_empatica_reader_contents(shifted_start_times, self.sample_freqs, self.acc_df, self.bvp_df,
+                                            self.eda_df,
+                                            self.hr_df, self.ibi_df, self.temp_df)
+
+    def test_random_timeshift(self):
+        self.empatica_reader.timeshift()
+        self._test_empatica_reader_contents(self.start_times, self.sample_freqs, self.acc_df, self.bvp_df, self.eda_df,
+                                            self.hr_df, self.ibi_df, self.temp_df, random_timeshift_applied=True)
+
+    def test_write_timeshift(self):
+        shift = pd.Timedelta('-1 day, 2 hours, 3 minutes, 4 seconds')
+        shifted_start_times = {signal_name: timestamp + shift for signal_name, timestamp in self.start_times.items()}
+        self.empatica_reader.timeshift(shift)
+        self.empatica_reader.write(self.WRITE_PATH)
+        self._test_written_path_contents(self.WRITE_PATH, shifted_start_times, self.sample_freqs,
+                                         self.acc_df.drop(columns=['acc_mag']), self.bvp_df,
+                                         self.eda_df, self.hr_df, self.ibi_df, self.temp_df)
+        shutil.rmtree(self.WRITE_PATH)
+
     def _test_empatica_reader_contents(self, start_times, sample_freqs, acc_df, bvp_df, eda_df, hr_df, ibi_df, temp_df,
                                        random_timeshift_applied=False):
         pd.testing.assert_frame_equal(self.empatica_reader.ACC, acc_df)
@@ -126,8 +169,14 @@ class EmpaticaTestCase(unittest.TestCase):
         pd.testing.assert_frame_equal(written_bvp_signals, bvp_df)
         pd.testing.assert_frame_equal(written_eda_signals, eda_df)
         pd.testing.assert_frame_equal(written_hr_signals, hr_df)
-        #pd.testing.assert_frame_equal(written_ibi_signals, ibi_df)
         pd.testing.assert_frame_equal(written_temp_signals, temp_df)
+
+        # pd.testing.assert_frame_equal(written_ibi_signals, ibi_df)
+        # Commented out because of rounding issues with pd.read_csv.
+        # Floating point numbers are never completely exact, not even with the highest float_precision.
+        # To quote github user chris-b1 from https://github.com/pandas-dev/pandas/issues/17154:
+        # "Trying to get exact equality out of floating points is generally a losing battle,
+        # doubly so with a lossy format like csv"
 
         if random_timeshift_applied:
             for signal_name in start_times.keys():
@@ -136,49 +185,6 @@ class EmpaticaTestCase(unittest.TestCase):
             self.assertEquals(written_start_times, start_times)
 
         self.assertEquals(written_sample_freqs, sample_freqs)
-
-    def test_basic_read(self):
-        self._test_empatica_reader_contents(self.start_times, self.sample_freqs, self.acc_df, self.bvp_df, self.eda_df,
-                                            self.hr_df, self.ibi_df, self.temp_df)
-
-    def test_basic_write(self):
-        self.empatica_reader.write(self.WRITE_PATH)
-        self._test_written_path_contents(self.WRITE_PATH, self.start_times, self.sample_freqs,
-                                         self.acc_df.drop(columns=['acc_mag']), self.bvp_df,
-                                         self.eda_df, self.hr_df, self.ibi_df, self.temp_df)
-        shutil.rmtree(self.WRITE_PATH)
-
-    def test_timeshift_with_timestamp_as_parameter(self):
-        timestamp = pd.Timestamp('23 April 2009, 4am')
-        shifted_start_times = {signal_name: timestamp for signal_name in self.start_times.keys()}
-        self.empatica_reader.timeshift(timestamp)
-        self._test_empatica_reader_contents(shifted_start_times, self.sample_freqs, self.acc_df, self.bvp_df,
-                                            self.eda_df,
-                                            self.hr_df, self.ibi_df, self.temp_df)
-
-    def test_timeshift_with_timedelta_as_parameter(self):
-        timedelta = pd.Timedelta('42 days, 420 hours, 69 seconds')
-        shifted_start_times = {signal_name: timestamp + timedelta for signal_name, timestamp in
-                               self.start_times.items()}
-        self.empatica_reader.timeshift(timedelta)
-        self._test_empatica_reader_contents(shifted_start_times, self.sample_freqs, self.acc_df, self.bvp_df,
-                                            self.eda_df,
-                                            self.hr_df, self.ibi_df, self.temp_df)
-
-    def test_random_timeshift(self):
-        self.empatica_reader.timeshift()
-        self._test_empatica_reader_contents(self.start_times, self.sample_freqs, self.acc_df, self.bvp_df, self.eda_df,
-                                            self.hr_df, self.ibi_df, self.temp_df, random_timeshift_applied=True)
-
-    def test_write_timeshift(self):
-        shift = pd.Timedelta('-1 day, 2 hours, 3 minutes, 4 seconds')
-        shifted_start_times = {signal_name: timestamp + shift for signal_name, timestamp in self.start_times.items()}
-        self.empatica_reader.timeshift(shift)
-        self.empatica_reader.write(self.WRITE_PATH)
-        self._test_written_path_contents(self.WRITE_PATH, shifted_start_times, self.sample_freqs,
-                                         self.acc_df.drop(columns=['acc_mag']), self.bvp_df,
-                                         self.eda_df, self.hr_df, self.ibi_df, self.temp_df)
-        shutil.rmtree(self.WRITE_PATH)
 
 if __name__ == '__main__':
     unittest.main()
