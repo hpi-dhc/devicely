@@ -125,7 +125,7 @@ class EmpaticaReader:
                                       freq=f"{sample_interval_length}N")
             raw_data[signal_name].index = timerange
 
-        self.joined_dataframe = reduce(lambda df1, df2: df1.join(df2, how='outer', sort=True), raw_data.values())
+        self.data = reduce(lambda df1, df2: df1.join(df2, how='outer', sort=True), raw_data.values())
 
     def init_filelist(self, path):
         self.filelist = {

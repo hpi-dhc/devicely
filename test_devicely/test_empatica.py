@@ -108,6 +108,24 @@ class EmpaticaTestCase(unittest.TestCase):
                                          self.eda_df, self.hr_df, self.ibi_df, self.temp_df)
         shutil.rmtree(self.WRITE_PATH)
 
+    def test_joined_dataframe(self):
+        self.assertIsNotNone(self.empatica_reader.data)
+        self.assertIsInstance(self.empatica_reader.data, pd.DataFrame)
+        pd.testing.assert_index_equal(self.empatica_reader.data.columns,
+                                      pd.Index(['acc_x', 'acc_y', 'acc_z', 'acc_mag', 'bvp', 'eda', 'hr', 'temp']))
+
+        acc_part_from_joined_df = self.empatica_reader.data[['acc_x', 'acc_y', 'acc_z', 'acc_mag']].dropna()
+        self.assertEquals(len(acc_part_from_joined_df), len(self.acc_df))
+        acc_part_from_joined_df.index = range(len(acc_part_from_joined_df))
+        pd.testing.assert_frame_equal(acc_part_from_joined_df, self.acc_df)
+
+        for signal_name, correct_df in zip(['bvp', 'eda', 'hr', 'temp'], [self.bvp_df, self.eda_df, self.hr_df, self.temp_df]):
+            extracted_df_from_joined_df = self.empatica_reader.data[signal_name].to_frame().dropna()
+            extracted_df_from_joined_df.index = range(len(extracted_df_from_joined_df))
+            pd.testing.assert_frame_equal(extracted_df_from_joined_df, correct_df)
+
+
+
     def _test_empatica_reader_contents(self, start_times, sample_freqs, acc_df, bvp_df, eda_df, hr_df, ibi_df, temp_df,
                                        random_timeshift_applied=False):
         pd.testing.assert_frame_equal(self.empatica_reader.ACC, acc_df)

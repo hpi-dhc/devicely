@@ -18,7 +18,7 @@ def test_empatica_correctness(read_path, write_path):
 
 read_path = "data/Empatica"
 empatica = devicely.EmpaticaReader(read_path)
-print(empatica.joined_dataframe)
+print(empatica.data)
 #empatica.timeshift()
 os.mkdir('new_path')
 empatica.write('new_path')
