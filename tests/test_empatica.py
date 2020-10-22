@@ -1,14 +1,17 @@
 import unittest
-from devicely import empatica
-import pandas as pd
 import os
 import shutil
+import sys
+
+import pandas as pd
+
+import devicely
 
 class EmpaticaTestCase(unittest.TestCase):
-    WRITE_PATH = 'Empatica_test_data_write'
+    WRITE_PATH = 'test_data_write'
 
     def setUp(self):
-        self.empatica_reader = empatica.EmpaticaReader('Empatica_test_data_read')
+        self.empatica_reader = devicely.EmpaticaReader('Empatica_test_data_read')
         self.start_times = {
             'acc': pd.Timestamp(1551453301, unit='s'),
             'bvp': pd.Timestamp(1551453301, unit='s'),
