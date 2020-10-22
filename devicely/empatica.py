@@ -1,8 +1,6 @@
-import datetime
-import operator
 import os
-import re
 import random
+import sys
 from functools import reduce
 
 import numpy as np
@@ -10,6 +8,8 @@ import pandas as pd
 
 from .helpers import create_df
 
+def is_file_empty(path):
+    return os.stat(path).st_size == 0
 
 class EmpaticaReader:
     signal_names = ['acc', 'bvp', 'eda', 'hr', 'temp']
@@ -25,12 +25,13 @@ class EmpaticaReader:
         self.HR = self._read_signal('hr')
         self.TEMP = self._read_signal('temp')
         self.ACC = self._read_acc()
-        # Read inter beat intervals
-        if os.stat(self.filelist['ibi']).st_size != 0:
-            self.IBI = self._read_ibi()
+        self.IBI = self._read_ibi()
+
+        if os.path.isfile(self.filelist['tags']):
+            self.tags = pd.read_csv(self.filelist['tags'], header=None, parse_dates=[0],
+                                         date_parser=lambda x: pd.Timestamp(float(x), unit='s'))
         else:
-            self.IBI = None
-            print("IBI file is empty.")
+            self.tags = None
 
         self._update_joined_dataframe()
 
@@ -44,8 +45,14 @@ class EmpaticaReader:
         self._write_acc(path)
         if self.IBI is not None:
             self._write_ibi(path)
+        if self.tags is not None:
+            numeric_tags = pd.to_numeric(self.tags[0]) / 1e9
+            numeric_tags.to_csv(os.path.join(path, 'tags.csv'), header=None, index=None)
 
     def _read_signal(self, signal_name):
+        if is_file_empty(self.filelist[signal_name]):
+            print(f"File {self.filelist[signal_name]} is empty. Exiting")
+            sys.exit()
         with open(self.filelist[signal_name]) as f:
             self.start_times[signal_name] = pd.Timestamp(float(f.readline()), unit='s')
             self.sample_freqs[signal_name] = float(f.readline())
@@ -61,12 +68,15 @@ class EmpaticaReader:
             f.write('\n'.join([str(x) for x in dataframe[signal_name]]))
 
     def _read_acc(self):
+        if is_file_empty(self.filelist['acc']):
+            print(f"File {self.filelist['acc']} is empty. Exiting")
+            sys.exit()
         with open(self.filelist['acc']) as f:
             start_times = [pd.Timestamp(float(x), unit='s') for x in f.readline().split(', ')]
             sample_freqs = [float(x) for x in f.readline().split(', ')]
             self.start_times['acc'] = start_times[0]
             self.sample_freqs['acc'] = sample_freqs[0]
-            df = pd.read_csv(f, names=['acc_x', 'acc_y', 'acc_z'])
+            df = pd.read_csv(f, names=self.acc_names)
             df['acc_mag'] = np.linalg.norm(df.to_numpy(), axis=1)
             return df
 
@@ -81,7 +91,8 @@ class EmpaticaReader:
 
     def _read_ibi(self):
         to_timedelta = lambda x: (pd.Timedelta(float(x), unit='s'))
-
+        if is_file_empty(self.filelist['ibi']):
+            return None
         with open(self.filelist['ibi']) as f:
             self.start_times['ibi'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
             df = pd.read_csv(f, names=['timedeltas', 'ibis'], converters={0: to_timedelta, 1: to_timedelta})
@@ -101,13 +112,20 @@ class EmpaticaReader:
             two_years = pd.Timedelta('730 days').value
             random_timedelta = pd.Timedelta(random.uniform(one_month, two_years))
             for signal_name in self.start_times.keys():
-                self.start_times[signal_name] -= random_timedelta
+                self.start_times[signal_name]-=random_timedelta
+            if self.tags is not None:
+                self.tags-=random_timedelta
         if isinstance(shift, pd.Timestamp):
             for signal_name in self.start_times.keys():
                 self.start_times[signal_name] = shift
+            if self.tags is not None:
+                timedeltas = self.tags - self.tags.loc[0, 0]
+                self.tags = shift + timedeltas
         if isinstance(shift, pd.Timedelta):
             for signal_name in self.start_times.keys():
-                self.start_times[signal_name] += shift
+                self.start_times[signal_name]+=shift
+            if self.tags is not None:
+                self.tags+=shift
 
         self._update_joined_dataframe()
 
@@ -135,4 +153,5 @@ class EmpaticaReader:
             'hr': os.path.join(path, 'HR.csv'),
             'ibi': os.path.join(path, 'IBI.csv'),
             'temp': os.path.join(path, 'TEMP.csv'),
+            'tags': os.path.join(path, 'tags.csv')
         }
