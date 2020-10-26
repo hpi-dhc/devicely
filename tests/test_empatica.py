@@ -11,7 +11,7 @@ class EmpaticaTestCase(unittest.TestCase):
     WRITE_PATH = 'test_data_write'
 
     def setUp(self):
-        self.empatica_reader = devicely.EmpaticaReader('Empatica_test_data_read')
+        self.empatica_reader = devicely.EmpaticaReader('C:\\Users\\Ariane.Morassi-Sasso\Documents\\Git\\devicely\\tests\\Empatica_test_data_read')
         self.start_times = {
             'acc': pd.Timestamp(1551453301, unit='s'),
             'bvp': pd.Timestamp(1551453301, unit='s'),
@@ -53,15 +53,15 @@ class EmpaticaTestCase(unittest.TestCase):
                    109.27, 110.62, 110.76, 111.0, 110.32, 109.5]
         })
         self.ibi_df = pd.DataFrame({
-            'timedeltas': [145.631666, 146.522332, 151.725695, 152.835121, 153.710161, 154.725832, 161.679276,
+            'timedelta': [145.631666, 146.522332, 151.725695, 152.835121, 153.710161, 154.725832, 161.679276,
                            162.741824, 163.773122, 164.757542, 165.757587, 166.69513, 167.585796, 168.429585,
                            169.288999, 170.148413, 170.929699, 171.695359, 172.539148, 173.492316, 174.398608],
-            'ibis': [0.62509, 0.890666, 1.062549, 1.109426, 0.87504, 1.015671, 1.031297, 1.062549, 1.031297, 0.98442,
+            'ibi': [0.62509, 0.890666, 1.062549, 1.109426, 0.87504, 1.015671, 1.031297, 1.062549, 1.031297, 0.98442,
                      1.000046, 0.937543, 0.890666, 0.843789, 0.859414, 0.859414, 0.781286, 0.76566, 0.843789, 0.953169,
                      0.906291]
         })
-        self.ibi_df['timedeltas'] = pd.to_timedelta(self.ibi_df['timedeltas'], unit='s')
-        self.ibi_df['ibis'] = pd.to_timedelta(self.ibi_df['ibis'], unit='s')
+        self.ibi_df['timedelta'] = pd.to_timedelta(self.ibi_df['timedelta'], unit='s')
+        self.ibi_df['ibi'] = pd.to_timedelta(self.ibi_df['ibi'], unit='s')
 
         self.temp_df = pd.DataFrame({
             'temp': [23.75, 23.75, 23.75, 23.75, 23.75, 23.75, 23.75, 23.75, 23.6, 23.71, 23.71, 23.712, 23.69, 23.69,
@@ -78,8 +78,8 @@ class EmpaticaTestCase(unittest.TestCase):
         pd.testing.assert_frame_equal(self.empatica_reader.TEMP, self.temp_df)
         pd.testing.assert_frame_equal(self.empatica_reader.tags, self.tags_df)
 
-        self.assertEquals(self.empatica_reader.start_times, self.start_times)
-        self.assertEquals(self.empatica_reader.sample_freqs, self.sample_freqs)
+        self.assertEqual(self.empatica_reader.start_times, self.start_times)
+        self.assertEqual(self.empatica_reader.sample_freqs, self.sample_freqs)
 
     def test_basic_write(self):
         self.empatica_reader.write(self.WRITE_PATH)
@@ -100,10 +100,10 @@ class EmpaticaTestCase(unittest.TestCase):
             written_signals['acc'] = pd.read_csv(f, names=['acc_x', 'acc_y', 'acc_z'])
         with open(os.path.join(path, 'IBI.csv'), 'r') as f:
             first_line_split = f.readline().split(', ')
-            self.assertEquals(first_line_split[1], 'IBI\n')
+            self.assertEqual(first_line_split[1], 'IBI\n')
             written_start_times['ibi'] = pd.Timestamp(float(first_line_split[0]), unit='s')
             to_timedelta = lambda x: (pd.Timedelta(float(x), unit='s'))
-            written_signals['ibi'] = pd.read_csv(f, names=['timedeltas', 'ibis'],
+            written_signals['ibi'] = pd.read_csv(f, names=['timedelta', 'ibi'],
                                               converters={0: to_timedelta, 1: to_timedelta})
 
         written_tags = pd.read_csv(os.path.join(path, 'tags.csv'), header=None, parse_dates=[0],
@@ -121,11 +121,11 @@ class EmpaticaTestCase(unittest.TestCase):
     def test_timeshift_with_timestamp_as_parameter(self):
         timestamp = pd.Timestamp('23 April 2009, 4am')
         shifted_start_times = {signal_name: timestamp for signal_name in self.start_times.keys()}
-        timedeltas = self.tags_df - self.tags_df.loc[0, 0]
-        shifted_tags = timestamp + timedeltas
+        timedelta = self.tags_df - self.tags_df.loc[0, 0]
+        shifted_tags = timestamp + timedelta
         self.empatica_reader.timeshift(timestamp)
 
-        self.assertEquals(self.empatica_reader.start_times, shifted_start_times)
+        self.assertEqual(self.empatica_reader.start_times, shifted_start_times)
         pd.testing.assert_frame_equal(self.empatica_reader.tags, shifted_tags)
 
     def test_timeshift_with_timedelta_as_parameter(self):
@@ -135,7 +135,7 @@ class EmpaticaTestCase(unittest.TestCase):
         shifted_tags = self.tags_df + timedelta
         self.empatica_reader.timeshift(timedelta)
 
-        self.assertEquals(self.empatica_reader.start_times, shifted_start_times)
+        self.assertEqual(self.empatica_reader.start_times, shifted_start_times)
         pd.testing.assert_frame_equal(self.empatica_reader.tags, shifted_tags)
 
     def test_random_timeshift(self):
@@ -155,7 +155,7 @@ class EmpaticaTestCase(unittest.TestCase):
                                       pd.Index(['acc_x', 'acc_y', 'acc_z', 'acc_mag', 'bvp', 'eda', 'hr', 'temp']))
 
         acc_part_from_joined_df = self.empatica_reader.data[['acc_x', 'acc_y', 'acc_z', 'acc_mag']].dropna()
-        self.assertEquals(len(acc_part_from_joined_df), len(self.acc_df))
+        self.assertEqual(len(acc_part_from_joined_df), len(self.acc_df))
         acc_part_from_joined_df.index = range(len(acc_part_from_joined_df))
         pd.testing.assert_frame_equal(acc_part_from_joined_df, self.acc_df)
 
