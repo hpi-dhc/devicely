@@ -18,7 +18,7 @@ URL = None
 EMAIL = 'felix.musmann@student.hpi.de, ariane.morassi-sasso@hpi.de'
 AUTHOR = 'Felix Musmann, Ariane Morassi Sasso'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '0.2.2'
+VERSION = '0.2.3'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
@@ -26,7 +26,8 @@ REQUIRED = [
     'numpy',
     'pandas',
     'scipy',
-    'pyedflib'
+    'pyedflib',
+    'xmltodict'
 ]
 
 # What packages are optional?

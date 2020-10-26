@@ -1,5 +1,6 @@
 import operator
 import pandas as pd
+from collections import OrderedDict
 
 def create_df(signal_names, signals, sample_freqs, start_timestamps):
     base_freq_key = max(sample_freqs.items(), key=operator.itemgetter(1))[0]
@@ -17,3 +18,10 @@ def create_df(signal_names, signals, sample_freqs, start_timestamps):
                                          columns=[signal])
         data_frame = data_frame.join(signal_data_frame, how='outer', sort=True)
     return data_frame
+
+def recursive_ordered_dict_to_dict(ordered_dict):
+        if isinstance(ordered_dict, OrderedDict):
+            ordered_dict = dict(ordered_dict)
+            for k, v in ordered_dict.items():
+                ordered_dict[k] = recursive_ordered_dict_to_dict(ordered_dict)
+        return ordered_dict
