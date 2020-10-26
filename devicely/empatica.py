@@ -95,15 +95,15 @@ class EmpaticaReader:
             return None
         with open(self.filelist['ibi']) as f:
             self.start_times['ibi'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
-            df = pd.read_csv(f, names=['timedeltas', 'ibis'], converters={0: to_timedelta, 1: to_timedelta})
+            df = pd.read_csv(f, names=['timedelta', 'ibi'], converters={0: to_timedelta, 1: to_timedelta})
             return df
 
     def _write_ibi(self, dir_path):
         file_path = os.path.join(dir_path, "IBI.csv")
         with open(file_path, 'w') as f:
             f.write(f"{self.start_times['ibi'].value / 1e9}, IBI\n")
-            timedeltas = pd.to_numeric(self.IBI['timedeltas']) / 1e9
-            ibis = pd.to_numeric(self.IBI['ibis']) / 1e9
+            timedeltas = pd.to_numeric(self.IBI['timedelta']) / 1e9
+            ibis = pd.to_numeric(self.IBI['ibi']) / 1e9
             f.write(pd.concat([timedeltas, ibis], axis=1).to_csv(index=None, header=None))
 
     def timeshift(self, shift='random'):
