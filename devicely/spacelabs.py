@@ -1,63 +1,47 @@
 import pandas as pd
-import numpy as np
 import datetime as dt
+import xmltodict
+from .helpers import recursive_ordered_dict_to_dict
 
 class SpacelabsReader:
-
     def __init__(self, path, timeshift=0):
         # Metadata Definition
-        metadata = pd.read_csv(path, nrows=3, header=None, names=['info'])
-        metadata = metadata.loc[metadata['info'] != '0']
-        subject = metadata.loc[[0]]['info'].values.item()
-        date = metadata.iloc[[1]]['info'].values.item()
+        metadata = pd.read_csv(path, nrows=3, header=None)
+        self.subject = metadata.loc[0, 0]
+        base_date = dt.datetime.strptime(metadata.loc[2, 0], '%d.%m.%Y')
 
-        # Column Names
-        names = ['hour','minutes','SYS(mmHg)','DIA(mmHg)','x','y','error','z','stress_test']
-
-        # Reading File
+        column_names = ['hour','minutes','SYS(mmHg)','DIA(mmHg)','x','y','error','z','stress_test']
         self.data = pd.read_csv(path, sep=',', skiprows=51, skipfooter=1, header=None,
-                                names=names,
-                                parse_dates={'time' : ['hour', 'minutes']},
-                                date_parser = lambda x: pd.to_datetime(x, format='%H %M'), engine='python')
+                                names=column_names,
+                                parse_dates={'time': ['hour', 'minutes']},
+                                date_parser=lambda hours, minutes: dt.time(hour=int(hours), minute=int(minutes)),
+                                engine='python')
 
         # Droping NAs and Errors
         self.data.dropna(subset=['DIA(mmHg)', 'SYS(mmHg)', 'x'], inplace=True)
         self.data = self.data[self.data['error'] != 'EB']
 
-        # Adding Date and Subject
-        self.data['date'] = date
-        self.data['subject'] = subject
-
-        # Adjusting Timestamp
-        self.data['time'] = pd.to_datetime(self.data['time'], format='%H %M').dt.time
-        self.data['date'] = pd.to_datetime(self.data['date'], format='%d.%m.%Y').dt.date
-        self.data['datetime'] = self.data.apply(lambda x : dt.datetime.combine(x['date'], x['time']), 1)
-
         # Adjusting Date
-        count = 0
-        new = {}
-        previous = '23'
-        for n, row in self.data.iterrows():
-            if (str(row['time']) >= '00:00:00' and str(row['time']) <= '00:59:59' and previous != '00'):
-                count += 1
-            previous = str(row['time'])[2:]
-            new[row.name] = count
+        dates = [base_date]
+        current_date = base_date
+        for i in range(1, len(self.data)):
+            previous_row = self.data.iloc[i - 1]
+            current_row = self.data.iloc[i]
+            if previous_row.time > current_row.time:
+                current_date += dt.timedelta(days=1)
+            dates.append(current_date)
 
-        days = pd.DataFrame.from_dict(new, orient='index', columns=['days'])
+        self.data.reset_index(inplace=True)
+        self.data['timestamp'] = [dt.datetime.combine(dates[i], self.data.time[i]) for i in range(len(dates))]
+        self.data.drop(columns=['time'], inplace=True)
 
-        # Updating Timestamp
-        days = pd.DataFrame.from_dict(new, orient='index', columns=['days'])
-        self.data = pd.concat([self.data, days], axis=1, sort=False, join='inner')
-        diff = self.data['days'].apply(np.ceil).apply(lambda x: dt.timedelta(days=x))
-        self.data['datetime'] = self.data['datetime'] + diff
-        self.data['date'] = self.data['datetime'].dt.date
-        self.data.drop(['days'], axis=1, inplace=True)
-
-        order = ['datetime','date','time','subject','SYS(mmHg)','DIA(mmHg)','x','y','z','error','stress_test']
-
+        order = ['timestamp','SYS(mmHg)','DIA(mmHg)','x','y','z','error','stress_test']
         self.data = self.data[order]
-        self.data.set_index('datetime', inplace=True, verify_integrity=True)
-        self.data.index = self.data.index.shift(periods=-timeshift, freq='1H')
+        self.data.set_index('timestamp', inplace=True, verify_integrity=True)
+
+        xml_line = open(path, 'r').readlines()[-1]
+        xml_dict = recursive_ordered_dict_to_dict(xmltodict.parse(xml_line))
+        self.metadata = xml_dict['XML']
 
     def set_window(self, window_size, type):
         if (type == 'bffill'):
