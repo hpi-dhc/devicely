@@ -23,5 +23,5 @@ def recursive_ordered_dict_to_dict(ordered_dict):
         if isinstance(ordered_dict, OrderedDict):
             ordered_dict = dict(ordered_dict)
             for k, v in ordered_dict.items():
-                ordered_dict[k] = recursive_ordered_dict_to_dict(ordered_dict)
+                ordered_dict[k] = recursive_ordered_dict_to_dict(v)
         return ordered_dict
