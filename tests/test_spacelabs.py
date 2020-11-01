@@ -7,41 +7,29 @@ import datetime as dt
 
 
 class SpacelabsTestCase(unittest.TestCase):
-    READ_PATH = 'SpaceLabs_test_data_read/spacelabs.abp'
-    WRITE_PATH = 'SpaceLabs_test_data_write/spacelabs_written.abp'
+    READ_PATH = 'SpaceLabs_test_data/spacelabs.abp'
+    WRITE_PATH = 'SpaceLabs_test_data/spacelabs_written.abp'
 
     def setUp(self):
-        timestamps = ['2019-03-01 16:18:00', '2019-03-01 16:19:00', '2019-03-01 16:22:00', '2019-03-01 16:23:00',
-                      '2019-03-01 16:25:00', '2019-03-01 16:33:00', '2019-03-01 16:35:00', '2019-03-01 16:37:00',
-                      '2019-03-01 16:38:00', '2019-03-01 23:59:00', '2019-03-02 00:00:00', '2019-03-02 00:01:00',
-                      '2019-03-02 04:20:00', '2019-03-02 05:27:00']
-        timestamps = pd.to_datetime(timestamps)
-        dates = timestamps.date
-        times = timestamps.time
+        self.subject = '000002'
 
-        sys = [107, 96, 100, 103, 101, 107, 104, 105, 100, 100, 100, 100, 100, 100]
-        dia = [76, 62, 68, 68, 67, 67, 71, 52, 68, 68, 68, 68, 68, 68]
-        x = [78, 63, 64, 68, 65, 77, 70, 76, 68, 68, 68, 68, 68, 68]
-        y = [78, 63, 64, 68, 65, 77, 70, 76, 68, 68, 68, 68, 68, 68]
-        error = z = stress_test = 14 * [np.nan]
+        timestamps = pd.to_datetime(
+            ['1.1.99 17:03', '1.1.99 17:05', '1.1.99 17:07', '1.1.99 17:09', '1.1.99 17:11', '1.1.99 17:13',
+             '1.1.99 17:13', '1.1.99 17:25', '1.1.99 17:28', '1.1.99 17:31', '1.1.99 17:34', '1.1.99 17:36',
+             '1.1.99 17:39', '1.1.99 23:42', '1.1.99 23:59', '1.2.99 00:01', '1.2.99, 08:02'])
 
         self.data = pd.DataFrame({
-            'date': dates,
-            'time': times,
             'timestamp': timestamps,
-            'SYS(mmHg)': sys,
-            'DIA(mmHg)': dia,
-            'x': x,
-            'y': y,
-            'z': z,
-            'error': error,
-            'stress_test': stress_test
+            'date': timestamps.map(lambda timestamp: timestamp.date()),
+            'time': timestamps.map(lambda timestamp: timestamp.time()),
+            'SYS(mmHg)': [11, 142, 152, 151, 145, 3, 145, 4, 164, 154, 149, 153, 148, 148, 148, 148, 19],
+            'DIA(mmHg)': [0, 118, 112, 115, 110, 0, 117, 0, 119, 116, 119, 118, 114, 114, 114, 114, 1],
+            'x': [0, 99, 95, 96, 91, 0, 97, 0, 95, 95, 98, 96, 93, 93, 93, 93, np.nan],
+            'y': [0, 61, 61, 61, 59, 0, 60, 0, 63, 63, 63, 60, 62, 62, 62, 62, np.nan],
+            'z': 17 * [np.nan],
+            'error': ['EB', np.nan, np.nan, np.nan, np.nan, 'EB', np.nan, 'EB', np.nan, np.nan, np.nan, np.nan, np.nan,
+                      np.nan, np.nan, np.nan, None]
         })
-        numeric_columns = ['SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'z', 'error', 'stress_test']
-        self.data.set_index('timestamp', inplace=True)
-        self.data[numeric_columns] = self.data[numeric_columns].astype('float')
-
-        self.subject = '001V0'
 
         self.xml = {'PATIENTINFO': {'DOB': '16.09.1966', 'RACE': 'native american'},
                     'REPORTINFO': {'PHYSICIAN': 'Dr. Hannibal Lecter',
@@ -58,31 +46,32 @@ class SpacelabsTestCase(unittest.TestCase):
 
     def test_write(self):
         self.spacelabs_reader.write(self.WRITE_PATH)
+        read_file_contents = open(self.READ_PATH, 'r').readlines()
         written_file_contents = open(self.WRITE_PATH, 'r').readlines()
-        self.assertEquals(written_file_contents[1], "001V0\n")
-        self.assertEquals(written_file_contents[9], "0\n")
-        self.assertEquals(written_file_contents[17], '01.03.2019\n')
-        self.assertEquals(written_file_contents[24], "Unknown Line\n")
+        self.assertEquals(read_file_contents[:51], written_file_contents[:51])
+
+        new_df = devicely.SpacelabsReader(self.WRITE_PATH).data
+        pd.testing.assert_frame_equal(self.spacelabs_reader.data, new_df)
+
+        self.assertEquals(read_file_contents[-1], written_file_contents[-1])
 
         os.remove(self.WRITE_PATH)
 
-
     def test_random_timeshift(self):
-        old_index = self.spacelabs_reader.data.index
-        old_date_column = self.spacelabs_reader.data.date
-        old_time_column = self.spacelabs_reader.data.time
+        old_timestamp_column = self.spacelabs_reader.data.timestamp.copy()
         self.spacelabs_reader.timeshift()
-        new_index = self.spacelabs_reader.data.index
+        new_timestamp_column = self.spacelabs_reader.data.timestamp.copy()
         new_date_column = self.spacelabs_reader.data.date
         new_time_column = self.spacelabs_reader.data.time
 
-        self.assertTrue((old_index - pd.Timedelta('730 days') <= new_index).all())
-        self.assertTrue((new_index <= old_index - pd.Timedelta('30 days')).all())
+        self.assertTrue((old_timestamp_column - pd.Timedelta('730 days') <= new_timestamp_column).all())
+        self.assertTrue((new_timestamp_column <= old_timestamp_column - pd.Timedelta('30 days')).all())
 
-        testing_index = pd.Index([dt.datetime.combine(new_date_column[i], new_time_column[i]) for i in
+        testing_timestamp_column = pd.Series([dt.datetime.combine(new_date_column[i], new_time_column[i]) for i in
                                   range(len(self.spacelabs_reader.data))])
+        testing_timestamp_column.name = 'timestamp'
 
-        pd.testing.assert_index_equal(new_index, testing_index)
+        pd.testing.assert_series_equal(new_timestamp_column, testing_timestamp_column)
 
 
 
