@@ -3,6 +3,8 @@ import datetime as dt
 import xmltodict
 import random
 from .helpers import recursive_ordered_dict_to_dict
+import csv
+
 
 class SpacelabsReader:
     def __init__(self, path):
@@ -11,7 +13,7 @@ class SpacelabsReader:
         self.subject = str(metadata.loc[0, 0])
         base_date = dt.datetime.strptime(metadata.loc[2, 0], '%d.%m.%Y').date()
 
-        column_names = ['hour','minutes','SYS(mmHg)','DIA(mmHg)','x','y','error','z']
+        column_names = ['hour', 'minutes', 'SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']
         self.data = pd.read_csv(path, sep=',', skiprows=51, skipfooter=1, header=None,
                                 names=column_names,
                                 parse_dates={'time': ['hour', 'minutes']},
@@ -30,9 +32,10 @@ class SpacelabsReader:
 
         self.data.reset_index(inplace=True)
         self.data['timestamp'] = [dt.datetime.combine(dates[i], self.data.time[i]) for i in range(len(dates))]
+        self.data.set_index('timestamp', inplace=True)
         self.data['date'] = dates
 
-        order = ['timestamp', 'date', 'time', 'SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'z', 'error']
+        order = ['date', 'time', 'SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'z', 'error']
         self.data = self.data[order]
 
         xml_line = open(path, 'r').readlines()[-1]
@@ -50,12 +53,18 @@ class SpacelabsReader:
             f.write("Unknown Line")
             f.write(26 * '\n')
             f.write(str(len(self.data)) + "\n")
-            adjusted_df = self.data.drop(columns=['timestamp', 'date', 'time'])
-            adjusted_df['hours'] = self.data.time.map(lambda x: x.hour)
-            adjusted_df['minutes'] = self.data.time.map(lambda x: x.minute)
-            order = ['hours','minutes','SYS(mmHg)','DIA(mmHg)','x','y','error','z']
-            adjusted_df = adjusted_df[order]
-            adjusted_df.to_csv(f, header=None, index=None)
+            printing_df = self.data.drop(columns=['date', 'time'])
+            printing_df['hours'] = self.data.time.map(lambda x: x.strftime("%H"))
+            printing_df['minutes'] = self.data.time.map(lambda x: x.strftime("%M"))
+            order = ['hours', 'minutes', 'SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']
+            printing_df = printing_df[order]
+            printing_df.fillna(-9999, inplace=True)
+            printing_df.replace('EB', -9998, inplace=True)
+            printing_df[['SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']] = printing_df[
+                ['SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']].astype(int).astype(str)
+            printing_df.replace('-9999', '""', inplace=True)
+            printing_df.replace('-9998', '"EB"', inplace=True)
+            printing_df.to_csv(f, header=None, index=None, quoting=csv.QUOTE_NONE)
             f.write(xmltodict.unparse({'XML': self.metadata}).split('\n')[1])
 
     def timeshift(self, shift='random'):
@@ -63,14 +72,14 @@ class SpacelabsReader:
             one_month = pd.Timedelta('30 days').value
             two_years = pd.Timedelta('730 days').value
             random_timedelta = pd.Timedelta(random.uniform(one_month, two_years)).round('min')
-            self.data.timestamp -= random_timedelta
+            self.data.index -= random_timedelta
         if isinstance(shift, pd.Timestamp):
-            timedeltas = self.data.timestamp - self.data.timestamp[0]
-            self.data.timestamp = shift + timedeltas
+            timedeltas = self.data.index - self.data.index[0]
+            self.data.index = shift.round('min') + timedeltas
         if isinstance(shift, pd.Timedelta):
-            self.data.timestamp += shift
-        self.data.date = self.data.timestamp.map(lambda timestamp: timestamp.date())
-        self.data.time = self.data.timestamp.map(lambda timestamp: timestamp.time())
+            self.data.index += shift.round('min')
+        self.data.date = self.data.index.map(lambda timestamp: timestamp.date())
+        self.data.time = self.data.index.map(lambda timestamp: timestamp.time())
 
     def set_window(self, window_size, type):
         if (type == 'bffill'):

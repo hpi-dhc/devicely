@@ -6,10 +6,10 @@ from functools import reduce
 import numpy as np
 import pandas as pd
 
-from .helpers import create_df
 
 def is_file_empty(path):
     return os.stat(path).st_size == 0
+
 
 class EmpaticaReader:
     signal_names = ['acc', 'bvp', 'eda', 'hr', 'temp']
@@ -29,7 +29,7 @@ class EmpaticaReader:
 
         if os.path.isfile(self.filelist['tags']):
             self.tags = pd.read_csv(self.filelist['tags'], header=None, parse_dates=[0],
-                                         date_parser=lambda x: pd.Timestamp(float(x), unit='s'))
+                                    date_parser=lambda x: pd.Timestamp(float(x), unit='s'))
         else:
             self.tags = None
 
@@ -57,6 +57,8 @@ class EmpaticaReader:
             self.start_times[signal_name] = pd.Timestamp(float(f.readline()), unit='s')
             self.sample_freqs[signal_name] = float(f.readline())
             df = pd.read_csv(f, names=[signal_name])
+            df.index = pd.date_range(start=self.start_times[signal_name], freq=f"{1 / self.sample_freqs[signal_name]}S",
+                                     periods=len(df))
             return df
 
     def _write_signal(self, dir_path, dataframe):
@@ -78,6 +80,8 @@ class EmpaticaReader:
             self.sample_freqs['acc'] = sample_freqs[0]
             df = pd.read_csv(f, names=self.acc_names)
             df['acc_mag'] = np.linalg.norm(df.to_numpy(), axis=1)
+            df.index = pd.date_range(start=self.start_times['acc'], freq=f"{1 / self.sample_freqs['acc']}S",
+                                     periods=len(df))
             return df
 
     def _write_acc(self, dir_path):
@@ -90,12 +94,13 @@ class EmpaticaReader:
             f.write(self.ACC.drop(columns='acc_mag').to_csv(header=None, index=None))
 
     def _read_ibi(self):
-        to_timedelta = lambda x: (pd.Timedelta(float(x), unit='s'))
+        to_seconds = lambda x: (pd.Timedelta(float(x), unit='s'))
         if is_file_empty(self.filelist['ibi']):
             return None
         with open(self.filelist['ibi']) as f:
             self.start_times['ibi'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
-            df = pd.read_csv(f, names=['timedelta', 'ibi'], converters={0: to_timedelta, 1: to_timedelta})
+            df = pd.read_csv(f, names=['timedelta', 'ibi'], converters={0: to_seconds, 1: to_seconds})
+            df.index = self.start_times['ibi'] + df.timedelta
             return df
 
     def _write_ibi(self, dir_path):
@@ -108,24 +113,30 @@ class EmpaticaReader:
 
     def timeshift(self, shift='random'):
         if shift == 'random':
-            one_month = pd.Timedelta('30 days').value
-            two_years = pd.Timedelta('730 days').value
+            one_month = pd.Timedelta('- 30 days').value
+            two_years = pd.Timedelta('- 730 days').value
             random_timedelta = pd.Timedelta(random.uniform(one_month, two_years))
-            for signal_name in self.start_times.keys():
-                self.start_times[signal_name]-=random_timedelta
-            if self.tags is not None:
-                self.tags-=random_timedelta
+            self.timeshift(random_timedelta)
+
+        dfs = [self.BVP, self.EDA, self.HR, self.TEMP, self.ACC, self.IBI]
+
         if isinstance(shift, pd.Timestamp):
             for signal_name in self.start_times.keys():
                 self.start_times[signal_name] = shift
             if self.tags is not None:
                 timedeltas = self.tags - self.tags.loc[0, 0]
                 self.tags = shift + timedeltas
+            for df in dfs:
+                timedeltas = df.index - df.index[0]
+                df.index = shift + timedeltas
+
         if isinstance(shift, pd.Timedelta):
             for signal_name in self.start_times.keys():
-                self.start_times[signal_name]+=shift
+                self.start_times[signal_name] += shift
             if self.tags is not None:
-                self.tags+=shift
+                self.tags += shift
+            for df in dfs:
+                df.index += shift
 
         self._update_joined_dataframe()
 

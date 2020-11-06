@@ -11,7 +11,7 @@ class EmpaticaTestCase(unittest.TestCase):
     WRITE_PATH = 'test_data_write'
 
     def setUp(self):
-        self.empatica_reader = devicely.EmpaticaReader('C:\\Users\\Ariane.Morassi-Sasso\Documents\\Git\\devicely\\tests\\Empatica_test_data_read')
+        self.empatica_reader = devicely.EmpaticaReader('Empatica_test_data_read')
         self.start_times = {
             'acc': pd.Timestamp(1551453301, unit='s'),
             'bvp': pd.Timestamp(1551453301, unit='s'),
