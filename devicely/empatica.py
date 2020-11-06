@@ -51,8 +51,8 @@ class EmpaticaReader:
 
     def _read_signal(self, signal_name):
         if is_file_empty(self.filelist[signal_name]):
-            print(f"File {self.filelist[signal_name]} is empty. Exiting")
-            sys.exit()
+            print(f"File {self.filelist[signal_name]} is empty. Skipping")
+            return None
         with open(self.filelist[signal_name]) as f:
             self.start_times[signal_name] = pd.Timestamp(float(f.readline()), unit='s')
             self.sample_freqs[signal_name] = float(f.readline())
@@ -101,6 +101,7 @@ class EmpaticaReader:
             self.start_times['ibi'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
             df = pd.read_csv(f, names=['timedelta', 'ibi'], converters={0: to_seconds, 1: to_seconds})
             df.index = self.start_times['ibi'] + df.timedelta
+            df.index.name = None
             return df
 
     def _write_ibi(self, dir_path):
@@ -141,20 +142,8 @@ class EmpaticaReader:
         self._update_joined_dataframe()
 
     def _update_joined_dataframe(self):
-        raw_data = {
-            'acc': self.ACC.copy(),
-            'bvp': self.BVP.copy(),
-            'eda': self.EDA.copy(),
-            'hr': self.HR.copy(),
-            'temp': self.TEMP.copy()
-        }
-        for signal_name in raw_data.keys():
-            sample_interval_length = int(1e9 / self.sample_freqs[signal_name])
-            timerange = pd.date_range(start=self.start_times[signal_name], periods=len(raw_data[signal_name]),
-                                      freq=f"{sample_interval_length}N")
-            raw_data[signal_name].index = timerange
-
-        self.data = reduce(lambda df1, df2: df1.join(df2, how='outer', sort=True), raw_data.values())
+        dfs = [self.BVP, self.EDA, self.HR, self.TEMP, self.ACC, self.IBI]
+        self.data = reduce(lambda df1, df2: df1.join(df2, how='outer', sort=True), dfs)
 
     def init_filelist(self, path):
         self.filelist = {
