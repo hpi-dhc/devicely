@@ -32,10 +32,9 @@ class SpacelabsReader:
 
         self.data.reset_index(inplace=True)
         self.data['timestamp'] = [dt.datetime.combine(dates[i], self.data.time[i]) for i in range(len(dates))]
-        self.data.set_index('timestamp', inplace=True)
         self.data['date'] = dates
 
-        order = ['date', 'time', 'SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'z', 'error']
+        order = ['timestamp', 'date', 'time', 'SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'z', 'error']
         self.data = self.data[order]
 
         xml_line = open(path, 'r').readlines()[-1]
@@ -68,18 +67,35 @@ class SpacelabsReader:
             f.write(xmltodict.unparse({'XML': self.metadata}).split('\n')[1])
 
     def timeshift(self, shift='random'):
+        eb_dropped = self.data.index.name == 'timestamp'
+
         if shift == 'random':
             one_month = pd.Timedelta('30 days').value
             two_years = pd.Timedelta('730 days').value
-            random_timedelta = pd.Timedelta(random.uniform(one_month, two_years)).round('min')
-            self.data.index -= random_timedelta
+            random_timedelta = - pd.Timedelta(random.uniform(one_month, two_years)).round('min')
+            self.timeshift(random_timedelta)
         if isinstance(shift, pd.Timestamp):
-            timedeltas = self.data.index - self.data.index[0]
-            self.data.index = shift.round('min') + timedeltas
+            if eb_dropped:
+                timedeltas = self.data.index - self.data.index[0]
+                self.data.index = shift.round('min') + timedeltas
+            else:
+                timedeltas = self.data.timestamp - self.data.timestamp[0]
+                self.data.timestamp = shift.round('min') + timedeltas
         if isinstance(shift, pd.Timedelta):
-            self.data.index += shift.round('min')
-        self.data.date = self.data.index.map(lambda timestamp: timestamp.date())
-        self.data.time = self.data.index.map(lambda timestamp: timestamp.time())
+            if eb_dropped:
+                self.data.index += shift.round('min')
+            else:
+                self.data.timestamp += shift.round('min')
+        if eb_dropped:
+            self.data.date = self.data.index.map(lambda timestamp: timestamp.date())
+            self.data.time = self.data.index.map(lambda timestamp: timestamp.time())
+        else:
+            self.data.date = self.data.timestamp.map(lambda timestamp: timestamp.date())
+            self.data.time = self.data.timestamp.map(lambda timestamp: timestamp.time())
+
+    def drop_EB(self):
+        self.data = self.data[self.data.error != 'EB']
+        self.data.set_index('timestamp', inplace=True)
 
     def set_window(self, window_size, type):
         if (type == 'bffill'):

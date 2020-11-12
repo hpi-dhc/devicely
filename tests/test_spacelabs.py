@@ -7,8 +7,8 @@ import datetime as dt
 
 
 class SpacelabsTestCase(unittest.TestCase):
-    READ_PATH = 'SpaceLabs_test_data/spacelabs.abp'
-    WRITE_PATH = 'SpaceLabs_test_data/spacelabs_written.abp'
+    READ_PATH = os.path.join(os.getcwd(), 'tests/SpaceLabs_test_data/spacelabs.abp')
+    WRITE_PATH = os.path.join(os.getcwd(), 'tests/SpaceLabs_test_data/spacelabs_written.abp')
 
     def setUp(self):
         self.subject = '000002'
@@ -30,7 +30,6 @@ class SpacelabsTestCase(unittest.TestCase):
             'error': ['EB', np.nan, np.nan, np.nan, np.nan, 'EB', 'EB', np.nan, np.nan, np.nan, np.nan, np.nan,
                       np.nan, np.nan, np.nan]
         })
-        self.data.set_index('timestamp', inplace=True)
 
         self.xml = {'PATIENTINFO': {'DOB': '16.09.1966', 'RACE': 'native american'},
                     'REPORTINFO': {'PHYSICIAN': 'Dr. Hannibal Lecter',
@@ -42,32 +41,40 @@ class SpacelabsTestCase(unittest.TestCase):
 
     def test_read(self):
         pd.testing.assert_frame_equal(self.spacelabs_reader.data, self.data)
-        self.assertEquals(self.spacelabs_reader.subject, self.subject)
-        self.assertEquals(self.spacelabs_reader.metadata, self.xml)
+        self.assertEqual(self.spacelabs_reader.subject, self.subject)
+        self.assertEqual(self.spacelabs_reader.metadata, self.xml)
 
     def test_write(self):
         self.spacelabs_reader.write(self.WRITE_PATH)
         read_file_contents = open(self.READ_PATH, 'r').readlines()
         written_file_contents = open(self.WRITE_PATH, 'r').readlines()
-        self.assertEquals(read_file_contents, written_file_contents)
+        self.assertEqual(read_file_contents, written_file_contents)
 
         os.remove(self.WRITE_PATH)
 
     def test_random_timeshift(self):
-        old_timestamp_column = self.spacelabs_reader.data.index
+        old_timestamp_column = self.spacelabs_reader.data.timestamp.copy()
         self.spacelabs_reader.timeshift()
-        new_timestamp_column = self.spacelabs_reader.data.index
+        new_timestamp_column = self.spacelabs_reader.data.timestamp
         new_date_column = self.spacelabs_reader.data.date
         new_time_column = self.spacelabs_reader.data.time
 
         self.assertTrue((old_timestamp_column - pd.Timedelta('730 days') <= new_timestamp_column).all())
         self.assertTrue((new_timestamp_column <= old_timestamp_column - pd.Timedelta('30 days')).all())
 
-        testing_timestamp_column = pd.Index([dt.datetime.combine(new_date_column[i], new_time_column[i]) for i in
+        testing_timestamp_column = pd.Series([dt.datetime.combine(new_date_column[i], new_time_column[i]) for i in
                                   range(len(self.spacelabs_reader.data))])
         testing_timestamp_column.name = 'timestamp'
 
-        pd.testing.assert_index_equal(new_timestamp_column, testing_timestamp_column)
+        pd.testing.assert_series_equal(new_timestamp_column, testing_timestamp_column)
+
+    def test_drop_EB(self):
+        self.data.drop(index=[0, 5, 6], inplace=True)
+        self.data.set_index('timestamp', inplace=True)
+
+        self.spacelabs_reader.drop_EB()
+
+        pd.testing.assert_frame_equal(self.spacelabs_reader.data, self.data)
 
 if __name__ == '__main__':
     unittest.main()

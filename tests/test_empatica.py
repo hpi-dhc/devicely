@@ -1,16 +1,14 @@
 import unittest
 import os
 import shutil
-import sys
 
 import pandas as pd
 
 import devicely
 
-
 class EmpaticaTestCase(unittest.TestCase):
-    READ_PATH = 'Empatica_test_data/test_data_read'
-    WRITE_PATH = 'Empatica_test_data/test_data_write'
+    READ_PATH = 'tests/Empatica_test_data/test_data_read'
+    WRITE_PATH = 'tests/Empatica_test_data/test_data_write'
 
     def setUp(self):
         self.empatica_reader = devicely.EmpaticaReader(self.READ_PATH)
@@ -114,12 +112,12 @@ class EmpaticaTestCase(unittest.TestCase):
                                              '2019-03-01 15:15:05.500000', '2019-03-01 15:15:05.750000'])
 
         self.ibi_df = pd.DataFrame({
-            'timedelta': pd.to_timedelta([145.631666, 146.522332, 151.725695, 152.835121, 153.710161, 154.725832, 161.679276,
+            'timedelta': [145.631666, 146.522332, 151.725695, 152.835121, 153.710161, 154.725832, 161.679276,
                           162.741824, 163.773122, 164.757542, 165.757587, 166.69513, 167.585796, 168.429585,
-                          169.288999, 170.148413, 170.929699, 171.695359, 172.539148, 173.492316, 174.398608], unit='s'),
-            'ibi': pd.to_timedelta([0.62509, 0.890666, 1.062549, 1.109426, 0.87504, 1.015671, 1.031297, 1.062549, 1.031297, 0.98442,
+                          169.288999, 170.148413, 170.929699, 171.695359, 172.539148, 173.492316, 174.398608],
+            'ibi': [0.62509, 0.890666, 1.062549, 1.109426, 0.87504, 1.015671, 1.031297, 1.062549, 1.031297, 0.98442,
                     1.000046, 0.937543, 0.890666, 0.843789, 0.859414, 0.859414, 0.781286, 0.76566, 0.843789, 0.953169,
-                    0.906291], unit='s')
+                    0.906291]
         })
         self.ibi_df.index = pd.to_datetime(['2019-03-01 15:17:26.631666', '2019-03-01 15:17:27.522332',
                                             '2019-03-01 15:17:32.725695', '2019-03-01 15:17:33.835121',
@@ -154,6 +152,22 @@ class EmpaticaTestCase(unittest.TestCase):
             written = pd.read_csv(os.path.join(self.WRITE_PATH, filename), header=None).replace(' IBI', 0).astype(float)
             pd.testing.assert_frame_equal(read, written)
         shutil.rmtree(self.WRITE_PATH)
+
+    def test_joined_dataframe(self):
+        acc_part_of_joined_df = self.empatica_reader.data[['acc_x', 'acc_y', 'acc_z', 'acc_mag']].dropna()
+        pd.testing.assert_frame_equal(self.empatica_reader.ACC, acc_part_of_joined_df)
+
+        ibi_part_of_joined_df = self.empatica_reader.data[['timedelta', 'ibi']].dropna()
+        pd.testing.assert_frame_equal(self.empatica_reader.IBI, ibi_part_of_joined_df)
+
+        signal_dfs_from_joined = dict()
+        for signal_name in ['bvp', 'eda', 'hr', 'temp']:
+            signal_dfs_from_joined[signal_name] = pd.DataFrame(self.empatica_reader.data[signal_name].dropna())
+
+        pd.testing.assert_frame_equal(signal_dfs_from_joined['bvp'], self.bvp_df)
+        pd.testing.assert_frame_equal(signal_dfs_from_joined['eda'], self.eda_df)
+        pd.testing.assert_frame_equal(signal_dfs_from_joined['hr'], self.hr_df)
+        pd.testing.assert_frame_equal(signal_dfs_from_joined['temp'], self.temp_df)
 
 if __name__ == '__main__':
     unittest.main()

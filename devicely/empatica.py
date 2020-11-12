@@ -94,13 +94,12 @@ class EmpaticaReader:
             f.write(self.ACC.drop(columns='acc_mag').to_csv(header=None, index=None))
 
     def _read_ibi(self):
-        to_seconds = lambda x: (pd.Timedelta(float(x), unit='s'))
         if is_file_empty(self.filelist['ibi']):
             return None
         with open(self.filelist['ibi']) as f:
             self.start_times['ibi'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
-            df = pd.read_csv(f, names=['timedelta', 'ibi'], converters={0: to_seconds, 1: to_seconds})
-            df.index = self.start_times['ibi'] + df.timedelta
+            df = pd.read_csv(f, names=['timedelta', 'ibi'])
+            df.index = self.start_times['ibi'] + pd.to_timedelta(df.timedelta, unit='s')
             df.index.name = None
             return df
 
@@ -108,9 +107,7 @@ class EmpaticaReader:
         file_path = os.path.join(dir_path, "IBI.csv")
         with open(file_path, 'w') as f:
             f.write(f"{self.start_times['ibi'].value / 1e9}, IBI\n")
-            timedeltas = pd.to_numeric(self.IBI['timedelta']) / 1e9
-            ibis = pd.to_numeric(self.IBI['ibi']) / 1e9
-            f.write(pd.concat([timedeltas, ibis], axis=1).to_csv(index=None, header=None))
+            f.write(self.IBI.to_csv(index=None, header=None))
 
     def timeshift(self, shift='random'):
         if shift == 'random':
