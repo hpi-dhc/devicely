@@ -1,5 +1,6 @@
-import pandas as pd
 import random
+
+import pandas as pd
 
 class TagReader:
     def __init__(self, path):

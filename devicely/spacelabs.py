@@ -1,10 +1,11 @@
-import pandas as pd
-import datetime as dt
-import xmltodict
-import random
-from .helpers import recursive_ordered_dict_to_dict
 import csv
+import datetime as dt
+import random
 
+import pandas as pd
+import xmltodict
+
+from .helpers import recursive_ordered_dict_to_dict
 
 class SpacelabsReader:
     def __init__(self, path):

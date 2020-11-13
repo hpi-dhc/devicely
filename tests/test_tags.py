@@ -1,8 +1,9 @@
-import unittest
-import pandas as pd
-import devicely
 import os
+import unittest
 
+import pandas as pd
+
+import devicely
 
 class TagsTestCase(unittest.TestCase):
     READ_PATH = os.path.join(os.getcwd(), 'tests/Tags_test_data/tags.csv')

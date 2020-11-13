@@ -1,10 +1,11 @@
-import unittest
-import pandas as pd
-import numpy as np
-import devicely
-import os
 import datetime as dt
+import os
+import unittest
 
+import numpy as np
+import pandas as pd
+
+import devicely
 
 class SpacelabsTestCase(unittest.TestCase):
     READ_PATH = os.path.join(os.getcwd(), 'tests/SpaceLabs_test_data/spacelabs.abp')

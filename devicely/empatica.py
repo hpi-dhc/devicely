@@ -1,7 +1,7 @@
+from functools import reduce
 import os
 import random
 import sys
-from functools import reduce
 
 import numpy as np
 import pandas as pd
