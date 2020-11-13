@@ -204,4 +204,7 @@ $RECYCLE.BIN/
 # Optional folders
 data/
 
+# Pycharm config
+.idea
+
 # End of https://www.gitignore.io/api/macos,linux,python,windows,jupyternotebook,visualstudiocode
