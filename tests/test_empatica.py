@@ -12,6 +12,7 @@ class EmpaticaTestCase(unittest.TestCase):
 
     def setUp(self):
         self.empatica_reader = devicely.EmpaticaReader(self.READ_PATH)
+
         self.start_times = {
             'acc': pd.Timestamp(1551453301, unit='s'),
             'bvp': pd.Timestamp(1551453301, unit='s'),
