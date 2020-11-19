@@ -1,15 +1,15 @@
+from functools import reduce
 import os
 import random
 import sys
-from functools import reduce
 
 import numpy as np
 import pandas as pd
 
-from .helpers import create_df
 
 def is_file_empty(path):
     return os.stat(path).st_size == 0
+
 
 class EmpaticaReader:
     signal_names = ['acc', 'bvp', 'eda', 'hr', 'temp']
@@ -29,7 +29,7 @@ class EmpaticaReader:
 
         if os.path.isfile(self.filelist['tags']):
             self.tags = pd.read_csv(self.filelist['tags'], header=None, parse_dates=[0],
-                                         date_parser=lambda x: pd.Timestamp(float(x), unit='s'))
+                                    date_parser=lambda x: pd.Timestamp(float(x), unit='s'))
         else:
             self.tags = None
 
@@ -51,12 +51,14 @@ class EmpaticaReader:
 
     def _read_signal(self, signal_name):
         if is_file_empty(self.filelist[signal_name]):
-            print(f"File {self.filelist[signal_name]} is empty. Exiting")
-            sys.exit()
+            print(f"File {self.filelist[signal_name]} is empty. Skipping")
+            return None
         with open(self.filelist[signal_name]) as f:
             self.start_times[signal_name] = pd.Timestamp(float(f.readline()), unit='s')
             self.sample_freqs[signal_name] = float(f.readline())
             df = pd.read_csv(f, names=[signal_name])
+            df.index = pd.date_range(start=self.start_times[signal_name], freq=f"{1 / self.sample_freqs[signal_name]}S",
+                                     periods=len(df))
             return df
 
     def _write_signal(self, dir_path, dataframe):
@@ -78,6 +80,8 @@ class EmpaticaReader:
             self.sample_freqs['acc'] = sample_freqs[0]
             df = pd.read_csv(f, names=self.acc_names)
             df['acc_mag'] = np.linalg.norm(df.to_numpy(), axis=1)
+            df.index = pd.date_range(start=self.start_times['acc'], freq=f"{1 / self.sample_freqs['acc']}S",
+                                     periods=len(df))
             return df
 
     def _write_acc(self, dir_path):
@@ -90,60 +94,53 @@ class EmpaticaReader:
             f.write(self.ACC.drop(columns='acc_mag').to_csv(header=None, index=None))
 
     def _read_ibi(self):
-        to_timedelta = lambda x: (pd.Timedelta(float(x), unit='s'))
         if is_file_empty(self.filelist['ibi']):
             return None
         with open(self.filelist['ibi']) as f:
             self.start_times['ibi'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
-            df = pd.read_csv(f, names=['timedelta', 'ibi'], converters={0: to_timedelta, 1: to_timedelta})
+            df = pd.read_csv(f, names=['timedelta', 'ibi'])
+            df.index = self.start_times['ibi'] + pd.to_timedelta(df.timedelta, unit='s')
+            df.index.name = None
             return df
 
     def _write_ibi(self, dir_path):
         file_path = os.path.join(dir_path, "IBI.csv")
         with open(file_path, 'w') as f:
             f.write(f"{self.start_times['ibi'].value / 1e9}, IBI\n")
-            timedeltas = pd.to_numeric(self.IBI['timedelta']) / 1e9
-            ibis = pd.to_numeric(self.IBI['ibi']) / 1e9
-            f.write(pd.concat([timedeltas, ibis], axis=1).to_csv(index=None, header=None))
+            f.write(self.IBI.to_csv(index=None, header=None))
 
     def timeshift(self, shift='random'):
         if shift == 'random':
-            one_month = pd.Timedelta('30 days').value
-            two_years = pd.Timedelta('730 days').value
+            one_month = pd.Timedelta('- 30 days').value
+            two_years = pd.Timedelta('- 730 days').value
             random_timedelta = pd.Timedelta(random.uniform(one_month, two_years))
-            for signal_name in self.start_times.keys():
-                self.start_times[signal_name]-=random_timedelta
-            if self.tags is not None:
-                self.tags-=random_timedelta
+            self.timeshift(random_timedelta)
+
+        dfs = [self.BVP, self.EDA, self.HR, self.TEMP, self.ACC, self.IBI]
+
         if isinstance(shift, pd.Timestamp):
             for signal_name in self.start_times.keys():
                 self.start_times[signal_name] = shift
             if self.tags is not None:
                 timedeltas = self.tags - self.tags.loc[0, 0]
                 self.tags = shift + timedeltas
+            for df in dfs:
+                timedeltas = df.index - df.index[0]
+                df.index = shift + timedeltas
+
         if isinstance(shift, pd.Timedelta):
             for signal_name in self.start_times.keys():
-                self.start_times[signal_name]+=shift
+                self.start_times[signal_name] += shift
             if self.tags is not None:
-                self.tags+=shift
+                self.tags += shift
+            for df in dfs:
+                df.index += shift
 
         self._update_joined_dataframe()
 
     def _update_joined_dataframe(self):
-        raw_data = {
-            'acc': self.ACC.copy(),
-            'bvp': self.BVP.copy(),
-            'eda': self.EDA.copy(),
-            'hr': self.HR.copy(),
-            'temp': self.TEMP.copy()
-        }
-        for signal_name in raw_data.keys():
-            sample_interval_length = int(1e9 / self.sample_freqs[signal_name])
-            timerange = pd.date_range(start=self.start_times[signal_name], periods=len(raw_data[signal_name]),
-                                      freq=f"{sample_interval_length}N")
-            raw_data[signal_name].index = timerange
-
-        self.data = reduce(lambda df1, df2: df1.join(df2, how='outer', sort=True), raw_data.values())
+        dfs = [self.BVP, self.EDA, self.HR, self.TEMP, self.ACC, self.IBI]
+        self.data = reduce(lambda df1, df2: df1.join(df2, how='outer', sort=True), dfs)
 
     def init_filelist(self, path):
         self.filelist = {
