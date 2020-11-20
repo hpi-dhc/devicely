@@ -8,8 +8,8 @@ import pandas as pd
 import devicely
 
 class SpacelabsTestCase(unittest.TestCase):
-    READ_PATH = os.path.join(os.getcwd(), 'tests/SpaceLabs_test_data/spacelabs.abp')
-    WRITE_PATH = os.path.join(os.getcwd(), 'tests/SpaceLabs_test_data/spacelabs_written.abp')
+    READ_PATH = 'tests/SpaceLabs_test_data/spacelabs.abp'
+    WRITE_PATH = 'tests/SpaceLabs_test_data/spacelabs_written.abp'
 
     def setUp(self):
         self.subject = '000002'
