@@ -1,5 +1,7 @@
 import os
 import glob
+import time
+import random
 import numpy as np
 import pandas as pd
 
@@ -74,18 +76,18 @@ class EverionReader:
 
         if signal_tags is not None:
             self.selected_signal_tags = signal_tags
-        data_signals = self.read_signals()
+        data_signals = self._read_file(self.filelist['signals'], self.selected_signal_tags, self.SIGNAL_TAGS)
 
         if feature_tags is not None:
             self.selected_feature_tags = feature_tags
-        data_features = self.read_features()
+        data_features = self._read_file(self.filelist['features'], self.selected_feature_tags, self.FEATURE_TAGS)
+        data_features.rename(columns={'inter_pulse_interval_quality': 'inter_pulse_interval_deviation'})
 
         # Raw data is contained in the the sensor file
         if 'sensors' in self.filelist:
             if sensor_tags is not None:
                 self.selected_sensor_tags = sensor_tags
-            data_sensors = self.read_sensors()
-
+            data_sensors = self._read_file(self.filelist['sensors'], self.selected_sensor_tags, self.SENSOR_TAGS)
             data_all = data_signals.join([data_sensors, data_features], how='outer')
         else:
             data_all = data_signals.join([data_features], how='outer')
@@ -95,7 +97,6 @@ class EverionReader:
 
         self.data = data_all
 
-
     def init_filelist(self, path):
         self.filelist = {
             'signals': glob.glob(path+r'/*signals*').pop(),
@@ -104,67 +105,37 @@ class EverionReader:
             'events': glob.glob(path+r'/*everion_events*').pop(),
             'features': glob.glob(path+r'/*features*').pop()
         }
-
         try:
             self.filelist['sensors'] = glob.glob(path+r'/*sensor*').pop()
             print('Reading processed and raw data.')
         except IndexError:
             print('No sensors file. Reading processed data only.')
 
-    def read_signals(self):
-        raw_signals = pd.read_csv(self.filelist['signals'])
+    def _split_values_column(df, tag_name):
+        try:
+            df[tag_name] = df['values'].astype(float)
+        except ValueError:
+            df[[tag_name, f"{tag_name}_quality"]] = df['values'].str.split(';', expand=True).astype(float)
+        df.drop(columns=['values'], inplace=True)
+        return df
+
+    def _read_file(self, path, selected_tags, tag_names):
+        raw_signals = pd.read_csv(path)
         raw_signals = raw_signals.drop_duplicates()
+        raw_signals = raw_signals[raw_signals['tag'].isin(selected_tags)]
 
-        min_count_dict = {}
-        count_ts_dict = {}
+        timestamps_min_and_count = raw_signals.groupby('time').agg(
+            count_min=pd.NamedAgg(column='count', aggfunc='min'),
+            count_range=pd.NamedAgg(column='count', aggfunc=lambda series: series.max() - series.min() + 1),
+        )
+        raw_signals = raw_signals.merge(timestamps_min_and_count.reset_index(), on='time')
+        raw_signals['time'] += (raw_signals['count'] - raw_signals['count_min']) / raw_signals['count_range']
+        raw_signals['time'] = pd.to_datetime(raw_signals['time'], unit='s')
+
         data = pd.DataFrame()
-        sub_df = raw_signals.loc[raw_signals['tag'] == self.selected_signal_tags[0]]
-        for ts in raw_signals['time'].unique():
-            min_count_dict[ts] = sub_df.loc[sub_df['time'] == ts].loc[:, 'count'].min()
-            count_ts_dict[ts] = sub_df.loc[sub_df['time'] == ts].loc[:, 'count'].max() - min_count_dict[ts] + 1
-        for tag in np.sort(raw_signals['tag'].unique()):
-            if tag not in self.selected_signal_tags:
-                continue
-            tag_name = self.SIGNAL_TAGS[tag]
-            sub_df = raw_signals.loc[raw_signals['tag'] == tag].copy()
-            columns_to_join = [tag_name]
-            # Check if signal includes quality value
-            sub_df_values = sub_df.loc[sub_df.first_valid_index(), 'values']
-            if sub_df_values.find(';') != -1:
-                quality_name = '{}_quality'.format(tag_name)
-                columns_to_join = columns_to_join + [quality_name]
-                sub_df.loc[:, quality_name] = sub_df['values'].apply(lambda val: val[val.find(';')+1:]).astype(float)
-                sub_df.loc[:, tag_name] = sub_df['values'].apply(lambda val: val[:val.find(';')]).astype(float)
-            else:
-                sub_df.loc[:, tag_name] = sub_df['values'].astype(float)
-            sub_df.loc[:, 'time'] = pd.to_datetime(sub_df.apply(lambda x: x['time'] + (x['count'] - min_count_dict[x['time']]) / count_ts_dict[x['time']], axis=1), unit='s')
-            if sub_df.empty or (sub_df[tag_name] == 0).all():
-                continue
-            sub_df = sub_df.set_index('time', verify_integrity=True)
-            sub_df = sub_df.sort_index()
-            data = data.join(sub_df[columns_to_join], how='outer')
-
-        return data
-
-    def read_sensors(self):
-        raw_sensors = pd.read_csv(self.filelist['sensors'])
-        raw_sensors = raw_sensors.drop_duplicates()
-
-        min_count_dict = {}
-        count_ts_dict = {}
-        data = pd.DataFrame()
-        sub_df = raw_sensors.loc[raw_sensors['tag'] == self.selected_sensor_tags[0]]
-        for ts in raw_sensors['time'].unique():
-            min_count_dict[ts] = sub_df.loc[sub_df['time'] == ts].loc[:, 'count'].min()
-            count_ts_dict[ts] = sub_df.loc[sub_df['time'] == ts].loc[:, 'count'].max() - min_count_dict[ts] + 1
-        for tag in np.sort(raw_sensors['tag'].unique()):
-            if tag not in self.selected_sensor_tags:
-                continue
-            tag_name = self.SENSOR_TAGS[tag]
-            sub_df = raw_sensors.loc[raw_sensors['tag'] == tag].copy()
-
-            sub_df.loc[:, 'time'] = pd.to_datetime(sub_df.apply(lambda x: x['time'] + (x['count'] - min_count_dict[x['time']]) / count_ts_dict[x['time']], axis=1), unit='s')
-            sub_df.loc[:, tag_name] = sub_df['values']
+        for tag, group_df in raw_signals.groupby('tag'):
+            tag_name = tag_names[tag]
+            sub_df = EverionReader._split_values_column(group_df, tag_name)
             if sub_df.empty or (sub_df[tag_name] == 0).all():
                 continue
             sub_df = sub_df.set_index('time', verify_integrity=True)
@@ -173,42 +144,14 @@ class EverionReader:
 
         return data
 
-    def read_features(self):
-        raw_features = pd.read_csv(self.filelist['features'])
-        raw_features = raw_features.drop_duplicates()
-
-        min_count_dict = {}
-        count_ts_dict = {}
-        data = pd.DataFrame()
-        sub_df = raw_features.loc[raw_features['tag'] == self.selected_feature_tags[0]]
-        for ts in raw_features['time'].unique():
-            min_count_dict[ts] = sub_df.loc[sub_df['time'] == ts].loc[:, 'count'].min()
-            count_ts_dict[ts] = sub_df.loc[sub_df['time'] == ts].loc[:, 'count'].max() - min_count_dict[ts] + 1
-
-        for tag in np.sort(raw_features['tag'].unique()):
-            if tag not in self.selected_feature_tags:
-                continue
-            tag_name = self.FEATURE_TAGS[tag]
-            sub_df = raw_features.loc[raw_features['tag'] == tag]
-
-            columns_to_join = [tag_name]
-            # Check if signal includes quality value
-            sub_df_values = sub_df.loc[sub_df.first_valid_index(), 'values']
-            if sub_df_values.find(';') != -1:
-                if tag == 14: # inter pulse interval quality is given as deviation
-                    quality_name = '{}_deviation'.format(tag_name)
-                else:
-                    quality_name = '{}_quality'.format(tag_name)
-                columns_to_join = columns_to_join + [quality_name]
-                sub_df.loc[:, quality_name] = sub_df['values'].apply(lambda val: val[val.find(';')+1:]).astype(float)
-                sub_df.loc[:, tag_name] = sub_df['values'].apply(lambda val: val[:val.find(';')]).astype(float)
-            else:
-                sub_df.loc[:, tag_name] = sub_df['values'].astype(float)
-            sub_df.loc[:, 'time'] = pd.to_datetime(sub_df.apply(lambda x: x['time'] + (x['count'] - min_count_dict[x['time']]) / count_ts_dict[x['time']], axis=1), unit='s')
-            if sub_df.empty or (sub_df[tag_name] == 0).all():
-                continue
-            sub_df = sub_df.set_index('time', verify_integrity=True)
-            sub_df = sub_df.sort_index()
-            data = data.join(sub_df[columns_to_join], how='outer')
-
-        return data
+    def timeshift(self, shift='random'):
+        if shift == 'random':
+            one_month = pd.Timedelta('30 days').value
+            two_years = pd.Timedelta('730 days').value
+            random_timedelta = - pd.Timedelta(random.uniform(one_month, two_years)).round('s')
+            self.timeshift(random_timedelta)
+        if isinstance(shift, pd.Timestamp):
+            timedeltas = self.data.index - self.data.index.min()
+            self.data.index = shift + timedeltas
+        if isinstance(shift, pd.Timedelta):
+            self.data.index += shift
