@@ -144,6 +144,9 @@ ENV/
 env.bak/
 venv.bak/
 
+#Sphinx _build directory
+sphinx/_build
+
 # Spyder project settings
 .spyderproject
 .spyproject
