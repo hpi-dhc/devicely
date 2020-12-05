@@ -48,7 +48,7 @@ class EmpaticaReader:
     signal_names = ['acc', 'bvp', 'eda', 'hr', 'temp']
     acc_names = ['acc_x', 'acc_y', 'acc_z']
 
-    def file_empty_or_not_existing(path):
+    def _file_empty_or_not_existing(path):
         return not os.path.isfile(path) or os.stat(path).st_size == 0
 
     def __init__(self, path):
@@ -73,7 +73,7 @@ class EmpaticaReader:
         self.ACC = self._read_acc()
         self.IBI = self._read_ibi()
 
-        if not self.__class__.file_empty_or_not_existing(self.filelist['tags']):
+        if not self.__class__._file_empty_or_not_existing(self.filelist['tags']):
             self.tags = pd.read_csv(self.filelist['tags'], header=None, parse_dates=[0],
                                     date_parser=lambda x: pd.Timestamp(float(x), unit='s'))
         else:
@@ -110,7 +110,7 @@ class EmpaticaReader:
             numeric_tags.to_csv(os.path.join(path, 'tags.csv'), header=None, index=None)
 
     def _read_signal(self, signal_name):
-        if self.__class__.file_empty_or_not_existing(self.filelist[signal_name]):
+        if self.__class__._file_empty_or_not_existing(self.filelist[signal_name]):
             print(f"File {self.filelist[signal_name]} is empty or doesn't exist. Skipping")
             return None
         with open(self.filelist[signal_name]) as f:
@@ -131,7 +131,7 @@ class EmpaticaReader:
                 f.write('\n'.join([str(x) for x in dataframe[signal_name]]))
 
     def _read_acc(self):
-        if self.__class__.file_empty_or_not_existing(self.filelist['acc']):
+        if self.__class__._file_empty_or_not_existing(self.filelist['acc']):
             print(f"File {self.filelist['acc']} is empty or doesn't exist. Skipping")
             return None
         with open(self.filelist['acc']) as f:
@@ -156,7 +156,7 @@ class EmpaticaReader:
                 f.write(self.ACC.drop(columns='acc_mag').to_csv(header=None, index=None))
 
     def _read_ibi(self):
-        if self.__class__.file_empty_or_not_existing(self.filelist['ibi']):
+        if self.__class__._file_empty_or_not_existing(self.filelist['ibi']):
             print(f"File {self.filelist['acc']} is empty or doesn't exist. Skipping")
             return None
         with open(self.filelist['ibi']) as f:
