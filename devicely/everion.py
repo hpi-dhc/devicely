@@ -1,7 +1,7 @@
 import os
 import glob
 import time
-
+import random
 import numpy as np
 import pandas as pd
 
@@ -76,18 +76,18 @@ class EverionReader:
 
         if signal_tags is not None:
             self.selected_signal_tags = signal_tags
-        data_signals = self.read_file(self.filelist['signals'], self.selected_signal_tags, self.SIGNAL_TAGS)
+        data_signals = self._read_file(self.filelist['signals'], self.selected_signal_tags, self.SIGNAL_TAGS)
 
         if feature_tags is not None:
             self.selected_feature_tags = feature_tags
-        data_features = self.read_file(self.filelist['features'], self.selected_feature_tags, self.FEATURE_TAGS)
+        data_features = self._read_file(self.filelist['features'], self.selected_feature_tags, self.FEATURE_TAGS)
         data_features.rename(columns={'inter_pulse_interval_quality': 'inter_pulse_interval_deviation'})
 
         # Raw data is contained in the the sensor file
         if 'sensors' in self.filelist:
             if sensor_tags is not None:
                 self.selected_sensor_tags = sensor_tags
-            data_sensors = self.read_file(self.filelist['sensors'], self.selected_sensor_tags, self.SENSOR_TAGS)
+            data_sensors = self._read_file(self.filelist['sensors'], self.selected_sensor_tags, self.SENSOR_TAGS)
             data_all = data_signals.join([data_sensors, data_features], how='outer')
         else:
             data_all = data_signals.join([data_features], how='outer')
@@ -97,7 +97,6 @@ class EverionReader:
 
         self.data = data_all
 
-
     def init_filelist(self, path):
         self.filelist = {
             'signals': glob.glob(path+r'/*signals*').pop(),
@@ -106,7 +105,6 @@ class EverionReader:
             'events': glob.glob(path+r'/*everion_events*').pop(),
             'features': glob.glob(path+r'/*features*').pop()
         }
-
         try:
             self.filelist['sensors'] = glob.glob(path+r'/*sensor*').pop()
             print('Reading processed and raw data.')
@@ -121,7 +119,7 @@ class EverionReader:
         df.drop(columns=['values'], inplace=True)
         return df
 
-    def read_file(self, path, selected_tags, tag_names):
+    def _read_file(self, path, selected_tags, tag_names):
         raw_signals = pd.read_csv(path)
         raw_signals = raw_signals.drop_duplicates()
         raw_signals = raw_signals[raw_signals['tag'].isin(selected_tags)]
@@ -145,3 +143,15 @@ class EverionReader:
             data = data.join(sub_df[tag_name], how='outer')
 
         return data
+
+    def timeshift(self, shift='random'):
+        if shift == 'random':
+            one_month = pd.Timedelta('30 days').value
+            two_years = pd.Timedelta('730 days').value
+            random_timedelta = - pd.Timedelta(random.uniform(one_month, two_years)).round('s')
+            self.timeshift(random_timedelta)
+        if isinstance(shift, pd.Timestamp):
+            timedeltas = self.data.index - self.data.index.min()
+            self.data.index = shift + timedeltas
+        if isinstance(shift, pd.Timedelta):
+            self.data.index += shift
