@@ -7,13 +7,12 @@ import numpy as np
 import pandas as pd
 
 
-def is_file_empty(path):
-    return os.stat(path).st_size == 0
-
-
 class EmpaticaReader:
     signal_names = ['acc', 'bvp', 'eda', 'hr', 'temp']
     acc_names = ['acc_x', 'acc_y', 'acc_z']
+
+    def file_empty_or_not_existing(path):
+        return not os.path.isfile(path) or os.stat(path).st_size == 0
 
     def __init__(self, path):
         self.init_filelist(path)
@@ -27,7 +26,7 @@ class EmpaticaReader:
         self.ACC = self._read_acc()
         self.IBI = self._read_ibi()
 
-        if os.path.isfile(self.filelist['tags']):
+        if not self.__class__.file_empty_or_not_existing(self.filelist['tags']):
             self.tags = pd.read_csv(self.filelist['tags'], header=None, parse_dates=[0],
                                     date_parser=lambda x: pd.Timestamp(float(x), unit='s'))
         else:
@@ -43,15 +42,15 @@ class EmpaticaReader:
         self._write_signal(path, self.HR)
         self._write_signal(path, self.TEMP)
         self._write_acc(path)
-        if self.IBI is not None:
-            self._write_ibi(path)
+        self._write_ibi(path)
+
         if self.tags is not None:
             numeric_tags = pd.to_numeric(self.tags[0]) / 1e9
             numeric_tags.to_csv(os.path.join(path, 'tags.csv'), header=None, index=None)
 
     def _read_signal(self, signal_name):
-        if is_file_empty(self.filelist[signal_name]):
-            print(f"File {self.filelist[signal_name]} is empty. Skipping")
+        if self.__class__.file_empty_or_not_existing(self.filelist[signal_name]):
+            print(f"File {self.filelist[signal_name]} is empty or doesn't exist. Skipping")
             return None
         with open(self.filelist[signal_name]) as f:
             self.start_times[signal_name] = pd.Timestamp(float(f.readline()), unit='s')
@@ -62,17 +61,18 @@ class EmpaticaReader:
             return df
 
     def _write_signal(self, dir_path, dataframe):
-        signal_name = dataframe.columns[0]
-        file_path = os.path.join(dir_path, f"{signal_name.upper()}.csv")
-        with open(file_path, 'w') as f:
-            f.write(f"{str(self.start_times[signal_name].value / 10 ** 9)}\n")
-            f.write(f"{str(self.sample_freqs[signal_name])}\n")
-            f.write('\n'.join([str(x) for x in dataframe[signal_name]]))
+        if dataframe is not None:
+            signal_name = dataframe.columns[0]
+            file_path = os.path.join(dir_path, f"{signal_name.upper()}.csv")
+            with open(file_path, 'w') as f:
+                f.write(f"{str(self.start_times[signal_name].value / 10 ** 9)}\n")
+                f.write(f"{str(self.sample_freqs[signal_name])}\n")
+                f.write('\n'.join([str(x) for x in dataframe[signal_name]]))
 
     def _read_acc(self):
-        if is_file_empty(self.filelist['acc']):
-            print(f"File {self.filelist['acc']} is empty. Exiting")
-            sys.exit()
+        if self.__class__.file_empty_or_not_existing(self.filelist['acc']):
+            print(f"File {self.filelist['acc']} is empty or doesn't exist. Skipping")
+            return None
         with open(self.filelist['acc']) as f:
             start_times = [pd.Timestamp(float(x), unit='s') for x in f.readline().split(', ')]
             sample_freqs = [float(x) for x in f.readline().split(', ')]
@@ -85,16 +85,18 @@ class EmpaticaReader:
             return df
 
     def _write_acc(self, dir_path):
-        file_path = os.path.join(dir_path, "ACC.csv")
-        with open(file_path, 'w') as f:
-            start_time_as_string = str(self.start_times['acc'].value / 10 ** 9)
-            sample_freq_as_string = str(self.sample_freqs['acc'])
-            f.write(', '.join([start_time_as_string] * 3) + '\n')
-            f.write(', '.join([sample_freq_as_string] * 3) + '\n')
-            f.write(self.ACC.drop(columns='acc_mag').to_csv(header=None, index=None))
+        if self.ACC is not None:
+            file_path = os.path.join(dir_path, "ACC.csv")
+            with open(file_path, 'w') as f:
+                start_time_as_string = str(self.start_times['acc'].value / 10 ** 9)
+                sample_freq_as_string = str(self.sample_freqs['acc'])
+                f.write(', '.join([start_time_as_string] * 3) + '\n')
+                f.write(', '.join([sample_freq_as_string] * 3) + '\n')
+                f.write(self.ACC.drop(columns='acc_mag').to_csv(header=None, index=None))
 
     def _read_ibi(self):
-        if is_file_empty(self.filelist['ibi']):
+        if self.__class__.file_empty_or_not_existing(self.filelist['ibi']):
+            print(f"File {self.filelist['acc']} is empty or doesn't exist. Skipping")
             return None
         with open(self.filelist['ibi']) as f:
             self.start_times['ibi'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
@@ -104,10 +106,11 @@ class EmpaticaReader:
             return df
 
     def _write_ibi(self, dir_path):
-        file_path = os.path.join(dir_path, "IBI.csv")
-        with open(file_path, 'w') as f:
-            f.write(f"{self.start_times['ibi'].value / 1e9}, IBI\n")
-            f.write(self.IBI.to_csv(index=None, header=None))
+        if self.IBI is not None:
+            file_path = os.path.join(dir_path, "IBI.csv")
+            with open(file_path, 'w') as f:
+                f.write(f"{self.start_times['ibi'].value / 1e9}, IBI\n")
+                f.write(self.IBI.to_csv(index=None, header=None))
 
     def timeshift(self, shift='random'):
         if shift == 'random':
@@ -116,7 +119,7 @@ class EmpaticaReader:
             random_timedelta = pd.Timedelta(random.uniform(one_month, two_years))
             self.timeshift(random_timedelta)
 
-        dfs = [self.BVP, self.EDA, self.HR, self.TEMP, self.ACC, self.IBI]
+        dfs = [df for df in [self.BVP, self.EDA, self.HR, self.TEMP, self.ACC, self.IBI] if df is not None]
 
         if isinstance(shift, pd.Timestamp):
             for signal_name in self.start_times.keys():
@@ -139,7 +142,7 @@ class EmpaticaReader:
         self._update_joined_dataframe()
 
     def _update_joined_dataframe(self):
-        dfs = [self.BVP, self.EDA, self.HR, self.TEMP, self.ACC, self.IBI]
+        dfs = [df for df in [self.BVP, self.EDA, self.HR, self.TEMP, self.ACC, self.IBI] if df is not None]
         self.data = reduce(lambda df1, df2: df1.join(df2, how='outer', sort=True), dfs)
 
     def init_filelist(self, path):
