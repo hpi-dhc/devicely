@@ -112,6 +112,9 @@ coverage.xml
 # Scrapy stuff:
 .scrapy
 
+# Sphinx documentation
+sphinx/_build
+
 # PyBuilder
 target/
 
