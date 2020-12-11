@@ -1,3 +1,7 @@
+## Documentation
+
+https://hpi-dhc.github.io/devicely/
+
 ## Description
 
 Package containing `readers` for reading files from different devices.
