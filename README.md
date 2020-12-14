@@ -1,3 +1,5 @@
+![Devicely Logo](/imgs/logo/devicely-logo.png)
+
 ## Documentation
 
 https://hpi-dhc.github.io/devicely/
