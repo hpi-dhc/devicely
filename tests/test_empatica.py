@@ -136,13 +136,13 @@ class EmpaticaTestCase(unittest.TestCase):
             [pd.Timestamp(x, unit='s') for x in [1549015050.68, 1549014523.17, 1549014702.49, 1549014872.04]])
 
     def test_read(self):
-        pd.testing.assert_frame_equal(self.empatica_reader.ACC, self.acc_df)
-        pd.testing.assert_frame_equal(self.empatica_reader.BVP, self.bvp_df)
-        pd.testing.assert_frame_equal(self.empatica_reader.EDA, self.eda_df)
-        pd.testing.assert_frame_equal(self.empatica_reader.HR, self.hr_df)
-        pd.testing.assert_frame_equal(self.empatica_reader.TEMP, self.temp_df)
-        pd.testing.assert_frame_equal(self.empatica_reader.IBI, self.ibi_df)
-        pd.testing.assert_frame_equal(self.empatica_reader.tags, self.tags_df)
+        pd.testing.assert_frame_equal(self.empatica_reader.ACC, self.acc_df, check_freq=False)
+        pd.testing.assert_frame_equal(self.empatica_reader.BVP, self.bvp_df, check_freq=False)
+        pd.testing.assert_frame_equal(self.empatica_reader.EDA, self.eda_df, check_freq=False)
+        pd.testing.assert_frame_equal(self.empatica_reader.HR, self.hr_df, check_freq=False)
+        pd.testing.assert_frame_equal(self.empatica_reader.TEMP, self.temp_df, check_freq=False)
+        pd.testing.assert_frame_equal(self.empatica_reader.IBI, self.ibi_df, check_freq=False)
+        pd.testing.assert_frame_equal(self.empatica_reader.tags, self.tags_df, check_freq=False)
         self.assertEqual(self.empatica_reader.start_times, self.start_times)
         self.assertEqual(self.empatica_reader.sample_freqs, self.sample_freqs)
 
@@ -156,10 +156,10 @@ class EmpaticaTestCase(unittest.TestCase):
 
     def test_joined_dataframe(self):
         acc_part_of_joined_df = self.empatica_reader.data[['acc_x', 'acc_y', 'acc_z', 'acc_mag']].dropna()
-        pd.testing.assert_frame_equal(self.empatica_reader.ACC, acc_part_of_joined_df)
+        pd.testing.assert_frame_equal(self.empatica_reader.ACC, acc_part_of_joined_df, check_freq=False)
 
         ibi_part_of_joined_df = self.empatica_reader.data[['timedelta', 'ibi']].dropna()
-        pd.testing.assert_frame_equal(self.empatica_reader.IBI, ibi_part_of_joined_df)
+        pd.testing.assert_frame_equal(self.empatica_reader.IBI, ibi_part_of_joined_df, check_freq=False)
 
         signal_dfs_from_joined = dict()
         for signal_name in ['bvp', 'eda', 'hr', 'temp']:
