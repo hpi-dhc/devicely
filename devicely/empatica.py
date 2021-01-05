@@ -134,7 +134,7 @@ class EmpaticaReader:
         with open(self.filelist[signal_name]) as f:
             self.start_times[signal_name] = pd.Timestamp(float(f.readline()), unit='s')
             self.sample_freqs[signal_name] = float(f.readline())
-            df = pd.read_csv(f, names=[signal_name])
+            df = pd.read_csv(f, names=[signal_name], float_precision='high')
             df.index = pd.date_range(start=self.start_times[signal_name], freq=f"{1 / self.sample_freqs[signal_name]}S",
                                      periods=len(df))
             return df
@@ -179,7 +179,7 @@ class EmpaticaReader:
             return None
         with open(self.filelist['ibi']) as f:
             self.start_times['ibi'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
-            df = pd.read_csv(f, names=['timedelta', 'ibi'])
+            df = pd.read_csv(f, names=['timedelta', 'ibi'], float_precision='high')
             df.index = self.start_times['ibi'] + pd.to_timedelta(df.timedelta, unit='s')
             df.index.name = None
             return df
