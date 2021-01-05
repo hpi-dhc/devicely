@@ -90,7 +90,7 @@ class SpacelabsReader:
         else:
             self.subject = 'xxxxxx'
 
-        # Removing XML Metada
+        # Removing XML Metadata
         for key in self.metadata:
             self.metadata[key] = None
 
