@@ -122,6 +122,7 @@ class SpacelabsReader:
             printing_df = printing_df[order]
             printing_df.fillna(-9999, inplace=True)
             printing_df.replace('EB', -9998, inplace=True)
+            printing_df.replace('AB', -9997, inplace=True)
             printing_df[['SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']] = printing_df[
                 ['SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']].astype(int).astype(str)
             printing_df.replace('-9999', '""', inplace=True)
