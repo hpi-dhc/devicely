@@ -45,6 +45,23 @@ class SpacelabsTestCase(unittest.TestCase):
         self.assertEqual(self.spacelabs_reader.subject, self.subject)
         self.assertEqual(self.spacelabs_reader.metadata, self.xml)
 
+    def test_deidentify(self):
+        self.spacelabs_reader.deidentify()
+        self.spacelabs_reader.write(self.WRITE_PATH)
+        read_file_contents = open(self.READ_PATH, 'r').readlines()
+        written_file_contents = open(self.WRITE_PATH, 'r').readlines()
+        self.assertEqual(read_file_contents[2:-1], written_file_contents[2:-1])
+
+        read_file_contents = open(self.READ_PATH, 'r').readlines()
+        written_file_contents = open(self.WRITE_PATH, 'r').readlines()
+        self.assertNotEqual(read_file_contents[1:2], written_file_contents[1:2])
+
+        read_file_contents = open(self.READ_PATH, 'r').readlines()
+        written_file_contents = open(self.WRITE_PATH, 'r').readlines()
+        self.assertNotEqual(read_file_contents[:-1], written_file_contents[:-1])
+
+        os.remove(self.WRITE_PATH)
+
     def test_write(self):
         self.spacelabs_reader.write(self.WRITE_PATH)
         read_file_contents = open(self.READ_PATH, 'r').readlines()
