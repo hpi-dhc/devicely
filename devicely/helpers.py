@@ -1,4 +1,5 @@
 import operator
+import os
 import pandas as pd
 from collections import OrderedDict
 
@@ -25,3 +26,6 @@ def recursive_ordered_dict_to_dict(ordered_dict):
             for k, v in ordered_dict.items():
                 ordered_dict[k] = recursive_ordered_dict_to_dict(v)
         return ordered_dict
+
+def file_empty_or_not_existing(path):
+    return not os.path.isfile(path) or os.stat(path).st_size == 0
