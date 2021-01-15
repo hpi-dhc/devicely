@@ -45,7 +45,11 @@ class SpacelabsReader:
         metadata = pd.read_csv(path, nrows=5, header=None)
         self.subject = str(metadata.loc[0, 0])
         base_date = dt.datetime.strptime(metadata.loc[2, 0], '%d.%m.%Y').date()
-        self.valid_measurements = str(metadata.loc[4, 0])
+        if metadata.loc[4, 0] != 'Unknown Line':
+            self.valid_measurements = str(metadata.loc[4, 0])
+        else:
+            metadata = pd.read_csv(path, nrows=6, header=None)
+            self.valid_measurements = str(metadata.loc[5, 0])
 
         column_names = ['hour', 'minutes', 'SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']
         self.data = pd.read_csv(path, sep=',', skiprows=51, skipfooter=1, header=None,
@@ -127,6 +131,7 @@ class SpacelabsReader:
                 ['SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']].astype(int).astype(str)
             printing_df.replace('-9999', '""', inplace=True)
             printing_df.replace('-9998', '"EB"', inplace=True)
+            printing_df.replace('-9997', '"AB"', inplace=True)
             printing_df.to_csv(f, header=None, index=None, quoting=csv.QUOTE_NONE)
             f.write(xmltodict.unparse({'XML': self.metadata}).split('\n')[1])
 
@@ -187,7 +192,8 @@ class SpacelabsReader:
 
     def set_window(self, window_duration, window_type):
         """
-        Set a window around, before or after the blood pressure measurement.
+        Set a window around, before or after the blood pressure measurement by creating
+        two new columns with the window_start and window_end times.
 
         Parameters
         ----------
