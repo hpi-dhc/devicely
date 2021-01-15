@@ -5,6 +5,7 @@ import random
 import numpy as np
 import pandas as pd
 
+
 class EverionReader:
 
     SIGNAL_TAGS = {
@@ -65,84 +66,169 @@ class EverionReader:
         79: 'pid_quality'
     }
 
-    selected_signal_tags = [6, 7, 11, 12, 15, 19, 20, 21, 118, 119]
-    selected_sensor_tags = [80, 81, 82, 83, 84, 85, 86]
-    selected_feature_tags = [14]
+    default_signal_tags = [6, 7, 11, 12, 15, 19, 20, 21, 118, 119]
+    default_sensor_tags = [80, 81, 82, 83, 84, 85, 86]
+    default_feature_tags = [14]
 
     ACC_NAMES = ['accx_data', 'accy_data', 'accz_data']
 
-    def __init__(self, path, signal_tags=None, sensor_tags=None, feature_tags=None):
-        self.init_filelist(path)
+    def __init__(self, path, signal_tags=default_signal_tags, sensor_tags=default_sensor_tags, feature_tags=default_feature_tags):
+        if not os.path.isdir(path):
+            raise OSError(f"path parameter needs to point to a directory")
 
-        if signal_tags is not None:
-            self.selected_signal_tags = signal_tags
-        data_signals = self._read_file(self.filelist['signals'], self.selected_signal_tags, self.SIGNAL_TAGS)
+        for tag in signal_tags:
+            if tag not in self.SIGNAL_TAGS:
+                raise KeyError(
+                    f"Tag with number {tag} is not a valid signal tag. See EverionReader.SIGNAL_TAGS for a list of valid signal tags.")
+        for tag in feature_tags:
+            if tag not in self.FEATURE_TAGS:
+                raise KeyError(
+                    f"Tag with number {tag} is not a valid feature tag. See EverionReader.FEATURE_TAGS for a list of valid feature tags.")
+        for tag in sensor_tags:
+            if tag not in self.SENSOR_TAGS:
+                raise KeyError(
+                    f"Tag with number {tag} is not a valid sensor tag. See EverionReader.SENSOR_TAGS for a list of valid sensor tags.")
 
-        if feature_tags is not None:
-            self.selected_feature_tags = feature_tags
-        data_features = self._read_file(self.filelist['features'], self.selected_feature_tags, self.FEATURE_TAGS)
-        data_features.rename(columns={'inter_pulse_interval_quality': 'inter_pulse_interval_deviation'})
+        self.selected_signal_tags = signal_tags
+        self.selected_feature_tags = feature_tags
+        self.selected_sensor_tags = sensor_tags
 
-        # Raw data is contained in the the sensor file
-        if 'sensors' in self.filelist:
-            if sensor_tags is not None:
-                self.selected_sensor_tags = sensor_tags
-            data_sensors = self._read_file(self.filelist['sensors'], self.selected_sensor_tags, self.SENSOR_TAGS)
-            data_all = data_signals.join([data_sensors, data_features], how='outer')
-        else:
-            data_all = data_signals.join([data_features], how='outer')
+        self._init_filelist(path)
 
-        if all(x in set(data_all.columns) for x in self.ACC_NAMES):
-            data_all['acc_mag'] = np.linalg.norm(data_all[self.ACC_NAMES], axis='1')
+        self.aggregates = self._read_file('aggregates')
+        self.analytics_events = self._read_file('analytics_events')
+        self.attributes_dailys = self._read_file('attributes_dailys')
+        self.everion_events = self._read_file('everion_events')
+        self.features = self._read_file('features')
+        self.sensors = self._read_file('sensor_data')
+        self.signals = self._read_file('signals')
 
-        self.data = data_all
+        self._join()
 
-    def init_filelist(self, path):
-        self.filelist = {
-            'signals': glob.glob(path+r'/*signals*').pop(),
-            'aggregates': glob.glob(path+r'/*aggregates*').pop(),
-            'analytics': glob.glob(path+r'/*analytics_events*').pop(),
-            'events': glob.glob(path+r'/*everion_events*').pop(),
-            'features': glob.glob(path+r'/*features*').pop()
-        }
+    def _init_filelist(self, path):
+        file_patterns = ['aggregates', 'analytics_events', 'attributes_dailys',
+                         'everion_events', 'features', 'sensor_data', 'signals']
+        self.filelist = dict()
+        for pattern in file_patterns:
+            filenames = glob.glob(os.path.join(path, f"*{pattern}*"))
+            if len(filenames) == 0:
+                print(
+                    f"No file found in path {path} that matches the pattern *{pattern}*. Continuing with the remaining files.")
+                continue
+            if len(filenames) > 1:
+                print(
+                    f"Multiple files found in {path} that match the pattern *{pattern}*. Continuing with the remaining files because this is ambiguous.")
+                continue
+            self.filelist[pattern] = filenames.pop()
+
+    def _read_file(self, filepattern):
         try:
-            self.filelist['sensors'] = glob.glob(path+r'/*sensor*').pop()
-            print('Reading processed and raw data.')
-        except IndexError:
-            print('No sensors file. Reading processed data only.')
+            filepath = self.filelist[filepattern]
+        except KeyError:
+            return None
 
-    def _split_values_column(df, tag_name):
+        dateparse = {"parse_dates": ['time'],
+                    "date_parser": lambda x: pd.to_datetime(x, unit='s')}
+        df = pd.read_csv(filepath, **dateparse).drop_duplicates()
+        
         try:
-            df[tag_name] = df['values'].astype(float)
+            df['values'] = df['values'].astype(float)
         except ValueError:
-            df[[tag_name, f"{tag_name}_quality"]] = df['values'].str.split(';', expand=True).astype(float)
-        df.drop(columns=['values'], inplace=True)
+            df[['values', 'quality']] = df['values'].str.split(
+                ';', expand=True).astype(float)
         return df
+        
+    def _join(self):
+        signals = self._convert_single_dataframe(
+            self.signals, self.selected_signal_tags)
+        features = self._convert_single_dataframe(
+            self.features, self.selected_feature_tags)
+        sensors = self._convert_single_dataframe(
+            self.sensors, self.selected_sensor_tags)
+        dataframes = [signals, features, sensors]
+        self.data = pd.DataFrame()
+        for df in dataframes:
+            self.data = self.data.join(df, how='outer')
 
-    def _read_file(self, path, selected_tags, tag_names):
-        raw_signals = pd.read_csv(path)
-        raw_signals = raw_signals.drop_duplicates()
-        raw_signals = raw_signals[raw_signals['tag'].isin(selected_tags)]
+        if all(x in set(self.data.columns) for x in self.ACC_NAMES):
+            self.data['acc_mag'] = np.linalg.norm(self.data[self.ACC_NAMES], axis='1')
 
-        timestamps_min_and_count = raw_signals.groupby('time').agg(
+    def _convert_single_dataframe(self, df, selected_tags=None):
+        if df is None:
+            return pd.DataFrame()
+        df = df.drop_duplicates()
+        if selected_tags is not None:
+            df = df[df['tag'].isin(selected_tags)]
+
+        df['time'] = df['time'].astype(int) / 10**9
+        timestamps_min_and_count = df.groupby('time').agg(
             count_min=pd.NamedAgg(column='count', aggfunc='min'),
-            count_range=pd.NamedAgg(column='count', aggfunc=lambda series: series.max() - series.min() + 1),
-        )
-        raw_signals = raw_signals.merge(timestamps_min_and_count.reset_index(), on='time')
-        raw_signals['time'] += (raw_signals['count'] - raw_signals['count_min']) / raw_signals['count_range']
-        raw_signals['time'] = pd.to_datetime(raw_signals['time'], unit='s')
+            count_range=pd.NamedAgg(
+                column='count', aggfunc=lambda s: s.max() - s.min() + 1)
+        ).reset_index()
+        df = df.merge(timestamps_min_and_count, on='time')
+        df['time'] += (df['count'] - df['count_min']) / df['count_range']
+        df['time'] = pd.to_datetime(df['time'], unit='s')
 
-        data = pd.DataFrame()
-        for tag, group_df in raw_signals.groupby('tag'):
-            tag_name = tag_names[tag]
-            sub_df = EverionReader._split_values_column(group_df, tag_name)
+        new_df = pd.DataFrame()
+        for tag, group_df in df.groupby('tag'):
+            tag_name = self._tag_name(tag)
+            quality_name = f"{tag_name}_deviation" if tag == 14 else f"{tag_name}_quality"
+            sub_df = group_df.rename(columns={'values': tag_name, 'quality': quality_name})
+            sub_df.drop(columns=['count', 'streamType', 'tag', 'count_min', 'count_range'], inplace=True)
+            sub_df.dropna(axis=1, inplace=True)
             if sub_df.empty or (sub_df[tag_name] == 0).all():
                 continue
             sub_df = sub_df.set_index('time', verify_integrity=True)
             sub_df = sub_df.sort_index()
-            data = data.join(sub_df[tag_name], how='outer')
+            new_df = new_df.join(sub_df, how='outer')
 
-        return data
+        return new_df
+
+    def _tag_name(self, tag_number):
+        try:
+            return self.SIGNAL_TAGS[tag_number]
+        except KeyError:
+            pass
+        try:
+            return self.SENSOR_TAGS[tag_number]
+        except KeyError:
+            pass
+        try:
+            return self.FEATURE_TAGS[tag_number]
+        except KeyError:
+            pass
+        raise KeyError(
+            f"no corresponding tag name for tag number {tag_number}")
+
+    def write(self, path):
+        if not os.path.exists(path):
+            os.mkdir(path)
+        if self.aggregates is not None:
+            self._write_single_df(self.aggregates, os.path.join(path, 'aggregates.csv'))
+        if self.analytics_events is not None:
+            self._write_single_df(self.analytics_events, os.path.join(path, "analytics_events.csv"))
+        if self.attributes_dailys is not None:
+            self._write_single_df(self.attributes_dailys, os.path.join(path, "attributes_dailys.csv"))
+        if self.everion_events is not None:
+            self._write_single_df(self.everion_events, os.path.join(path, "everion_events.csv"))
+        if self.features is not None:
+            self._write_single_df(self.features, os.path.join(path, "features.csv"))
+        if self.sensors is not None:
+            self._write_single_df(self.sensors, os.path.join(path, "sensor_data.csv"))
+        if self.signals is not None:
+            self._write_single_df(self.signals, os.path.join(path, "signals.csv"))
+
+    def _write_single_df(self, df, filepath):
+        writing_df = df.copy()
+        writing_df['time'] = (writing_df['time'].astype(int) / 10**9).astype(int)
+        if 'quality' in writing_df.columns:
+            writing_df['values'] = writing_df['values'].astype(str)
+            quality_col = writing_df['quality'].dropna().astype(str)
+            writing_df.loc[quality_col.index, 'values'] += ';' + quality_col
+            writing_df.drop(columns=['quality'], inplace=True)
+
+        writing_df.to_csv(filepath, index=None)
 
     def timeshift(self, shift='random'):
         if shift == 'random':
@@ -151,7 +237,16 @@ class EverionReader:
             random_timedelta = - pd.Timedelta(random.uniform(one_month, two_years)).round('s')
             self.timeshift(random_timedelta)
         if isinstance(shift, pd.Timestamp):
-            timedeltas = self.data.index - self.data.index.min()
-            self.data.index = shift + timedeltas
+            for df in self._raw_dataframes():
+                timedeltas = df['time'] - df['time'].min()
+                df['time'] = shift + timedeltas
+            self._join()
         if isinstance(shift, pd.Timedelta):
-            self.data.index += shift
+            for df in self._raw_dataframes():
+                df['time'] += shift
+            self._join()
+
+    def _raw_dataframes(self):
+        return [df for df in [self.aggregates, self.analytics_events, self.attributes_dailys,
+                              self.everion_events, self.features, self.sensors, self.signals] 
+                if df is not None]
