@@ -3,56 +3,68 @@ import pyedflib
 import numpy as np
 import pandas as pd
 from datetime import datetime
+import glob
 
-from .helpers import create_df
 
 class FarosReader:
 
-    signal_names = ['ECG', 'HRV', 'Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z', 'acc_mag']
+    #signal_names = ['ECG', 'HRV', 'Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z', 'acc_mag']
 
-    def __init__(self, path, timeshift=0):
-        self.init_filelist(path)
+    def __init__(self, path):
+        self._init_filelist(path)
 
-        with pyedflib.EdfReader(self.filelist['edf']) as f:
+        with pyedflib.EdfReader(self.filelist['edf']) as reader:
+            labels = reader.getSignalLabels()
+            self.sample_freqs = dict(zip(labels, reader.getSampleFrequencies()))
+            self.start_time = pd.Timestamp(reader.getStartdatetime())
+            signals = dict(zip(labels, [reader.readSignal(i) for i in range(len(labels))]))
+            self.data = pd.DataFrame()
+            for label in labels:
+                index = pd.date_range(start=self.start_time, 
+                                      periods=len(signals[label]),
+                                      freq=pd.DateOffset(seconds=1/self.sample_freqs[label]))
+                series = pd.Series(signals[label], index=index, name=label)
+                self.data = self.data.join(series, how='outer')
 
-            # read EDF file into a dictionary, keys: signal_labels
-            n = f.signals_in_file # get num of signal types
-            signal_labels = f.getSignalLabels() # get labels for types of signals
-            raw_sample_freqs = f.getSampleFrequencies()
-            start_ts = (f.getStartdatetime() - datetime.fromtimestamp(timeshift)).total_seconds()
+            if all(label in self.data.columns for label in ['Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z']):
+                self.data['acc_mag'] = np.linalg.norm([self.data['Accelerometer_X'], self.data['Accelerometer_Y'], self.data['Accelerometer_Z']], axis=0)
+                self.sample_freqs['acc_mag'] = self.sample_freqs['Accelerometer_X']
 
-            raw_data = dict.fromkeys(signal_labels) # the signals have difference sizes, therefore put into a dictionary
-            for i in np.arange(n):
-                raw_data[signal_labels[i]] = f.readSignal(i)
+    def write(self, path):
+        signal_data = []
+        labels = self.data.columns.drop('acc_mag')
+        with pyedflib.EdfWriter(path, n_channels=len(labels)) as writer:
+            writer.setStartdatetime(self.start_time.to_pydatetime())
+            for i, label in enumerate(labels):
+                writer.setLabel(i, label)
+                writer.setSamplefrequency(i, self.sample_freqs[label])
+                signal_data.append(self.data[label].dropna().values)
+            writer.writeSamples(signal_data)
 
-        raw_data['acc_mag'] = np.linalg.norm([raw_data['Accelerometer_X'], raw_data['Accelerometer_Y'], raw_data['Accelerometer_Z']], axis=0)
+    def timeshift(self, shift='random'):
+        if shift == 'random':
+            one_month = pd.Timedelta('30 days').value
+            two_years = pd.Timedelta('730 days').value
+            random_timedelta = - pd.Timedelta(random.uniform(one_month, two_years)).round('s')
+            self.timeshift(random_timedelta)
+        if isinstance(shift, pd.Timestamp):
+            self.start_time = shift
+            timedeltas = self.data.index - self.data.index.min()
+            self.data.index = shift + timedeltas
+        if isinstance(shift, pd.Timedelta):
+            self.start_time += shift
+            self.data.index += shift
 
-        sample_freqs = {}
-        for i in range(len(signal_labels)):
-            sample_freqs[signal_labels[i]] = raw_sample_freqs[i]
-        sample_freqs['acc_mag'] = sample_freqs['Accelerometer_X']
-        start_timestamps = {}
-        for name in self.signal_names:
-            start_timestamps[name] = start_ts
+    def _init_filelist(self, path):
+        self.filelist = dict()
+        edf_filenames = glob.glob(os.path.join(path, f"*.EDF"))
+        if len(edf_filenames) == 0:
+            raise FileNotFoundError(f"No file with .EDF extension found in {path}.")
+        if len(edf_filenames) > 1:
+            raise Error(f"Multiple files with .EDF extension found in {path}. This is ambiguous.")
+        self.filelist['edf'] = edf_filenames.pop()
 
-        self.data = create_df(self.signal_names, raw_data, sample_freqs, start_timestamps)
-
-    def init_filelist(self, path):
-        files = {
-            'EDF': '.EDF',
-            'ASC': '.ASC',
-            'SDF': '.SDF'
-        }
-        for file in os.listdir(path):
-            if file.endswith(".EDF"):
-                files['EDF'] = file
-            elif file.endswith(".ASC"):
-                files['ASC'] = file
-            elif file.endswith(".SDF"):
-                files['SDF'] = file
-
-        self.filelist = {
-            'edf': os.path.join(path, files['EDF']),
-            'asc': os.path.join(path, files['ASC']),
-            'sdf': os.path.join(path, files['SDF']),
-        }
+        for key, file_extension in {'asc': 'ASC', 'sdf': 'SDF'}.items():
+            filenames = glob.glob(os.path.join(path, f"*.{file_extension}"))
+            if len(filenames) == 1:
+                self.filelist[key] = filenames.pop()
