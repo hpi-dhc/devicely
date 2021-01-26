@@ -1,5 +1,6 @@
 from datetime import datetime
 import glob
+import json
 import os
 import random
 
@@ -11,42 +12,65 @@ import pyedflib
 class FarosReader:
 
     #signal_names = ['ECG', 'HRV', 'Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z', 'acc_mag']
-
     def __init__(self, path):
-        self._init_filelist(path)
+        file_extension = os.path.splitext(path)[-1].lower()
+        if file_extension == '.edf':
+            self._read_from_edf(path)
+        elif file_extension == '.csv':
+            self._read_from_csv(path)
+        else:
+            raise ValueError(f"Wrong file extension. Expected one of [.edf, .h5, .hdf5]. Got {file_extension}.")
 
-        with pyedflib.EdfReader(self.filelist['edf']) as reader:
+    def write(self, path):
+        self._write_to_csv(path)
+
+    def _read_from_edf(self, path):
+        with pyedflib.EdfReader(path) as reader:
             self.data = pd.DataFrame()
-            self.sample_freqs = dict(zip(reader.getSignalLabels(), reader.getSampleFrequencies()))
-            self.start_time = reader.getStartdatetime()
+            self.sample_freqs = dict()
+
+            # Start time is identical for all signals
+            self.start_time = pd.Timestamp(reader.getStartdatetime())
+
+            # Creating a date_range index takes long and some signals have duplicate lengths and sample frequencies.
+            # Thus we reuse indices to avoid long computation times.
             indices = dict()
 
             for i in range(len(reader.getSignalLabels())):
                 label = reader.getLabel(i)
-                freq = self.sample_freqs[label]
-                signal_arr = reader.readSignal(i)
-                if (freq, len(signal_arr)) not in indices:
-                    indices[(freq, len(signal_arr))] = pd.date_range(start=self.start_time, 
-                                                                     periods=len(signal_arr), 
-                                                                     freq=pd.DateOffset(seconds=1/freq))
-                series = pd.Series(signal_arr, index=indices[(freq, len(signal_arr))], name=label)
+                sample_freq = pd.DateOffset(seconds=1/reader.getSampleFrequency(i))
+                self.sample_freqs[label] = sample_freq
+                signals = reader.readSignal(i)
+                signal_length = len(signals)
+                if (sample_freq, signal_length) not in indices:
+                    indices[(sample_freq, signal_length)] = pd.date_range(start=self.start_time, 
+                                                                     periods=signal_length, 
+                                                                     freq=sample_freq)
+                series = pd.Series(signals, index=indices[(sample_freq, signal_length)], name=label)
                 self.data = self.data.join(series, how='outer')
+            
+            self.data.index.name = 'time'
 
-            if all(label in self.data.columns for label in ['Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z']):
-                self.data['acc_mag'] = np.linalg.norm([self.data['Accelerometer_X'], self.data['Accelerometer_Y'], self.data['Accelerometer_Z']], axis=0)
-                self.sample_freqs['acc_mag'] = self.sample_freqs['Accelerometer_X']
+            self._add_acc_mag()
 
-    def write(self, path):
-        signal_data = []
-        labels = self.data.columns.drop('acc_mag')
-        with pyedflib.EdfWriter(path, n_channels=len(labels)) as writer:
-            writer.setStartdatetime(self.start_time)
-            for i, label in enumerate(labels):
-                writer.setLabel(i, label)
-                writer.setSamplefrequency(i, self.sample_freqs[label])
-                writer.write()
-                signal_data.append(self.data[label].dropna().values)
-            writer.writeSamples(signal_data)
+    def _write_to_csv(self, path):
+        with open(path, 'w') as f:
+            json.dump({'start_time': int(self.start_time.value / 1e9),
+                       'sample_freqs': {label: 1/dateoffset.seconds for label, dateoffset in self.sample_freqs.items()}}, f)
+            f.write('\n')
+            self.data.to_csv(f)
+
+    def _read_from_csv(self, path):
+        with open(path, 'r') as f:
+            metadata = json.loads(f.readline())
+            self.start_time = pd.Timestamp(metadata['start_time'], unit='s')
+            self.sample_freqs = {label: pd.DateOffset(seconds=1 / freq_hz) for label, freq_hz in metadata['sample_freqs'].items()}
+            self.data = pd.read_csv(f, index_col='time', parse_dates=['time'])
+
+    def _add_acc_mag(self):
+        if all(label in self.data.columns for label in ['Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z']):
+            self.data['acc_mag'] = np.linalg.norm(self.data[['Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z']], axis=1)
+            self.sample_freqs['acc_mag'] = self.sample_freqs['Accelerometer_X']
 
     def timeshift(self, shift='random'):
         if shift == 'random':
@@ -61,17 +85,3 @@ class FarosReader:
         if isinstance(shift, pd.Timedelta):
             self.start_time += shift
             self.data.index += shift
-
-    def _init_filelist(self, path):
-        self.filelist = dict()
-        edf_filenames = glob.glob(os.path.join(path, f"*.EDF"))
-        if len(edf_filenames) == 0:
-            raise FileNotFoundError(f"No file with .EDF extension found in {path}.")
-        if len(edf_filenames) > 1:
-            raise ValueError(f"Multiple files with .EDF extension found in {path}. This is ambiguous.")
-        self.filelist['edf'] = edf_filenames.pop()
-
-        for key, file_extension in {'asc': 'ASC', 'sdf': 'SDF'}.items():
-            filenames = glob.glob(os.path.join(path, f"*.{file_extension}"))
-            if len(filenames) == 1:
-                self.filelist[key] = filenames.pop()

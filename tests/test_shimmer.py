@@ -70,7 +70,6 @@ class ShimmerTestCase(unittest.TestCase):
 
         self.reader = devicely.ShimmerPlusReader(self.READ_PATH)
 
-
     def test_basic_read(self):
         self.assertEqual(self.reader.delimiter, self.expected_delimiter)
         pd.testing.assert_frame_equal(self.reader.data.head().reset_index(drop=True),
@@ -85,9 +84,38 @@ class ShimmerTestCase(unittest.TestCase):
         self.assertEqual(new_reader.delimiter, self.reader.delimiter)
         pd.testing.assert_frame_equal(new_reader.data.reset_index(drop=True), 
                                       self.reader.data.reset_index(drop=True))
-        pd.testing.assert_index_equal(new_reader.data.index.round('s'), self.reader.data.index.round('s'))
+        pd.testing.assert_index_equal(new_reader.data.index, self.reader.data.index)
         pd.testing.assert_series_equal(new_reader.units, self.reader.units)
         os.remove(self.WRITE_PATH)
+
+    def test_timeshift_by_timedelta(self):
+        shift = pd.Timedelta('1 days, 2 hours, 3 minutes, 4 seconds, 5 milliseconds')
+        self.reader.timeshift(shift)
+        expected_shifted_index_head = pd.DatetimeIndex(['2020-07-29 12:59:54.039000', '2020-07-29 12:59:54.062000',
+                                       '2020-07-29 12:59:54.079000', '2020-07-29 12:59:54.104000',
+                                       '2020-07-29 12:59:54.116000'])
+        pd.testing.assert_index_equal(self.reader.data.head().index, expected_shifted_index_head, check_names=False)
+
+    def test_timeshift_to_timestamp(self):
+        shift = pd.Timestamp(day=23, month=4, year=2009, hour=6, minute=42, second=21, microsecond=int(593.32e3))
+        self.reader.timeshift(shift)
+        expected_shifted_index_head = pd.DatetimeIndex(['2009-04-23 06:42:21.593000', '2009-04-23 06:42:21.616000',
+                                                        '2009-04-23 06:42:21.633000', '2009-04-23 06:42:21.658000',
+                                                        '2009-04-23 06:42:21.670000'])
+        pd.testing.assert_index_equal(self.reader.data.head().index, expected_shifted_index_head, check_names=False)
+
+    def test_random_timeshift(self):
+        earliest_possible = pd.DatetimeIndex(['2018-07-29 10:56:50.034000', '2018-07-29 10:56:50.057000',
+                                              '2018-07-29 10:56:50.074000', '2018-07-29 10:56:50.099000',
+                                              '2018-07-29 10:56:50.111000'])
+        latest_possible = pd.DatetimeIndex(['2020-06-28 10:56:50.034000', '2020-06-28 10:56:50.057000',
+                                            '2020-06-28 10:56:50.074000', '2020-06-28 10:56:50.099000',
+                                            '2020-06-28 10:56:50.111000'])
+
+        self.reader.timeshift()
+        self.assertTrue((earliest_possible <= self.reader.data.head().index).all())
+        self.assertTrue((self.reader.data.head().index <= latest_possible).all())
+
 
 if __name__ == '__main__':
     unittest.main()
