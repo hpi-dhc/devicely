@@ -6,7 +6,6 @@ import pandas as pd
 
 
 class ShimmerPlusReader:
-
     def __init__(self, path, delimiter=';', timeshift=0):
         self.delimiter = delimiter
         self.data = pd.read_csv(path, sep=delimiter, skiprows=1)
@@ -27,7 +26,7 @@ class ShimmerPlusReader:
 
     def write(self, path):
         write_df = self.data.drop(columns=['acc_mag'])
-        write_df['Shimmer_40AC_Timestamp_Unix_CAL'] = write_df.index.astype(int) // 1e6
+        write_df['Shimmer_40AC_Timestamp_Unix_CAL'] = (write_df.index.to_series().astype(int) / 1e6).round()
         units = self.units.drop('acc_mag').to_frame().transpose()
         write_df = pd.concat([units, write_df])
         with open(path, 'w') as f:
@@ -41,9 +40,10 @@ class ShimmerPlusReader:
             random_timedelta = - pd.Timedelta(random.uniform(one_month, two_years)).round('ms')
             self.timeshift(random_timedelta)
         if isinstance(shift, pd.Timestamp):
+            shift = shift.round('ms')
             timedeltas = self.data.index - self.data.index.min()
             self.data.index = shift + timedeltas
         if isinstance(shift, pd.Timedelta):
-            self.data.index += shift
+            self.data.index += shift.round('ms')
 
 
