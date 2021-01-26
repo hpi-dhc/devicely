@@ -14,16 +14,20 @@ class FarosReader:
         self._init_filelist(path)
 
         with pyedflib.EdfReader(self.filelist['edf']) as reader:
-            labels = reader.getSignalLabels()
-            self.sample_freqs = dict(zip(labels, reader.getSampleFrequencies()))
-            self.start_time = pd.Timestamp(reader.getStartdatetime())
-            signals = dict(zip(labels, [reader.readSignal(i) for i in range(len(labels))]))
             self.data = pd.DataFrame()
-            for label in labels:
-                index = pd.date_range(start=self.start_time, 
-                                      periods=len(signals[label]),
-                                      freq=pd.DateOffset(seconds=1/self.sample_freqs[label]))
-                series = pd.Series(signals[label], index=index, name=label)
+            self.sample_freqs = dict(zip(reader.getSignalLabels(), reader.getSampleFrequencies()))
+            self.start_time = reader.getStartdatetime()
+            indices = dict()
+
+            for i in range(len(reader.getSignalLabels())):
+                label = reader.getLabel(i)
+                freq = self.sample_freqs[label]
+                signal_arr = reader.readSignal(i)
+                if (freq, len(signal_arr)) not in indices:
+                    indices[(freq, len(signal_arr))] = pd.date_range(start=self.start_time, 
+                                                                     periods=len(signal_arr), 
+                                                                     freq=pd.DateOffset(seconds=1/freq))
+                series = pd.Series(signal_arr, index=indices[(freq, len(signal_arr))], name=label)
                 self.data = self.data.join(series, how='outer')
 
             if all(label in self.data.columns for label in ['Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z']):
@@ -34,10 +38,11 @@ class FarosReader:
         signal_data = []
         labels = self.data.columns.drop('acc_mag')
         with pyedflib.EdfWriter(path, n_channels=len(labels)) as writer:
-            writer.setStartdatetime(self.start_time.to_pydatetime())
+            writer.setStartdatetime(self.start_time)
             for i, label in enumerate(labels):
                 writer.setLabel(i, label)
                 writer.setSamplefrequency(i, self.sample_freqs[label])
+                writer.write()
                 signal_data.append(self.data[label].dropna().values)
             writer.writeSamples(signal_data)
 
