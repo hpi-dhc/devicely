@@ -1,9 +1,11 @@
-import os
-import pyedflib
-import numpy as np
-import pandas as pd
 from datetime import datetime
 import glob
+import os
+import random
+
+import numpy as np
+import pandas as pd
+import pyedflib
 
 
 class FarosReader:
