@@ -10,7 +10,7 @@ import pandas as pd
 import devicely
 
 
-class SpacelabsTestCase(unittest.TestCase):
+class EverionTestCase(unittest.TestCase):
     READ_PATH = 'tests/Everion_test_data'
     BROKEN_READ_PATH = 'tests/Everion_test_data_broken' #for testing with missing files
     WRITE_PATH = 'tests/Everion_test_data_write'
