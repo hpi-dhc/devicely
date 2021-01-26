@@ -68,7 +68,7 @@ class FarosReader:
         if len(edf_filenames) == 0:
             raise FileNotFoundError(f"No file with .EDF extension found in {path}.")
         if len(edf_filenames) > 1:
-            raise Error(f"Multiple files with .EDF extension found in {path}. This is ambiguous.")
+            raise ValueError(f"Multiple files with .EDF extension found in {path}. This is ambiguous.")
         self.filelist['edf'] = edf_filenames.pop()
 
         for key, file_extension in {'asc': 'ASC', 'sdf': 'SDF'}.items():
