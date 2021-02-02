@@ -136,6 +136,7 @@ class EmpaticaTestCase(unittest.TestCase):
             [pd.Timestamp(x, unit='s') for x in [1549015050.68, 1549014523.17, 1549014702.49, 1549014872.04]])
 
     def test_read(self):
+        self.assertEqual(1, 2)
         pd.testing.assert_frame_equal(self.empatica_reader.ACC, self.acc_df, check_freq=False)
         pd.testing.assert_frame_equal(self.empatica_reader.BVP, self.bvp_df, check_freq=False)
         pd.testing.assert_frame_equal(self.empatica_reader.EDA, self.eda_df, check_freq=False)
