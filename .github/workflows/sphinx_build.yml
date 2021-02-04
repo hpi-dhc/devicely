@@ -15,10 +15,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Build documentation html
+    - uses: actions/checkout@v1
         run: |
-          cd sphinx
-          make html
-          cp -r _build/html ../docs
-          touch ../docs/.nojekyll
-          make clean
+          ls sphinx
