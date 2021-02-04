@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - master
+    - gh-workflow-sphinx-build
   pull_request:
     branches:
     - master
@@ -16,7 +17,9 @@ jobs:
     steps:
       - name: Build documentation html
         run: |
-          if test -d docs; then rm -r docs fi
+          if test -d docs;
+            then rm -r docs 
+          fi
           cd sphinx
           make html
           cp -r _build/html ../docs
