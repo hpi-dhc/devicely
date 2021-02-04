@@ -17,9 +17,6 @@ jobs:
     steps:
       - name: Build documentation html
         run: |
-          if test -d docs;
-            then rm -r docs 
-          fi
           cd sphinx
           make html
           cp -r _build/html ../docs
