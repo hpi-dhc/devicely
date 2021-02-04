@@ -1,0 +1,24 @@
+name: Build Sphinx Documentation
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  docs:
+    name: Building sphinx documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build documentation html
+        run: |
+          if test -d docs; then rm -r docs fi
+          cd sphinx
+          make html
+          cp -r _build/html ../docs
+          touch ../docs/.nojekyll
+          make clean
