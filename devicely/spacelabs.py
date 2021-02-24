@@ -4,9 +4,11 @@ Process Spacelabs (SL 90217) data
 import csv
 import datetime as dt
 import random
+import xml.etree.ElementTree as ET
 
 import pandas as pd
 import xmltodict
+
 
 from .helpers import recursive_ordered_dict_to_dict
 
@@ -76,8 +78,15 @@ class SpacelabsReader:
         self.data = self.data[order]
 
         xml_line = open(path, 'r').readlines()[-1]
-        xml_dict = recursive_ordered_dict_to_dict(xmltodict.parse(xml_line))
-        self.metadata = xml_dict['XML']
+        xml_root = ET.fromstring(xml_line)
+        self.metadata = {
+            'PATIENTINFO' : {'DOB' : xml_root.find('PATIENTINFO').find('DOB').text,
+                             'RACE' : xml_root.find('PATIENTINFO').find('RACE').text},
+            'REPORTINFO' : {'PHYSICIAN' : xml_root.find('REPORTINFO').find('PHYSICIAN').text,
+                            'NURSETECH' : xml_root.find('REPORTINFO').find('NURSETECH').text,
+                            'STATUS' : xml_root.find('REPORTINFO').find('STATUS').text,
+                            'CALIPERSUMMERY' : {'COUNT' : int(xml_root.find('REPORTINFO').find('CALIPERSUMMARY').find('COUNT').text)}}
+        }
 
     def deidentify(self, subject_id=None):
         """
@@ -134,6 +143,10 @@ class SpacelabsReader:
             printing_df.replace('-9997', '"AB"', inplace=True)
             printing_df.to_csv(f, header=None, index=None, quoting=csv.QUOTE_NONE)
             f.write(xmltodict.unparse({'XML': self.metadata}).split('\n')[1])
+
+            xml_root = ET.Element('XML')
+            patient_info = ET.SubElement(xml_root, 'PATIENTINFO')
+            report_info = ET.SubElement(xml_root, 'REPORTINFO')
 
     def timeshift(self, shift='random'):
         """

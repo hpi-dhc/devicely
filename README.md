@@ -1,3 +1,5 @@
+![unit tests](https://github.com/hpi-dhc/devicely/workflows/main.yml/badge.svg)
+
 ![Devicely Logo](/imgs/logo/devicely-logo.png)
 
 ## Documentation

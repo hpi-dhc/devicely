@@ -19,7 +19,7 @@ class FarosReader:
         elif file_extension == '.csv':
             self._read_from_csv(path)
         else:
-            raise ValueError(f"Wrong file extension. Expected one of [.edf, .h5, .hdf5]. Got {file_extension}.")
+            raise ValueError(f"Wrong file extension. Expected one of [.edf, .csv]. Got {file_extension}.")
 
     def write(self, path):
         self._write_to_csv(path)
