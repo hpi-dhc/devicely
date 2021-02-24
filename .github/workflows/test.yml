@@ -1,4 +1,4 @@
-name: Pytest for devicely
+name: test
 
 on:
   push:
