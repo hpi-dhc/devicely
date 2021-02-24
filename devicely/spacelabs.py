@@ -85,7 +85,7 @@ class SpacelabsReader:
             'REPORTINFO' : {'PHYSICIAN' : xml_root.find('REPORTINFO').find('PHYSICIAN').text,
                             'NURSETECH' : xml_root.find('REPORTINFO').find('NURSETECH').text,
                             'STATUS' : xml_root.find('REPORTINFO').find('STATUS').text,
-                            'CALIPERSUMMARY' : {'COUNT' : int(xml_root.find('REPORTINFO').find('CALIPERSUMMARY').find('COUNT').text)}}
+                            'CALIPERSUMMARY' : {'COUNT' : xml_root.find('REPORTINFO').find('CALIPERSUMMARY').find('COUNT').text}}
         }
 
     def deidentify(self, subject_id=None):
