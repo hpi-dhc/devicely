@@ -1,4 +1,4 @@
-[![unit-testing Actions Status](https://github.com/hpi-dhc/devicely/workflows/unit-testing/badge.svg)](https://github.com/hpi-dhc/devicely/actions)
+![unit-testing Actions Status](https://github.com/hpi-dhc/devicely/workflows/unit-testing/badge.svg)]
 
 ![Devicely Logo](/imgs/logo/devicely-logo.png)
 
