@@ -1,4 +1,4 @@
-name: Pytest for devicely
+name: unit-testing
 
 on:
   push:
