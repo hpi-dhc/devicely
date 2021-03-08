@@ -1,6 +1,5 @@
 import os
 import glob
-import time
 import random
 import numpy as np
 import pandas as pd
@@ -129,14 +128,14 @@ class EverionReader:
         dateparse = {"parse_dates": ['time'],
                     "date_parser": lambda x: pd.to_datetime(x, unit='s')}
         df = pd.read_csv(filepath, **dateparse).drop_duplicates()
-        
+
         try:
             df['values'] = df['values'].astype(float)
         except ValueError:
             df[['values', 'quality']] = df['values'].str.split(
                 ';', expand=True).astype(float)
         return df
-        
+
     def _join(self):
         signals = self._convert_single_dataframe(
             self.signals, self.selected_signal_tags)
@@ -247,5 +246,5 @@ class EverionReader:
 
     def _raw_dataframes(self):
         return [df for df in [self.aggregates, self.analytics_events, self.attributes_dailys,
-                              self.everion_events, self.features, self.sensors, self.signals] 
+                              self.everion_events, self.features, self.sensors, self.signals]
                 if df is not None]

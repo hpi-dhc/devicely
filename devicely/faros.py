@@ -43,12 +43,12 @@ class FarosReader:
                 signals = reader.readSignal(i)
                 signal_length = len(signals)
                 if (sample_freq, signal_length) not in indices:
-                    indices[(sample_freq, signal_length)] = pd.date_range(start=self.start_time, 
-                                                                     periods=signal_length, 
+                    indices[(sample_freq, signal_length)] = pd.date_range(start=self.start_time,
+                                                                     periods=signal_length,
                                                                      freq=sample_freq)
                 series = pd.Series(signals, index=indices[(sample_freq, signal_length)], name=label)
                 self.data = self.data.join(series, how='outer')
-            
+
             self.data.index.name = 'time'
 
             self._add_acc_mag()
