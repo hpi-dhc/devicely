@@ -54,8 +54,9 @@ import devicely
 
 ### Example 
 
-**shift** = pd.Timedelta(15,unit='d')
-
+```
+shift = pd.Timedelta(15,unit='d')
+```
 
 Reading Tags from the TimeStamp App
 
