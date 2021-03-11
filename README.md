@@ -116,6 +116,8 @@ Reading Spacelabs Data
 
 Timeshifting, Deidentifying and Writing them back
 
+The method deidentify generates a `random` subject id or you can specify one (e.g. 001)
+
 The method `set_window` will create a `timedelta` window around the blood pressure measurement (e.g. 30 secs)
 
 The type of window is defined by: `bfill` (before the start of the measurement),
