@@ -1,5 +1,5 @@
 """
-Module to Process Empatica Data
+Module to process Empatica data
 """
 
 import os
@@ -19,26 +19,31 @@ class EmpaticaReader:
     Attributes
     ----------
     start_times : dict
-        Contains the timestamp of the first measurement for all measured signals (BVP, ACC etc.).
+        Contains the timestamp of the first measurement for all
+        measured signals (BVP, ACC etc.).
 
     sample_freqs : dict
-        Contains the sampling frequencies of all measured signals in Hz.
+        Contains the sampling frequencies of all
+        measured signals in Hz.
 
     IBI : DataFrame
-        Contains inter-beat interval data with columns "timedelta" and "ibi",
-        indexed by time of measurement.
-        The column "timedelta" contains the passed time in seconds since the first measurement
-        and "ibi" contains the inter-beat interval in seconds since the last measurement.
+        Contains inter-beat interval data with columns "timedelta"
+        and "ibi", indexed by time of measurement. The column "timedelta"
+        contains the passed time in seconds since the first measurement and
+        "ibi" contains the inter-beat interval in seconds since the last
+        measurement.
 
     ACC : DataFrame
-        Contains the data measured with the onboard MEMS type 3-axis accelerometer,
-        indexed by time of measurement.
+        Contains the data measured with the onboard MEMS type 3-axis
+        accelerometer, indexed by time of measurement.
 
     BVP : DataFrame
-        Contains blood volume pulse data, indexed by time of measurement.
+        Contains blood volume pulse data, indexed by
+        time of measurement.
 
     EDA : DataFrame
-        Contains data captured from the electrodermal activity sensor, indexed by time of measurement.
+        Contains data captured from the electrodermal activity
+        sensor, indexed by time of measurement.
 
     HR : DataFrame
         Contains heart rate data, indexed by time of measurement.
@@ -47,8 +52,9 @@ class EmpaticaReader:
         Contains temperature data, indexed by time of measurement.
 
     data : DataFrame
-        Joined dataframe of all individual signal dataframes (see above).
-        May contain NaN values because sampling frequencies differ across signals.
+        Joined dataframe of all individual signal dataframes (see
+        above). May contain NaN values because sampling frequencies differ
+        across signals.
     """
 
     signal_names = ['acc', 'bvp', 'eda', 'hr', 'temp']
@@ -61,8 +67,9 @@ class EmpaticaReader:
         Parameters
         ----------
         path : str
-            Path of the directory that contains the individual signal csv files.
-            The files must be named ACC.csv, BVP.csv, EDA.csv, HR.csv, IBI.csv and TEMP.csv.
+            Path of the directory that contains the individual signal csv
+            files. The files must be named ACC.csv, BVP.csv, EDA.csv, HR.csv,
+            IBI.csv and TEMP.csv.
 
         Raises
         ------
@@ -94,7 +101,8 @@ class EmpaticaReader:
 
     def write(self, path):
         """
-        Write the signal dataframes back to individual csv files formatted the same way as the read csv files.
+        Write the signal dataframes back to individual csv files formatted the
+        same way as the read csv files.
 
         Parameters
         ----------
@@ -135,8 +143,10 @@ class EmpaticaReader:
             self.start_times[signal_name] = pd.Timestamp(float(f.readline()), unit='s')
             self.sample_freqs[signal_name] = float(f.readline())
             df = pd.read_csv(f, names=[signal_name], float_precision='high')
-            df.index = pd.date_range(start=self.start_times[signal_name], freq=f"{1 / self.sample_freqs[signal_name]}S",
-                                     periods=len(df))
+            df.index = pd.date_range(
+                start=self.start_times[signal_name],
+                freq=f"{1 / self.sample_freqs[signal_name]}S",
+                periods=len(df))
             return df
 
     def _write_signal(self, dir_path, dataframe):
@@ -159,8 +169,10 @@ class EmpaticaReader:
             self.sample_freqs['acc'] = sample_freqs[0]
             df = pd.read_csv(f, names=self.acc_names)
             df['acc_mag'] = np.linalg.norm(df.to_numpy(), axis=1)
-            df.index = pd.date_range(start=self.start_times['acc'], freq=f"{1 / self.sample_freqs['acc']}S",
-                                     periods=len(df))
+            df.index = pd.date_range(
+                start=self.start_times['acc'],
+                freq=f"{1 / self.sample_freqs['acc']}S",
+                periods=len(df))
             return df
 
     def _write_acc(self, dir_path):
@@ -204,7 +216,8 @@ class EmpaticaReader:
             If shift is a timdelta, shifts the data by that timedelta.
 
             If shift is a timestamp, shifts the data such that the earliest entry
-            is at that timestamp and the remaining values keep the same time distance to the first entry.
+            is at that timestamp and the remaining values keep the same
+            time distance to the first entry.
         """
 
         if shift == 'random':

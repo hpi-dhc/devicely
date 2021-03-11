@@ -1,5 +1,6 @@
-from datetime import datetime
-import glob
+"""
+Module to process Faros 180 data
+"""
 import json
 import os
 import random
@@ -11,8 +12,10 @@ import pyedflib
 
 class FarosReader:
 
-    #signal_names = ['ECG', 'HRV', 'Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z', 'acc_mag']
+    #signal_names = ['ECG', 'HRV', 'Accelerometer_X', 'Accelerometer_Y',
+    #'Accelerometer_Z', 'acc_mag']
     def __init__(self, path):
+        self.start_time = 0
         file_extension = os.path.splitext(path)[-1].lower()
         if file_extension == '.edf':
             self._read_from_edf(path)
@@ -32,8 +35,9 @@ class FarosReader:
             # Start time is identical for all signals
             self.start_time = pd.Timestamp(reader.getStartdatetime())
 
-            # Creating a date_range index takes long and some signals have duplicate lengths and sample frequencies.
-            # Thus we reuse indices to avoid long computation times.
+            # Creating a date_range index takes long and some signals have
+            # duplicate lengths and sample frequencies. Thus we reuse indices to
+            # avoid long computation times.
             indices = dict()
 
             for i in range(len(reader.getSignalLabels())):

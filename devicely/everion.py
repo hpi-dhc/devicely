@@ -1,3 +1,6 @@
+"""
+Module to process Everion data
+"""
 import os
 import glob
 import random

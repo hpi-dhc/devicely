@@ -1,4 +1,6 @@
-import datetime as dt
+"""
+Module to process Shimmer Plus data
+"""
 import random
 
 import numpy as np
@@ -6,14 +8,15 @@ import pandas as pd
 
 
 class ShimmerPlusReader:
-    def __init__(self, path, delimiter=';', timeshift=0):
+    def __init__(self, path, delimiter=';'):
         self.delimiter = delimiter
         self.data = pd.read_csv(path, sep=delimiter, skiprows=1)
         self.data = self.data.dropna(axis=1, how='all')
         self.units = self.data.iloc[0] # saving self.data units
         self.data = self.data.drop(0).astype(float)
-        self.data['time'] = pd.to_datetime(self.data['Shimmer_40AC_Timestamp_Unix_CAL'],
-                                           unit=self.units['Shimmer_40AC_Timestamp_Unix_CAL']).round('ms')
+        self.data['time'] = pd.to_datetime(
+            self.data['Shimmer_40AC_Timestamp_Unix_CAL'],
+            unit=self.units['Shimmer_40AC_Timestamp_Unix_CAL']).round('ms')
         self.data.drop(columns=['Shimmer_40AC_Timestamp_Unix_CAL'], inplace=True)
         self.data = self.data.drop_duplicates(subset='time')
         self.data.set_index('time', inplace=True, verify_integrity=True)
@@ -45,5 +48,3 @@ class ShimmerPlusReader:
             self.data.index = shift + timedeltas
         if isinstance(shift, pd.Timedelta):
             self.data.index += shift.round('ms')
-
-
