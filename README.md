@@ -8,7 +8,8 @@ https://hpi-dhc.github.io/devicely/
 
 ## Description
 
-Package containing `readers` for reading files from different devices.
+Package containing `readers` for reading data from different devices.
+You can also `timeshift` the data to a specified interval and `write` the data back.
 
 For a sample dataset go to: https://doi.org/10.6084/m9.figshare.12646217
 
@@ -38,7 +39,7 @@ Shimmer Consensys GSR (Shimmer3 GSR Development Kit)
 
 [Link](https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab)
 
-## Usage
+## Basic Usage
 
 To use the package, after cloning this repository:
 
@@ -51,47 +52,81 @@ Then:
 import devicely
 ```
 
-**timeshift** is the timeshift in hours from the recording to UTC (1 means: UTC + 1 hour)
+Example: **shift** = pd.Timedelta(15,unit='d')
+
 
 Reading Tags from the TimeStamp App
+
+Timeshifting and Writing them back
 ```
-tags = devicely.TagReader(tag_file, timeshift=0)
-tags.data
+tags = devicely.TagReader(tags_path)
+tags.data.head()
+
+tags.timeshift(shift)
+tags.data.head()
+
+tags.write(join(write_path, 'tags.csv'))
 ```
 
 Reading Empatica E4 Data
+
+Timeshifting and Writing them back
 ```
-empatica = devicely.EmpaticaReader(empatica_folder_path)
+empatica = devicely.EmpaticaReader(empatica_path)
 empatica.data.head()
+
+empatica.timeshift(shift)
+empatica.data.head()
+
+empatica.write(join(write_path, 'Empatica'))
 ```
 
 Reading Bittium Faros 180 Data
+
+Timeshifting and Writing them back
 ```
-faros = devicely.FarosReader(faros_folder_path, timeshift=0)
+faros = devicely.FarosReader(faros_path)
 faros.data.head()
+
+faros.timeshift(shift)
+faros.data.head()
+
+faros.write(join(write_path, 'faros.csv'))
 ```
 
 Reading Biovotion Everion Data
 
+Timeshifting and Writing them back
+
 The method detects automatically if the `sensors` file is present or not.
 ```
-everion = devicely.EverionReader(everion_folder_path)
+everion = devicely.EverionReader(everion_path)
 everion.data.head()
-```
 
+everion.timeshift(shift)
+everion.data.head()
+
+everion.write(join(write_path, 'Everion'))
+```
 
 Reading Spacelabs Data
 
-The column `stress_test` was created for adding information on when a stress test happened.
+Timeshifting, Deidentifying and Writing them back
 
-E. g. blood pressure measurements before and after a test.
-This is not part of the `abp` file.
+The method `set_window` will create a `timedelta` window around the blood pressure measurement (e.g. 30 secs)
 
-The method `set_window` will create a `timedelta` window around the blood pressure measurement (e. g. 30 secs)
-
-The type of window is defined by: `bfill` (before the start of the measurement) or `bffil` (half before and half after)
+The type of window is defined by: `bfill` (before the start of the measurement),
+`bffil` (half before and half after) of `ffill` (after the start of the measurement)
 ```
-spacelabs = devicely.SpacelabsReader(spacelabs_folder_path)
+spacelabs = devicely.SpacelabsReader(spacelabs_path)
+spacelabs.data.head()
+
+spacelabs.timeshift(shift)
+spacelabs.deidentify('001')
+spacelabs.data.head()
+
+spacelabs.write(join(write_path, 'spacelabs.abp'))
+
 spacelabs.set_window(timedelta(seconds=30), 'bfill')
 spacelabs.data.head()
 ```
@@ -99,10 +134,17 @@ spacelabs.data.head()
 
 Reading Shimmer Consensys GSR (Shimmer3 GSR Development Kit)
 
-Please define your `csv` delimiter (e. g. `,` `;` `\t`) and `timeshift` if applicable
+Timeshifting and Writing them back
+
+Please define your `csv` delimiter (e. g. `,` `;` `\t`)
 ```
 shimmer_plus = devicely.ShimmerPlusReader(shimmer_file_path, delimiter=';')
 shimmer_plus.data.head()
+
+shimmer_plus.timeshift(shift)
+shimmer_plus.data.head()
+
+shimmer_plus.write(join(write_path, 'shimmer_plus.csv'))
 ```
 
 
