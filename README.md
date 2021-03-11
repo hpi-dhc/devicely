@@ -141,7 +141,7 @@ Reading Shimmer Consensys GSR (Shimmer3 GSR Development Kit)
 
 Timeshifting and Writing them back
 
-Please define your `csv` delimiter (e. g. `,` `;` `\t`)
+Please define your `csv` delimiter (e.g. `,` `;` `\t`)
 ```
 shimmer_plus = devicely.ShimmerPlusReader(shimmer_file_path, delimiter=';')
 shimmer_plus.data.head()
