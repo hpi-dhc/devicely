@@ -52,7 +52,9 @@ Then:
 import devicely
 ```
 
-Example: **shift** = pd.Timedelta(15,unit='d')
+### Example 
+
+**shift** = pd.Timedelta(15,unit='d')
 
 
 Reading Tags from the TimeStamp App
