@@ -81,12 +81,13 @@ class SpacelabsReader:
         xml_line = open(path, 'r').readlines()[-1]
         xml_root = ET.fromstring(xml_line)
         self.metadata = {
-            'PATIENTINFO' : {'DOB' : xml_root.find('PATIENTINFO').find('DOB').text if xml_root.find('PATIENTINFO').find('DOB') else None,
-                             'RACE' : xml_root.find('PATIENTINFO').find('RACE').text if xml_root.find('PATIENTINFO').find('RACE') else None},
-            'REPORTINFO' : {'PHYSICIAN' : xml_root.find('REPORTINFO').find('PHYSICIAN').text if xml_root.find('REPORTINFO').find('PHYSICIAN') else None,
-                            'NURSETECH' : xml_root.find('REPORTINFO').find('NURSETECH').text if xml_root.find('REPORTINFO').find('NURSETECH') else None,
-                            'STATUS' : xml_root.find('REPORTINFO').find('STATUS').text if xml_root.find('REPORTINFO').find('STATUS') else None,
-                            'CALIPERSUMMARY' : {'COUNT' : xml_root.find('REPORTINFO').find('CALIPERSUMMARY').find('COUNT').text if xml_root.find('REPORTINFO').find('CALIPERSUMMARY') else None}}
+            'PATIENTINFO' : {'DOB' : (xml_root.find('PATIENTINFO').find('DOB').text if xml_root.find('PATIENTINFO').find('DOB') is not None else None),
+                             'RACE' : (xml_root.find('PATIENTINFO').find('RACE').text if xml_root.find('PATIENTINFO').find('RACE') is not None else None)},
+            'REPORTINFO' : {'PHYSICIAN' : (xml_root.find('REPORTINFO').find('PHYSICIAN').text if xml_root.find('REPORTINFO').find('PHYSICIAN') is not None else None),
+                            'NURSETECH' : (xml_root.find('REPORTINFO').find('NURSETECH').text if xml_root.find('REPORTINFO').find('NURSETECH') is not None else None),
+                            'STATUS' : (xml_root.find('REPORTINFO').find('STATUS').text if xml_root.find('REPORTINFO').find('STATUS') is not None else None),
+                            'CALIPERSUMMARY' : {'COUNT' :
+                                (xml_root.find('REPORTINFO').find('CALIPERSUMMARY').find('COUNT').text if xml_root.find('REPORTINFO').find('CALIPERSUMMARY') is not None else None)}}
         }
 
     def deidentify(self, subject_id=None):
