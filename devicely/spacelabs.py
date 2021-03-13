@@ -189,6 +189,16 @@ class SpacelabsReader:
         else:
             self.data.date = self.data.timestamp.map(lambda timestamp: timestamp.date())
             self.data.time = self.data.timestamp.map(lambda timestamp: timestamp.time())
+        if 'window_start' in self.data.columns:
+            if isinstance(shift, pd.Timestamp):
+                timedeltas = self.data.window_start - self.data.window_start[0]
+                self.data.window_start = shift.round('min') + timedeltas
+
+                timedeltas = self.data.window_end - self.data.window_end[0]
+                self.data.window_end = shift.round('min') + timedeltas
+            if isinstance(shift, pd.Timedelta):
+                self.data.window_start += shift.round('min')
+                self.data.window_end += shift.round('min')
 
     def drop_EB(self):
         """
