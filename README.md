@@ -52,12 +52,13 @@ Then:
 import devicely
 ```
 
-### Example 
+### Example
 
 ```
 shift = pd.Timedelta(15,unit='d')
 ```
 
+#### **Tags**
 Reading Tags from the TimeStamp App
 
 Timeshifting and Writing them back
@@ -71,6 +72,7 @@ tags.data.head()
 tags.write(join(write_path, 'tags.csv'))
 ```
 
+#### **Empatica**
 Reading Empatica E4 Data
 
 Timeshifting and Writing them back
@@ -84,6 +86,7 @@ empatica.data.head()
 empatica.write(join(write_path, 'Empatica'))
 ```
 
+#### **Faros**
 Reading Bittium Faros 180 Data
 
 Timeshifting and Writing them back
@@ -97,11 +100,12 @@ faros.data.head()
 faros.write(join(write_path, 'faros.csv'))
 ```
 
+#### **Biovotion**
 Reading Biovotion Everion Data
 
 Timeshifting and Writing them back
 
-The method detects automatically if the `sensors` file is present or not.
+* The reader method detects automatically if the `sensors` file is present or not.
 ```
 everion = devicely.EverionReader(everion_path)
 everion.data.head()
@@ -112,15 +116,18 @@ everion.data.head()
 everion.write(join(write_path, 'Everion'))
 ```
 
+#### **Spacelabs**
 Reading Spacelabs Data
 
 Timeshifting, Deidentifying and Writing them back
 
-The method deidentify generates a `random` subject id or you can specify one (e.g. 001)
+* The method deidentify generates a `random` subject id or you can specify one (e.g. 001)
 
-The method `set_window` will create a `timedelta` window around the blood pressure measurement (e.g. 30 secs)
+* The method `drop_EB` will drop lines with an `EB` error
 
-The type of window is defined by: `bfill` (before the start of the measurement),
+* The method `set_window` will create a `timedelta` window around the blood pressure measurement (e.g. 30 secs)
+
+    * The type of window is defined by: `bfill` (before the start of the measurement),
 `bffil` (half before and half after) of `ffill` (after the start of the measurement)
 ```
 spacelabs = devicely.SpacelabsReader(spacelabs_path)
@@ -128,20 +135,21 @@ spacelabs.data.head()
 
 spacelabs.timeshift(shift)
 spacelabs.deidentify('001')
+spacelabs.drop_EB()
 spacelabs.data.head()
-
-spacelabs.write(join(write_path, 'spacelabs.abp'))
 
 spacelabs.set_window(timedelta(seconds=30), 'bfill')
 spacelabs.data.head()
+
+spacelabs.write(join(write_path, 'spacelabs.abp'))
 ```
 
-
+#### **Shimmer**
 Reading Shimmer Consensys GSR (Shimmer3 GSR Development Kit)
 
 Timeshifting and Writing them back
 
-Please define your `csv` delimiter (e.g. `,` `;` `\t`)
+* Please define your `csv` delimiter (e.g. `,` `;` `\t`) in the reader method
 ```
 shimmer_plus = devicely.ShimmerPlusReader(shimmer_file_path, delimiter=';')
 shimmer_plus.data.head()
