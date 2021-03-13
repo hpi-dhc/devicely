@@ -2,7 +2,6 @@ import datetime as dt
 import glob
 import os
 import shutil
-import sys
 import unittest
 
 import numpy as np
@@ -36,7 +35,7 @@ class EverionTestCase(unittest.TestCase):
                                expected_sensor_tags + expected_feature_tags)
 
         self.assertEqual(set(self.reader.data.columns), expected_columns)
-    
+
     def test_read_with_non_default_tags(self):
         signal_tags = [12, 15, 19, 119, 134]
         sensor_tags = [80, 83, 84, 85, 92]
@@ -45,8 +44,8 @@ class EverionTestCase(unittest.TestCase):
                                         signal_tags=signal_tags,
                                         sensor_tags=sensor_tags,
                                         feature_tags=feature_tags)
-        
-        # The individual should dataframes contain all tags, regardless of the initialization parameters.                                        
+
+        # The individual should dataframes contain all tags, regardless of the initialization parameters.
         self._test_read_individual_dataframes(reader)
 
         expected_singal_columns = ['respiration_rate', 'temperature_local',
@@ -56,14 +55,14 @@ class EverionTestCase(unittest.TestCase):
         expected_sensor_columns = ['led1_data', 'led4_data', 'accy_data', 'accx_data']
         #17 is a valid feature column, but it is not present in the testing csv
         expected_feature_columns = []
-        expected_columns = set(expected_singal_columns + expected_signal_quality_columns + 
+        expected_columns = set(expected_singal_columns + expected_signal_quality_columns +
                                expected_sensor_columns + expected_feature_columns)
 
         self.assertEqual(set(reader.data.columns), expected_columns)
 
     def test_read_with_invalid_tags(self):
         signal_tags = [12, 15, 19, 119, 134, 80] #80 is not a signal tag
-        sensor_tags = [80, 83, 84, 85, 92, 70] #70 is not a sensor tag 
+        sensor_tags = [80, 83, 84, 85, 92, 70] #70 is not a sensor tag
         feature_tags = [17, 86] #86 is not a sensor tag
 
         call = lambda: devicely.EverionReader(self.READ_PATH,
@@ -71,7 +70,7 @@ class EverionTestCase(unittest.TestCase):
                                               sensor_tags=sensor_tags,
                                               feature_tags=feature_tags)
         self.assertRaises(KeyError, call)
-        
+
     def test_read_with_missing_files(self):
         print(os.listdir())
         shutil.copytree(self.READ_PATH, self.BROKEN_READ_PATH)
@@ -80,7 +79,7 @@ class EverionTestCase(unittest.TestCase):
         os.remove(signals_path)
         os.remove(attributes_dailys_path)
         reader = devicely.EverionReader(self.BROKEN_READ_PATH)
-        
+
         self.assertIsNone(reader.signals)
         self.assertIsNone(reader.attributes_dailys)
 
@@ -90,7 +89,7 @@ class EverionTestCase(unittest.TestCase):
 
         expected_columns = set(expected_sensor_tags + expected_feature_tags)
         self.assertEqual(set(reader.data.columns), expected_columns)
-        
+
         shutil.rmtree(self.BROKEN_READ_PATH)
 
     def test_read_with_all_join_files_missing(self):
@@ -167,7 +166,7 @@ class EverionTestCase(unittest.TestCase):
             'quality': [np.nan, 100.0, 85.0, np.nan, 93.0]
         })
 
-        timestamp = pd.Timestamp('1 May 2018 16:32:41')        
+        timestamp = pd.Timestamp('1 May 2018 16:32:41')
         self.reader.timeshift(timestamp)
 
         pd.testing.assert_frame_equal(self.reader.aggregates.head(), expected_aggregates_head)
@@ -234,7 +233,7 @@ class EverionTestCase(unittest.TestCase):
             'time': pd.to_datetime(5 * [1532216905], unit='s'),
             'values': [0.0, 21.86422, 65.0, 1.5686275, 18.0],
             'quality': [np.nan, 100.0, 85.0, np.nan, 93.0]
-        }) 
+        })
 
         timedelta = - pd.Timedelta('222 days, 15 hours, 51 minutes, 33 seconds')
         old_joined_data_time_col = self.reader.data.index.copy()
@@ -274,7 +273,7 @@ class EverionTestCase(unittest.TestCase):
             new_time_col = new_df['time']
             one_month = pd.Timedelta('30 days')
             two_years = pd.Timedelta('730 days')
-            
+
             #All time columns should be shifted at least one month and at most two years to the past.
             self.assertTrue(((old_time_col - two_years) < new_time_col).all())
             self.assertTrue((new_time_col < (old_time_col - one_month)).all())
@@ -361,7 +360,7 @@ class EverionTestCase(unittest.TestCase):
             'time': pd.to_datetime(5 * [1551454798], unit='s'),
             'values': [0.0, 21.86422, 65.0, 1.5686275, 18.0],
             'quality': [np.nan, 100.0, 85.0, np.nan, 93.0]
-        }) 
+        })
 
         pd.testing.assert_frame_equal(reader.aggregates.head(), expected_aggregates_head)
         pd.testing.assert_frame_equal(reader.analytics_events.head(), expected_analytics_events_head)

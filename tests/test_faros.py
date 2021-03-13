@@ -1,6 +1,4 @@
-import datetime as dt
 import os
-import shutil
 import unittest
 
 import numpy as np
@@ -54,7 +52,7 @@ class FarosTestCase(unittest.TestCase):
         self.assertEqual(write_reader.sample_freqs, self.reader.sample_freqs)
         pd.testing.assert_frame_equal(write_reader.data, self.reader.data, check_like=True)
         os.remove(self.WRITE_PATH)
-    
+
     def test_timeshift_by_timedelta(self):
         reader = devicely.FarosReader(self.READ_PATH)
         shift = pd.Timedelta('1 days, 2 hours, 3 minutes, 4 seconds, 5 milliseconds')
