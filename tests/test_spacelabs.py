@@ -94,5 +94,52 @@ class SpacelabsTestCase(unittest.TestCase):
 
         pd.testing.assert_frame_equal(self.spacelabs_reader.data, self.data)
 
+    def test_set_window_column(self):
+        self.spacelabs_reader.set_window(dt.timedelta(seconds=30), 'bfill')
+        window_start = pd.to_datetime('1.1.99 17:02:30')
+        window_end = pd.to_datetime('1.1.99 17:03:00')
+
+        self.assertEqual(window_start, self.spacelabs_reader.data.loc[0, 'window_start'])
+        self.assertEqual(window_end, self.spacelabs_reader.data.loc[0, 'window_end'])
+
+        self.spacelabs_reader.set_window(dt.timedelta(seconds=30), 'bffill')
+        window_start = pd.to_datetime('1.1.99 17:02:45')
+        window_end = pd.to_datetime('1.1.99 17:03:15')
+
+        self.assertEqual(window_start, self.spacelabs_reader.data.loc[0, 'window_start'])
+        self.assertEqual(window_end, self.spacelabs_reader.data.loc[0, 'window_end'])
+
+        self.spacelabs_reader.set_window(dt.timedelta(seconds=30), 'ffill')
+        window_start = pd.to_datetime('1.1.99 17:03:00')
+        window_end = pd.to_datetime('1.1.99 17:03:30')
+
+        self.assertEqual(window_start, self.spacelabs_reader.data.loc[0, 'window_start'])
+        self.assertEqual(window_end, self.spacelabs_reader.data.loc[0, 'window_end'])
+
+    def test_set_window_index(self):
+        self.spacelabs_reader.drop_EB()
+
+        self.spacelabs_reader.set_window(dt.timedelta(seconds=30), 'bfill')
+        window_start = pd.to_datetime('1.1.99 17:04:30')
+        window_end = pd.to_datetime('1.1.99 17:05:00')
+
+        self.assertEqual(window_start, self.spacelabs_reader.data[['window_start']].iloc[0].values)
+        self.assertEqual(window_end, self.spacelabs_reader.data[['window_end']].iloc[0].values)
+
+        self.spacelabs_reader.set_window(dt.timedelta(seconds=30), 'bffill')
+        window_start = pd.to_datetime('1.1.99 17:04:45')
+        window_end = pd.to_datetime('1.1.99 17:05:15')
+
+        self.assertEqual(window_start, self.spacelabs_reader.data[['window_start']].iloc[0].values)
+        self.assertEqual(window_end, self.spacelabs_reader.data[['window_end']].iloc[0].values)
+
+        self.spacelabs_reader.set_window(dt.timedelta(seconds=30), 'ffill')
+        window_start = pd.to_datetime('1.1.99 17:05:00')
+        window_end = pd.to_datetime('1.1.99 17:05:30')
+
+        self.assertEqual(window_start, self.spacelabs_reader.data[['window_start']].iloc[0].values)
+        self.assertEqual(window_end, self.spacelabs_reader.data[['window_end']].iloc[0].values)
+
+
 if __name__ == '__main__':
     unittest.main()
