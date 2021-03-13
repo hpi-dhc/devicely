@@ -52,8 +52,11 @@ Then:
 import devicely
 ```
 
-Example: **shift** = pd.Timedelta(15,unit='d')
+### Example 
 
+```
+shift = pd.Timedelta(15,unit='d')
+```
 
 Reading Tags from the TimeStamp App
 
@@ -113,6 +116,8 @@ Reading Spacelabs Data
 
 Timeshifting, Deidentifying and Writing them back
 
+The method deidentify generates a `random` subject id or you can specify one (e.g. 001)
+
 The method `set_window` will create a `timedelta` window around the blood pressure measurement (e.g. 30 secs)
 
 The type of window is defined by: `bfill` (before the start of the measurement),
@@ -136,7 +141,7 @@ Reading Shimmer Consensys GSR (Shimmer3 GSR Development Kit)
 
 Timeshifting and Writing them back
 
-Please define your `csv` delimiter (e. g. `,` `;` `\t`)
+Please define your `csv` delimiter (e.g. `,` `;` `\t`)
 ```
 shimmer_plus = devicely.ShimmerPlusReader(shimmer_file_path, delimiter=';')
 shimmer_plus.data.head()
