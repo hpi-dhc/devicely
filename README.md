@@ -180,4 +180,5 @@ And open `example.ipynb`
 * Felix Musmann
 * Jost Morgenstern
 * Lin Zhou
+* Pascal Hecker
 ```
