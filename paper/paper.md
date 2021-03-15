@@ -25,10 +25,10 @@ bibliography: paper.bib
 
 Wearable devices can track a multitude of parameters such as heart rate, body
 temperature, blood oxygen saturation, acceleration, blood glucose and much more
-(reference). Moreover, they are becoming increasingly popular with a steeping
-increase in market presence in 2020 alone (reference). Applications for wearable
-devices varies from tracking cardiovascular risks (reference) to identifying
-COVID-19 onset (reference). Therefore, there is a great need for scientists to
+`[@Kamisalic2018:2018]`. Moreover, they are becoming increasingly popular with a steeping
+increase in market presence in 2020 alone `[@IDC2020:2020]`. Applications for wearable
+devices varies from tracking cardiovascular risks `[@Bayoumy2021:2021]` to identifying
+COVID-19 onset `[@Mishra2020:2020]`. Therefore, there is a great need for scientists to
 easily go through data acquired from different wearables in an easy manner.
 In order to solve this problem and empower scientists working with biosignals,
 we developed the **devicely** package. It represent the data in a science-friendly
