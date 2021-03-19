@@ -349,3 +349,16 @@ Module Reference
 
 .. automodule:: devicely.spacelabs
     :members:
+
+.. automodule:: devicely.faros
+   :members:
+
+.. automodule:: devicely.everion
+    :members:
+   
+.. automodule:: devicely.shimmer_plus
+    :members:
+
+.. automodule:: devicely.tag
+    :members:
+
