@@ -209,8 +209,13 @@ class SpacelabsReader:
         and is thus used as an index for easy indexing.
         """
 
-        self.data = self.data[self.data.error != 'EB']
-        self.data.set_index('timestamp', inplace=True)
+        has_EB = self.data[self.data.error == 'EB'].any(axis=1).values
+        if has_EB.size != 0:
+            self.data = self.data[self.data.error != 'EB']
+            self.data.set_index('timestamp', inplace=True)
+        else:
+            print('No EB values found.')
+
 
     def set_window(self, window_duration, window_type):
         """

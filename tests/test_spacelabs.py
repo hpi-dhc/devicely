@@ -94,6 +94,10 @@ class SpacelabsTestCase(unittest.TestCase):
 
         pd.testing.assert_frame_equal(self.spacelabs_reader.data, self.data)
 
+        self.spacelabs_reader.drop_EB()
+
+        pd.testing.assert_frame_equal(self.spacelabs_reader.data, self.data)
+
     def test_set_window_column(self):
         self.spacelabs_reader.set_window(dt.timedelta(seconds=30), 'bfill')
         window_start = pd.to_datetime('1.1.99 17:02:30')
