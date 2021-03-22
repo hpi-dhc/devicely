@@ -1,4 +1,0 @@
-pandas
-numpy
-pyedflib
-xmltodict
