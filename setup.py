@@ -14,7 +14,7 @@ from setuptools import find_packages, setup, Command
 # Package meta-data.
 NAME = 'devicely'
 DESCRIPTION = 'Read multiple signals from different sources.'
-URL = None
+URL = 'https://github.com/hpi-dhc/devicely'
 EMAIL = 'ariane.morassi-sasso@hpi.de, jost.morgenstern@student.hpi.uni-potsdam.de, felix.musmann@student.hpi.de'
 AUTHOR = 'Ariane Morassi Sasso, Jost Morgenstern, Felix Musmann'
 REQUIRES_PYTHON = '>=3.6.0'
@@ -33,6 +33,11 @@ REQUIRED = [
 # What packages are optional?
 EXTRAS = {
     # 'fancy feature': ['django'],
+}
+
+PROJECT_URLS = {
+    'github' : 'https://github.com/hpi-dhc/devicely',
+    'documentation' : 'https://hpi-dhc.github.io/devicely'
 }
 
 # The rest you shouldn't have to touch too much :)
@@ -124,11 +129,15 @@ setup(
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
+    project_urls=PROJECT_URLS,
     # $ setup.py publish support.
     cmdclass={
         'upload': UploadCommand,
