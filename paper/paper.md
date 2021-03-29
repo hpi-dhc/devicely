@@ -86,6 +86,8 @@ Medicine. AIME 2020. Lecture Notes in Computer Science, volume 12299 (pp.
 
 GitHub: https://github.com/arianesasso/aime-2020
 
+Documentation: https://hpi-dhc.github.io/devicely
+
 # Acknowledgements
 
 We acknowledge contributions from Arpita Kappattanavar, Pascal Hecker, Bjarne Pfitzner and Lin
