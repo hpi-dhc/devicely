@@ -1,5 +1,5 @@
 ---
-title: 'Devicely: A Python package for reading, time-shifting and writing sensor data'
+title: 'Devicely: A Python package for reading, timeshifting and writing sensor data'
 tags:
   - Python
   - Wearables
@@ -29,7 +29,7 @@ temperature, blood oxygen saturation, acceleration, blood glucose and much more
 increase in market presence in 2020 alone `[@IDC2020:2020]`. Applications for wearable
 devices varies from tracking cardiovascular risks `[@Bayoumy2021:2021]` to identifying
 COVID-19 onset `[@Mishra2020:2020]`. Therefore, there is a great need for scientists to
-easily go through data acquired from different wearables in an easy manner.
+easily go through data acquired from different wearables.
 In order to solve this problem and empower scientists working with biosignals,
 we developed the **devicely** package. It represents the data in a science-friendly
 format and lets scientists focus on what they want: the analysis of biosignals.
@@ -54,19 +54,19 @@ We achieved both by encapsulating data preparation for each wearable behind comm
 
 After reading, the data is accessible through the reader in common formats such as dataframes.
 Deidentification is achieved by timeshifting the data, either by providing a shifting interval or randomly.
-For writing back anonymized data we focused on keeping a format that can be read again using the same reader class.
+For writing back deidentified data we focused on keeping a format that can be read again using the same reader class.
 In almost all cases, this is the same format as the wearable provides.
 This enables sharing data with the community while keeping patient anonymity. 
 
 # Functionalities
 
 All reader classes support three core functions: reading data created by wearables, timeshifting it and writing it back.
-To read data, initialize the corresponding reader class, providing as a parameter a path to the data created by the wearable.
-If you are unsure how each wearable outputs its data you can find example data in the _Examples_ section of our documentation site. 
+To _read_ data, initialize the corresponding reader class, providing as a parameter a path to the data created by the wearable.
+If you are unsure how each wearable outputs its data you can find examples in the _Examples_ section of our documentation website. 
 
 After reading, you can access the data through the reader in convenient formats such as dictionaries and dataframes.
 
-After heaving created a reader object you can call _timeshift_ on it. This assures deanonymization by shifting all time-related data points.
+After creating a reader object you can call _timeshift_ on it. This assures deidentification by shifting all time-related data points.
 If you would like to control the shifting interval, provide a parameter to _timeshift_.
 If no parameter is provided, the data is shifted by a random time interval to the past.
 
