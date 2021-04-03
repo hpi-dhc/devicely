@@ -50,7 +50,7 @@ and hopefully share more data to increase research reproducibility.
 
 Different wearables come with different data formats which require different preprocessing steps.
 However, it should be easy for scientists to add data from a new wearable to an existing pipeline and easy for developers to add a new wearable to the **devicely** package.
-We achieved both by encapsulating data preparation for each wearable behind commmon methods: reading, deidentifying and writing data.
+We achieved both by encapsulating data preparation for each wearable behind common methods: reading, deidentifying and writing data.
 
 After reading, the data is accessible through the reader in common formats such as dataframes.
 Deidentification is achieved by timeshifting the data, either by providing a shifting interval or randomly.
