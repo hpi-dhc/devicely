@@ -6,7 +6,7 @@
 Introduction
 ============
 
-The devicely package is made for reading, writing and anonymizing (timeshifting) health sensor data from
+The devicely package is made for reading, writing and timeshifting health sensor data from:
 
 * `Empatica E4 (Firmware 2.1.0.4911) <https://e4.empatica.com/e4-wristband/>`_
 * `Biovotion Everion (Firmware 03.06) <https://www.biovotion.com/everion/>`_
@@ -22,7 +22,7 @@ Examples
 Empatica
 ########
 
-The Empatice E4 wristband can be used to obtain data for inter-beat intervals, electrodermal activity, heart rate, temperature and blood volume pulse.
+The Empatice E4 wristband can be used to obtain data from inter-beat intervals, electrodermal activity, heart rate, temperature and blood volume pulse.
 The wristband outputs its measurements in `this directory structure <https://github.com/jostmorgenstern/devicely-documentation-sample-data/tree/main/Empatica/>`_.
 
 Create an :code:`EmpaticaReader` object, passing as a parameter a path of the same directory structure:
@@ -32,7 +32,7 @@ Create an :code:`EmpaticaReader` object, passing as a parameter a path of the sa
    >>> import devicely
    >>> empatica_reader = devicely.EmpaticaReader('path/to/empatica/dir')
 
-Accessing the individual signal dataframes
+Accessing the individual signal dataframes:
 
 .. code-block:: Python
 
@@ -61,7 +61,7 @@ You can access the sampling frequency of each signal:
    >>> empatica_reader.sample_freqs
    {'bvp': 64.0, 'eda': 4.0, 'hr': 1.0, 'temp': 4.0, 'acc': 32.0}
 
-Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a :code:`pandas.Timedelta` or a :code:`pandas.Timestamp` object as a parameter to :code:`EmpaticaReader.timeshift()`.
 
 .. code-block:: Python
@@ -83,7 +83,7 @@ If you would like to keep control over the shifting interval, you can provide ei
    'temp': Timestamp('2020-03-07 03:02:16.693659368'),
    'acc': Timestamp('2020-03-07 03:02:16.693659368'),
    'ibi': Timestamp('2020-03-07 03:02:16.693659368')}
-   
+
 
 Write the data back to csv files. The written data keeps the format of the original data, so you can use an :code:`EmpaticaReader` to read your written data.
 
@@ -111,11 +111,11 @@ Accessing the data:
 
    >>> spacelabs_reader.metadata
    {'PATIENTINFO': {'DOB': None, 'RACE': None},
-   'REPORTINFO': {'PHYSICIAN': None, 
-                  'NURSETECH': 'admin', 
-                  'STATUS': 'NOTCONFIRMED', 
+   'REPORTINFO': {'PHYSICIAN': None,
+                  'NURSETECH': 'admin',
+                  'STATUS': 'NOTCONFIRMED',
                   'CALIPERSUMMARY': {'COUNT': '0'}}}
-   >>> spacelabs_reader.subject 
+   >>> spacelabs_reader.subject
    '005F3'
    >>> spacelabs_reader.data.head(6)
                timestamp        date      time  SYS(mmHg)  DIA(mmHg)     x     y   z error
@@ -128,14 +128,17 @@ Accessing the data:
 
 EB-errors can be dropped using :code:`drop_EB`.
 
-Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+The method `set_window` will create a timedelta window around the blood pressure measurement (e.g. 30 secs)
+The type of window is defined by: `bfill` (before the start of the measurement), `bffil` (half before and half after) of `ffill` (after the start of the measurement)
+
+Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a :code:`pandas.Timedelta` or a :code:`pandas.Timestamp` object as a parameter to :code:`SpaceLabsReader.timeshift()`.
 
 .. code-block:: Python
 
    >>> spacelabs_reader.data.head(3)
                               date      time  SYS(mmHg)  DIA(mmHg)     x     y   z error
-   timestamp                                                                            
+   timestamp
    2019-03-01 16:18:00  2019-03-01  16:18:00        107         76  78.0  78.0 NaN   NaN
    2019-03-01 16:19:00  2019-03-01  16:19:00         96         62  63.0  63.0 NaN   NaN
    2019-03-01 16:22:00  2019-03-01  16:22:00        100         68  64.0  64.0 NaN   NaN
@@ -144,7 +147,7 @@ If you would like to keep control over the shifting interval, you can provide ei
 
    >>> spacelabs_reader.data.head(3)
                               date      time  SYS(mmHg)  DIA(mmHg)     x     y   z error
-   timestamp                                                                            
+   timestamp
    2017-12-17 11:12:00  2017-12-17  11:12:00        107         76  78.0  78.0 NaN   NaN
    2017-12-17 11:13:00  2017-12-17  11:13:00         96         62  63.0  63.0 NaN   NaN
    2017-12-17 11:16:00  2017-12-17  11:16:00        100         68  64.0  64.0 NaN   NaN
@@ -169,7 +172,7 @@ To read this data, create an :code:`EverionReader` object with such a path. Feel
    >>> reader = devicely.EverionReader("/home/jost/DHC/sample_data/devicely_documentation_sample_data/Everion")
    >>> reader.data.head()
                                  heart_rate  heart_rate_quality  oxygen_saturation  oxygen_saturation_quality  ...  accx_data  accy_data  accz_data      acc_mag
-   time                                                                                                         ...                                              
+   time                                                                                                         ...
    2019-03-01 13:23:05.000000000         NaN                 NaN                NaN                        NaN  ...      368.0     2096.0    -3536.0  4126.976617
    2019-03-01 13:23:05.019607808         NaN                 NaN                NaN                        NaN  ...      256.0     2016.0    -3808.0  4316.324362
    2019-03-01 13:23:05.039215872         NaN                 NaN                NaN                        NaN  ...      144.0     2288.0    -3728.0  4376.489918
@@ -179,7 +182,7 @@ To read this data, create an :code:`EverionReader` object with such a path. Feel
 You can access all different tags via :code:`EverionReader.SIGNAL_TAGS`, :code:`EverionReader.SENSOR_TAGS` and :code:`EverionReader.FEATURE_TAGS`.
 By default, the tags :code:`EverionReader.default_signal_tags`, :code:`EverionReader.default_sensor_tags` and :code:`EverionReader.default_feature_tags` are used but you can provide custom tags while creating the reader.
 
-Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a :code:`pandas.Timedelta` or a :code:`pandas.Timestamp` object as a parameter to :code:`EverionReader.timeshift()`.
 
 .. code-block:: Python
@@ -187,7 +190,7 @@ If you would like to keep control over the shifting interval, you can provide ei
    >>> reader.timeshift()
    >>> reader.data.head()
                                  heart_rate  heart_rate_quality  oxygen_saturation  oxygen_saturation_quality  ...  accx_data  accy_data  accz_data      acc_mag
-   time                                                                                                         ...                                              
+   time                                                                                                         ...
    2017-03-14 11:00:54.000000000         NaN                 NaN                NaN                        NaN  ...      368.0     2096.0    -3536.0  4126.976617
    2017-03-14 11:00:54.019607808         NaN                 NaN                NaN                        NaN  ...      256.0     2016.0    -3808.0  4316.324362
    2017-03-14 11:00:54.039215872         NaN                 NaN                NaN                        NaN  ...      144.0     2288.0    -3728.0  4376.489918
@@ -219,14 +222,14 @@ Create a :code:`FarosReader` object:
    {'ECG': <DateOffset: seconds=0.001>, 'Accelerometer_X': <DateOffset: seconds=0.01>, 'Accelerometer_Y': <DateOffset: seconds=0.01>, 'Accelerometer_Z': <DateOffset: seconds=0.01>, 'Marker': <DateOffset: seconds=1.0>, 'HRV': <DateOffset: seconds=0.2>, 'acc_mag': <DateOffset: seconds=0.01>}
    >>> reader.data.head()
                            ECG  Accelerometer_X  Accelerometer_Y  Accelerometer_Z  Marker  HRV     acc_mag
-   time                                                                                                     
+   time
    2019-03-01 16:12:43.000  26.0            164.0             23.0          -1172.0     0.0  0.0  1183.64226
    2019-03-01 16:12:43.001  -6.0              NaN              NaN              NaN     NaN  NaN         NaN
    2019-03-01 16:12:43.002 -31.0              NaN              NaN              NaN     NaN  NaN         NaN
    2019-03-01 16:12:43.003 -39.0              NaN              NaN              NaN     NaN  NaN         NaN
    2019-03-01 16:12:43.004 -17.0              NaN              NaN              NaN     NaN  NaN         NaN
 
-Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a :code:`pandas.Timedelta` or a :code:`pandas.Timestamp` object as a parameter to :code:`FarosReader.timeshift()`.
 
 .. code-block:: Python
@@ -236,7 +239,7 @@ If you would like to keep control over the shifting interval, you can provide ei
    Timestamp('2017-11-01 08:52:44')
    >>> reader.data.head()
                            ECG  Accelerometer_X  Accelerometer_Y  Accelerometer_Z  Marker  HRV     acc_mag
-   time                                                                                                     
+   time
    2017-11-01 08:52:44.000  26.0            164.0             23.0          -1172.0     0.0  0.0  1183.64226
    2017-11-01 08:52:44.001  -6.0              NaN              NaN              NaN     NaN  NaN         NaN
    2017-11-01 08:52:44.002 -31.0              NaN              NaN              NaN     NaN  NaN         NaN
@@ -255,7 +258,7 @@ Write the data to csv. You can read the written data using a :code:`FarosReader`
 Shimmer
 #######
 
-The `Shimmer Consensys GSR (Shimmer3 GSR Development Kit) <https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab/>`_ uses a :code:`csv` format as seen `here <https://github.com/jostmorgenstern/devicely-documentation-sample-data/blob/main/Shimmer/shimmer.csv/>`_
+The `Shimmer Consensys GSR (Shimmer3 GSR Development Kit) <https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab/>`_ uses a :code:`csv` format as seen `here <https://github.com/jostmorgenstern/devicely-documentation-sample-data/blob/main/Shimmer/shimmer.csv/>`_.
 
 To create a :code:`ShimmerPlusReader`, simply pass the path to the csv file:
 
@@ -264,14 +267,14 @@ To create a :code:`ShimmerPlusReader`, simply pass the path to the csv file:
    >>> reader = devicely.ShimmerPlusReader("path/to/shimmer.csv")
    >>> reader.data.head()
                            Shimmer_40AC_Accel_LN_X_CAL  Shimmer_40AC_Accel_LN_Y_CAL  ...  Shimmer_40AC_Temperature_BMP280_CAL    acc_mag
-   time                                                                               ...                                                
+   time                                                                               ...
    2020-07-28 10:56:50.034                    -1.434783                         10.0  ...                            33.365878  10.117604
    2020-07-28 10:56:50.057                    -1.402174                         10.0  ...                            33.365878  10.113031
    2020-07-28 10:56:50.074                    -1.434783                         10.0  ...                            33.365878  10.117604
    2020-07-28 10:56:50.099                    -1.413043                         10.0  ...                            33.365878  10.112809
    2020-07-28 10:56:50.111                    -1.445652                         10.0  ...                            33.365878  10.116862
 
-Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a :code:`pandas.Timedelta` or a :code:`pandas.Timestamp` object as a parameter to :code:`ShimmerPlusReader.timeshift()`.
 
 .. code-block:: Python
@@ -279,14 +282,14 @@ If you would like to keep control over the shifting interval, you can provide ei
    >>> reader.timeshift()
    >>> reader.data.head()
                            Shimmer_40AC_Accel_LN_X_CAL  Shimmer_40AC_Accel_LN_Y_CAL  ...  Shimmer_40AC_Temperature_BMP280_CAL    acc_mag
-   time                                                                               ...                                                
+   time                                                                               ...
    2018-11-06 11:13:05.814                    -1.434783                         10.0  ...                            33.365878  10.117604
    2018-11-06 11:13:05.837                    -1.402174                         10.0  ...                            33.365878  10.113031
    2018-11-06 11:13:05.854                    -1.434783                         10.0  ...                            33.365878  10.117604
    2018-11-06 11:13:05.879                    -1.413043                         10.0  ...                            33.365878  10.112809
    2018-11-06 11:13:05.891                    -1.445652                         10.0  ...                            33.365878  10.116862
 
-Write the anonymized data to file, maintaining the original format:
+Write the data to file, maintaining the original format:
 
 .. code-block:: Python
 
@@ -301,19 +304,19 @@ Tags
 Tags are timestamps that are important to the measuring process, like the start and finishing time of measurements.
 The tag files can be obtained using the Android App `TimeStamp <https://play.google.com/store/apps/details?id=jp.m_c8bit.timestamp/>`_.
 
-Read and access tags
+Read and access tags:
 
 .. code-block:: Python
 
    >>> tag_reader = devicely.TagReader('path/to/readfile')
    >>> tag_reader.data.head(3)
                         tag_number                tag
-   time                                              
+   time
    2019-03-01 16:16:37           1              Shake
    2019-03-01 16:17:43           2              Start
    2019-03-01 16:18:20           3     BP Measurement
 
-Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a :code:`pandas.Timedelta` or a :code:`pandas.Timestamp` object as a parameter to :code:`TagReader.timeshift()`.
 
 .. code-block:: Python
@@ -321,12 +324,12 @@ If you would like to keep control over the shifting interval, you can provide ei
    >>> tag_reader.timeshift()
    >>> tag_reader.data.head(3)
                         tag_number                tag
-   time                                              
+   time
    2018-07-25 01:48:47           1              Shake
    2018-07-25 01:49:53           2              Start
    2018-07-25 01:50:30           3     BP Measurement
 
-Write the data to file
+Write the data to file:
 
 .. code-block:: Python
 
@@ -355,7 +358,7 @@ Module Reference
 
 .. automodule:: devicely.everion
     :members:
-   
+
 .. automodule:: devicely.shimmer_plus
     :members:
 

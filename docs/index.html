@@ -164,7 +164,7 @@
             
   <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>The devicely package is made for reading, writing and anonymizing (timeshifting) health sensor data from</p>
+<p>The devicely package is made for reading, writing and timeshifting health sensor data from:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://e4.empatica.com/e4-wristband/">Empatica E4 (Firmware 2.1.0.4911)</a></p></li>
 <li><p><a class="reference external" href="https://www.biovotion.com/everion/">Biovotion Everion (Firmware 03.06)</a></p></li>
@@ -178,14 +178,14 @@
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="empatica">
 <h2>Empatica<a class="headerlink" href="#empatica" title="Permalink to this headline">¶</a></h2>
-<p>The Empatice E4 wristband can be used to obtain data for inter-beat intervals, electrodermal activity, heart rate, temperature and blood volume pulse.
+<p>The Empatice E4 wristband can be used to obtain data from inter-beat intervals, electrodermal activity, heart rate, temperature and blood volume pulse.
 The wristband outputs its measurements in <a class="reference external" href="https://github.com/jostmorgenstern/devicely-documentation-sample-data/tree/main/Empatica/">this directory structure</a>.</p>
 <p>Create an <code class="code docutils literal notranslate"><span class="pre">EmpaticaReader</span></code> object, passing as a parameter a path of the same directory structure:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">devicely</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">empatica_reader</span> <span class="o">=</span> <span class="n">devicely</span><span class="o">.</span><span class="n">EmpaticaReader</span><span class="p">(</span><span class="s1">&#39;path/to/empatica/dir&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Accessing the individual signal dataframes</p>
+<p>Accessing the individual signal dataframes:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">empatica_reader</span><span class="o">.</span><span class="n">ACC</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
                            <span class="n">acc_x</span>  <span class="n">acc_y</span>  <span class="n">acc_z</span>    <span class="n">acc_mag</span>
 <span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">16</span> <span class="mi">17</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mf">29.000000</span>     <span class="o">-</span><span class="mi">3</span>     <span class="mi">11</span>     <span class="mi">60</span>  <span class="mf">61.073726</span>
@@ -207,7 +207,7 @@ The wristband outputs its measurements in <a class="reference external" href="ht
 <span class="p">{</span><span class="s1">&#39;bvp&#39;</span><span class="p">:</span> <span class="mf">64.0</span><span class="p">,</span> <span class="s1">&#39;eda&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">,</span> <span class="s1">&#39;hr&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;temp&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">,</span> <span class="s1">&#39;acc&#39;</span><span class="p">:</span> <span class="mf">32.0</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">EmpaticaReader.timeshift()</span></code>.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">empatica_reader</span><span class="o">.</span><span class="n">start_times</span>
 <span class="p">{</span><span class="s1">&#39;bvp&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-10-16 17:04:29&#39;</span><span class="p">),</span>
@@ -262,7 +262,9 @@ If you would like to keep control over the shifting interval, you can provide ei
 </pre></div>
 </div>
 <p>EB-errors can be dropped using <code class="code docutils literal notranslate"><span class="pre">drop_EB</span></code>.</p>
-<p>Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+<p>The method <cite>set_window</cite> will create a timedelta window around the blood pressure measurement (e.g. 30 secs)
+The type of window is defined by: <cite>bfill</cite> (before the start of the measurement), <cite>bffil</cite> (half before and half after) of <cite>ffill</cite> (after the start of the measurement)</p>
+<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">SpaceLabsReader.timeshift()</span></code>.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">spacelabs_reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
                            <span class="n">date</span>      <span class="n">time</span>  <span class="n">SYS</span><span class="p">(</span><span class="n">mmHg</span><span class="p">)</span>  <span class="n">DIA</span><span class="p">(</span><span class="n">mmHg</span><span class="p">)</span>     <span class="n">x</span>     <span class="n">y</span>   <span class="n">z</span> <span class="n">error</span>
@@ -306,7 +308,7 @@ To read this data, create an <code class="code docutils literal notranslate"><sp
 </div>
 <p>You can access all different tags via <code class="code docutils literal notranslate"><span class="pre">EverionReader.SIGNAL_TAGS</span></code>, <code class="code docutils literal notranslate"><span class="pre">EverionReader.SENSOR_TAGS</span></code> and <code class="code docutils literal notranslate"><span class="pre">EverionReader.FEATURE_TAGS</span></code>.
 By default, the tags <code class="code docutils literal notranslate"><span class="pre">EverionReader.default_signal_tags</span></code>, <code class="code docutils literal notranslate"><span class="pre">EverionReader.default_sensor_tags</span></code> and <code class="code docutils literal notranslate"><span class="pre">EverionReader.default_feature_tags</span></code> are used but you can provide custom tags while creating the reader.</p>
-<p>Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">EverionReader.timeshift()</span></code>.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">timeshift</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -345,7 +347,7 @@ If you would like to keep control over the shifting interval, you can provide ei
 <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mf">43.004</span> <span class="o">-</span><span class="mf">17.0</span>              <span class="n">NaN</span>              <span class="n">NaN</span>              <span class="n">NaN</span>     <span class="n">NaN</span>  <span class="n">NaN</span>         <span class="n">NaN</span>
 </pre></div>
 </div>
-<p>Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">FarosReader.timeshift()</span></code>.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">timeshift</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">start_time</span>
@@ -369,7 +371,7 @@ If you would like to keep control over the shifting interval, you can provide ei
 </div>
 <div class="section" id="shimmer">
 <h2>Shimmer<a class="headerlink" href="#shimmer" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab/">Shimmer Consensys GSR (Shimmer3 GSR Development Kit)</a> uses a <code class="code docutils literal notranslate"><span class="pre">csv</span></code> format as seen <a class="reference external" href="https://github.com/jostmorgenstern/devicely-documentation-sample-data/blob/main/Shimmer/shimmer.csv/">here</a></p>
+<p>The <a class="reference external" href="https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab/">Shimmer Consensys GSR (Shimmer3 GSR Development Kit)</a> uses a <code class="code docutils literal notranslate"><span class="pre">csv</span></code> format as seen <a class="reference external" href="https://github.com/jostmorgenstern/devicely-documentation-sample-data/blob/main/Shimmer/shimmer.csv/">here</a>.</p>
 <p>To create a <code class="code docutils literal notranslate"><span class="pre">ShimmerPlusReader</span></code>, simply pass the path to the csv file:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">devicely</span><span class="o">.</span><span class="n">ShimmerPlusReader</span><span class="p">(</span><span class="s2">&quot;path/to/shimmer.csv&quot;</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -382,7 +384,7 @@ If you would like to keep control over the shifting interval, you can provide ei
 <span class="mi">2020</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mf">50.111</span>                    <span class="o">-</span><span class="mf">1.445652</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.116862</span>
 </pre></div>
 </div>
-<p>Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">ShimmerPlusReader.timeshift()</span></code>.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">timeshift</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -395,7 +397,7 @@ If you would like to keep control over the shifting interval, you can provide ei
 <span class="mi">2018</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">06</span> <span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">05.891</span>                    <span class="o">-</span><span class="mf">1.445652</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.116862</span>
 </pre></div>
 </div>
-<p>Write the anonymized data to file, maintaining the original format:</p>
+<p>Write the data to file, maintaining the original format:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;write_file.csv&quot;</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="s2">&quot;write_file.csv&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">()</span>
 <span class="kc">True</span>
@@ -406,7 +408,7 @@ If you would like to keep control over the shifting interval, you can provide ei
 <h2>Tags<a class="headerlink" href="#tags" title="Permalink to this headline">¶</a></h2>
 <p>Tags are timestamps that are important to the measuring process, like the start and finishing time of measurements.
 The tag files can be obtained using the Android App <a class="reference external" href="https://play.google.com/store/apps/details?id=jp.m_c8bit.timestamp/">TimeStamp</a>.</p>
-<p>Read and access tags</p>
+<p>Read and access tags:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">tag_reader</span> <span class="o">=</span> <span class="n">devicely</span><span class="o">.</span><span class="n">TagReader</span><span class="p">(</span><span class="s1">&#39;path/to/readfile&#39;</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">tag_reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
                      <span class="n">tag_number</span>                <span class="n">tag</span>
@@ -416,7 +418,7 @@ The tag files can be obtained using the Android App <a class="reference external
 <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">20</span>           <span class="mi">3</span>     <span class="n">BP</span> <span class="n">Measurement</span>
 </pre></div>
 </div>
-<p>Anonymize the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
+<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
 If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">TagReader.timeshift()</span></code>.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">tag_reader</span><span class="o">.</span><span class="n">timeshift</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">tag_reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -427,7 +429,7 @@ If you would like to keep control over the shifting interval, you can provide ei
 <span class="mi">2018</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">25</span> <span class="mi">01</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">30</span>           <span class="mi">3</span>     <span class="n">BP</span> <span class="n">Measurement</span>
 </pre></div>
 </div>
-<p>Write the data to file</p>
+<p>Write the data to file:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">tag_reader</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;path/to/writingfile&#39;</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;writingfile&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;path/to&#39;</span><span class="p">)</span>
 <span class="kc">True</span>
