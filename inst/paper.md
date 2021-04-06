@@ -27,7 +27,7 @@ Wearable devices can track a multitude of parameters such as heart rate, body
 temperature, blood oxygen saturation, acceleration, blood glucose and much more
 `[@Kamisalic2018:2018]`. Moreover, they are becoming increasingly popular with a steeping
 increase in market presence in 2020 alone `[@IDC2020:2020]`. Applications for wearable
-devices varies from tracking cardiovascular risks `[@Bayoumy2021:2021]` to identifying
+devices vary from tracking cardiovascular risks `[@Bayoumy2021:2021]` to identifying
 COVID-19 onset `[@Mishra2020:2020]`. Therefore, there is a great need for scientists to
 easily go through data acquired from different wearables.
 In order to solve this problem and empower scientists working with biosignals,
@@ -43,25 +43,24 @@ friendly way. We also added two methods to help with data _deidentification_, on
 is called timeshift and the other is a write method. The idea behind them is
 that you can timeshift all your time series to a different time from the one the
 actual experiments occurred and then write this new deidentified dataset back to
-the original data format. This will empower scientists to keep patient privacy
+the original or a similar data format. This will empower scientists to keep patient privacy
 and hopefully share more data to increase research reproducibility.
 
 # Design
 
 Different wearables come with different data formats which require different preprocessing steps.
-However, it should be easy for scientists to add data from a new wearable to an existing pipeline and easy for developers to add a new wearable to the **devicely** package.
-We achieved both by encapsulating data preparation for each wearable behind three common methods: reading, deidentifying and writing data.
+However, it should be easy for scientists to add data from a new wearable to an existing pipeline and easy for developers to add a new wearable to the **devicely** package. We achieved both by encapsulating data preparation for each wearable behind three common methods: reading, timeshifting and writing data.
 
 After reading, the data is accessible through the reader in common formats such as dataframes.
 Deidentification is achieved by timeshifting the data, either by providing a shifting interval or randomly.
 For writing back deidentified data we focused on keeping a format that can be read again using the same reader class.
-In almost all cases, this is the same format as the wearable provides.
+In almost all cases, this is the same format as the one the wearable originaly provides.
 This enables sharing data with the community while maintaining patient anonymity.
 
 
 # Functionalities
 
-All reader classes support three core functions: reading data created by wearables, timeshifting it and writing it back.
+All reader classes support three core functions: reading data created by a wearable, timeshifting them and writing them back.
 To _read_ data, initialize the corresponding reader class, providing as a parameter a path to the data created by the wearable.
 If you are unsure how each wearable outputs its data you can find examples in the _Examples_ section of our documentation website. 
 
@@ -74,11 +73,10 @@ If no parameter is provided, the data is shifted by a random time interval to th
 You can write the timeshifted data back using the _write_ method.
 For all wearables, the written data can be read again using the same reader class.
 
-Feel free to add a new sensor class to our package. As orientation you can use our package structure:
+Feel free to add a new sensor class to the **devicely** package. As orientation you can use the package structure:
 
 ![](devicely_structure.png)
 
-When you have a working implementation, just send us an email.
 
 # Mention
 
