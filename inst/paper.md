@@ -37,9 +37,8 @@ format and lets scientists focus on what they want: the analysis of biosignals.
 # Statement of need
 
 Every wearable company has a different data format and reading this data is
-usually a challenge for scientists. Therefore, we developed the **devicely** package
-in order for researchers to read different sensor data in an easy and
-friendly way. We also added two methods to help with data _deidentification_, one
+usually a challenge for scientists. Therefore, in order for researchers to be able to use different sensor data in an easy and
+friendly way we developed the **devicely** package. The package also contains two methods to help with data _deidentification_, one
 is called timeshift and the other is a write method. The idea behind them is
 that you can timeshift all your time series to a different time from the one the
 actual experiments occurred and then write this new deidentified dataset back to
