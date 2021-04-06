@@ -9,7 +9,7 @@ authors:
     orcid: 0000-0002-3669-4599
     affiliation: 1
  - name: Jost Morgenstern^[jost.morgenstern@student.hpi.de]
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0001-6268-9948
     affiliation: 1
 - name: Felix Musmann^[felix.musmann@student.hpi.uni-potsdam.de]
   orcid: 0000-0001-5365-0785
@@ -50,13 +50,14 @@ and hopefully share more data to increase research reproducibility.
 
 Different wearables come with different data formats which require different preprocessing steps.
 However, it should be easy for scientists to add data from a new wearable to an existing pipeline and easy for developers to add a new wearable to the **devicely** package.
-We achieved both by encapsulating data preparation for each wearable behind common methods: reading, deidentifying and writing data.
+We achieved both by encapsulating data preparation for each wearable behind three common methods: reading, deidentifying and writing data.
 
 After reading, the data is accessible through the reader in common formats such as dataframes.
 Deidentification is achieved by timeshifting the data, either by providing a shifting interval or randomly.
 For writing back deidentified data we focused on keeping a format that can be read again using the same reader class.
 In almost all cases, this is the same format as the wearable provides.
-This enables sharing data with the community while keeping patient anonymity. 
+This enables sharing data with the community while maintaining patient anonymity.
+
 
 # Functionalities
 
@@ -72,6 +73,12 @@ If no parameter is provided, the data is shifted by a random time interval to th
 
 You can write the timeshifted data back using the _write_ method.
 For all wearables, the written data can be read again using the same reader class.
+
+Feel free to add a new sensor class to our package. As orientation you can use our package structure:
+
+![](devicely_structure.png)
+
+When you have a working implementation, just send us an email.
 
 # Mention
 

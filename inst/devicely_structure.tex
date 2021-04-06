@@ -1,0 +1,146 @@
+\documentclass[aspectratio=169,handout]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{graphicx}
+
+% \usepackage{enumitem}
+% \usepackage{booktabs}
+
+%\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{fontawesome}
+\usepackage{verbatimbox}
+
+\usepackage[export]{adjustbox}
+
+\usepackage{fancyvrb}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+
+
+
+
+% document shape for individual files
+\makeatletter
+\pgfdeclareshape{document}{
+\inheritsavedanchors[from=rectangle] % this is nearly a rectangle
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+\inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{east}
+% ... and possibly more
+\backgroundpath{% this is new
+% store lower right in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+% compute corner of ‘‘flipped page’’
+\pgf@xc=\pgf@xb \advance\pgf@xc by-10pt % this should be a parameter
+\pgf@yc=\pgf@yb \advance\pgf@yc by-10pt
+% construct main path
+\pgfpathmoveto{\pgfpoint{\pgf@xa}{\pgf@ya}}
+\pgfpathlineto{\pgfpoint{\pgf@xa}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@ya}}
+\pgfpathclose
+% add little corner
+\pgfpathmoveto{\pgfpoint{\pgf@xc}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yc}}
+}
+}
+\makeatother
+
+
+\usetheme{metropolis}
+
+
+% \newsavebox\mybox
+
+\begin{document}
+
+\newcommand{\FTdir}{}
+\def\FTdir(#1,#2,#3){%
+  \FTfile(#1,{{\color{black!40!white}\faFolderOpen}\hspace{0.2em}#3})
+  (tmp.west)++(0.8em,-0.4em)node(#2){}
+  (tmp.west)++(1.5em,0)
+  ++(0,-1.3em)
+}
+
+\newcommand{\FTfile}{}
+\def\FTfile(#1,#2){%
+  node(tmp){}
+  (#1|-tmp)++(0.6em,0)
+  node(tmp)[anchor=west,black]{#2}
+  (#1)|-(tmp.west)
+  ++(0,-1.2em)
+}
+
+\newcommand{\FTroot}{}
+\def\FTroot{tmp.west}
+
+\tikzstyle{doc}=[%
+draw,
+align=center,
+color=black,
+shape=document,
+minimum width=20mm,
+minimum height=15mm,
+shape=document,
+inner sep=2ex,
+]
+
+
+
+\begin{myverbbox}{\reader}
+class EverionReader:
+    def __init__(self, path):
+        ...
+    def timeshift(self, interval):
+        ...
+    def write(self, path):
+        ...
+\end{myverbbox}
+
+\begin{myverbbox}{\initpy}
+from empatica import EmpaticaReader
+from spacelabs import SpacelabsReader
+...
+\end{myverbbox}
+
+% devicely
+\begin{frame}[fragile]
+    \begin{tikzpicture}%
+        \draw[color=black!60!white]
+        \FTdir(\FTroot,root,devicely){
+            \FTfile(root,\_\_init\_\_.py)
+            \FTfile(root,empatica.py)
+            \FTfile(root,spacelabs.py)
+            \FTfile(root,everion.py)
+            \FTfile(root,faros.py)
+            \FTfile(root,shimmer\_plus.py)
+        };
+        
+        
+        
+        \node[doc] at (9,0.5) (initpy) {
+            \initpy
+        };
+        \draw[loosely dashed]  (2.5,-0.5) -- (initpy.west);
+
+        \node[doc] at (9,-3) (everion) {
+            \reader
+        };
+        \draw[loosely dashed]  (2.6,-1.9) -- (everion.west);
+
+    \end{tikzpicture}
+\end{frame}
+
+\end{document}
