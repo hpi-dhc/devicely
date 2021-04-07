@@ -62,13 +62,11 @@ This enables sharing data with the community while maintaining patient anonymity
 All reader classes support three core functions: reading data created by a wearable, timeshifting them and writing them back.
 To _read_ data, initialize the corresponding reader class, providing as a parameter a path to the data created by the wearable.
 If you are unsure how each wearable outputs its data you can find examples in the _Examples_ section of our documentation website. 
-
 After reading, you can access the data through the reader in convenient formats such as dictionaries and dataframes.
 
 After creating a reader object you can call _timeshift_ on it. This assures deidentification by shifting all time-related data points.
 If you would like to control the shifting interval, provide a parameter to _timeshift_.
 If no parameter is provided, the data is shifted by a random time interval to the past.
-
 You can write the timeshifted data back using the _write_ method.
 For all wearables, the written data can be read again using the same reader class.
 
