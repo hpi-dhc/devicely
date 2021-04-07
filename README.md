@@ -7,6 +7,17 @@
 
 https://hpi-dhc.github.io/devicely/
 
+## Notebook
+
+To run a notebook with examples:
+```
+pipenv install
+pipenv shell
+pipenv run jupyter notebook
+```
+
+And open `example.ipynb`
+
 ## Description
 
 Package containing `readers` for reading data from different devices.
@@ -53,13 +64,13 @@ Then:
 import devicely
 ```
 
-### Example
+## Example
 
 ```
 shift = pd.Timedelta(15,unit='d')
 ```
 
-#### **Tags**
+### **Tags**
 Reading Tags from the TimeStamp App
 
 Timeshifting and Writing them back
@@ -73,7 +84,7 @@ tags.data.head()
 tags.write(join(write_path, 'tags.csv'))
 ```
 
-#### **Empatica**
+### **Empatica**
 Reading Empatica E4 Data
 
 Timeshifting and Writing them back
@@ -87,7 +98,7 @@ empatica.data.head()
 empatica.write(join(write_path, 'Empatica'))
 ```
 
-#### **Faros**
+### **Faros**
 Reading Bittium Faros 180 Data
 
 Timeshifting and Writing them back
@@ -101,7 +112,7 @@ faros.data.head()
 faros.write(join(write_path, 'faros.csv'))
 ```
 
-#### **Biovotion**
+### **Biovotion**
 Reading Biovotion Everion Data
 
 Timeshifting and Writing them back
@@ -117,7 +128,7 @@ everion.data.head()
 everion.write(join(write_path, 'Everion'))
 ```
 
-#### **Spacelabs**
+### **Spacelabs**
 Reading Spacelabs Data
 
 Timeshifting, Deidentifying and Writing them back
@@ -145,7 +156,7 @@ spacelabs.data.head()
 spacelabs.write(join(write_path, 'spacelabs.abp'))
 ```
 
-#### **Shimmer**
+### **Shimmer**
 Reading Shimmer Consensys GSR (Shimmer3 GSR Development Kit)
 
 Timeshifting and Writing them back
@@ -160,17 +171,6 @@ shimmer_plus.data.head()
 
 shimmer_plus.write(join(write_path, 'shimmer_plus.csv'))
 ```
-
-
-To run a notebook with examples:
-```
-pipenv install
-pipenv shell
-pipenv run jupyter notebook
-```
-
-And open `example.ipynb`
-
 
 ## Contributors
 
