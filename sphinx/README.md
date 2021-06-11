@@ -1,6 +1,6 @@
-# How add documentation for a new module in devicely
+# How to add documentation for a new module in devicely
 
-We use [sphinx](https://www.sphinx-doc.org/en/master/index.html), a documentation tool to document Python packages based on the [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html) markup language.
+We use [sphinx](https://www.sphinx-doc.org/en/master/index.html), a tool to document Python packages based on the [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html) markup language.
 
 To get started, you need the packages **sphinx** and **sphinx_rtd_theme**, both of which can be installed with pip. You also need to pip install devicely itself. 
 
