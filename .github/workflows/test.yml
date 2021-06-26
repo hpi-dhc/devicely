@@ -38,7 +38,7 @@ jobs:
          coverage run --source=tests -m pytest
          coverage xml
          COVERAGE=$(python -c "import xml.etree.ElementTree as ET; print(int(float(ET.parse('coverage.xml').getroot().attrib['line-rate']) * 100))")
-         COLOR=$(echo $COVERAGE | python -c "import sys; from bisect import bisect; i=bisect([0,60,70,80,80,100], int(sys.stdin.read()))-1; print(['red', 'orange', 'yellow', 'yellowgreen', 'green', 'brightgreen'][i])")
+         COLOR=$(echo $COVERAGE | python -c "import sys; from bisect import bisect; i=bisect([0,60,70,80,95,100], int(sys.stdin.read()))-1; print(['red', 'orange', 'yellow', 'yellowgreen', 'green', 'brightgreen'][i])")
          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
          echo "COLOR=$COLOR" >> $GITHUB_ENV
 
@@ -50,5 +50,5 @@ jobs:
         gistID: 270a0114dfad9251945a146dd6d29fa6
         filename: devicely_coverage_master.json
         label: Test Coverage
-        message: ${{ env.COVERAGE }}
+        message: ${{ env.COVERAGE }}%
         color: ${{ env.COLOR }}
