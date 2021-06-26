@@ -46,7 +46,7 @@ jobs:
       with:
         auth: ${{ secrets.GIST_SECRET }}
         gistID: 270a0114dfad9251945a146dd6d29fa6
-        filename: devicely__${{ env.BRANCH }}.json
+        filename: devicely_coverage_master.json
         label: Test Coverage
         message: ${{ env.COVERAGE }}
         color: ${{ env.COLOR }}
