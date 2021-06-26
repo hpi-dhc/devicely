@@ -31,11 +31,7 @@ jobs:
     - name: Test with pytest
       run: |
          coverage run --source=tests -m pytest --ignore=tests/test_faros.py
-
-    - name: Test if coverage.xml exists
-      run: |
-        ls -lisah
-        find.
+         coverage xml
 
     - if: ${{ matrix.python-version == '3.9' }}
       name: Calculate coverage and color
