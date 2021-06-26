@@ -32,6 +32,7 @@ jobs:
       run: |
          coverage run --source=tests -m pytest --ignore=tests/test_faros.py
          coverage xml
+         head -n 30 coverage.xml
 
     - if: ${{ matrix.python-version == '3.9' }}
       name: Calculate coverage and color
