@@ -30,7 +30,7 @@ jobs:
     
     - name: Test with pytest
       run: |
-        coverage run --source test -m pytest --ignore=tests/test_faros.py
+         coverage run --source=tests -m pytest --ignore=tests/test_faros.py
 
     - if: ${{ matrix.python-version == '3.9' }}
       name: Calculate coverage and color
