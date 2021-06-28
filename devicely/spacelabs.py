@@ -5,7 +5,7 @@ import csv
 import datetime as dt
 from pprint import pprint
 import random
-import xml.etree.ElementTree as ET
+from xml.etree import ElementTree as ET
 
 import pandas as pd
 import xmltodict
@@ -81,6 +81,8 @@ class SpacelabsReader:
         xml_root = ET.fromstring(xml_line)
         self.metadata = self._etree_to_dict(xml_root)['XML']
 
+        a = 0
+
     def deidentify(self, subject_id=None):
         """
         Deidentifies the data by removing the original XML metadata and
@@ -143,7 +145,7 @@ class SpacelabsReader:
             printing_df.replace('-9997', '"AB"', inplace=True)
             printing_df.to_csv(f, header=None, index=None, quoting=csv.QUOTE_NONE)
 
-            xml_node = ET.Element('XML')
+            xml_node = etree.Element('XML')
             xml_node.extend(self._dict_to_etree(self.metadata))
             xml_line = ET.dump(xml_node)
             f.write(xml_line)
