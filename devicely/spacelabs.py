@@ -3,6 +3,7 @@ Module to process Spacelabs (SL 90217) data
 """
 import csv
 import datetime as dt
+from pprint import pprint
 import random
 import xml.etree.ElementTree as ET
 
@@ -78,15 +79,7 @@ class SpacelabsReader:
 
         xml_line = open(path, 'r').readlines()[-1]
         xml_root = ET.fromstring(xml_line)
-        self.metadata = {
-            'PATIENTINFO' : {'DOB' : (xml_root.find('PATIENTINFO').find('DOB').text if xml_root.find('PATIENTINFO').find('DOB') is not None else None),
-                             'RACE' : (xml_root.find('PATIENTINFO').find('RACE').text if xml_root.find('PATIENTINFO').find('RACE') is not None else None)},
-            'REPORTINFO' : {'PHYSICIAN' : (xml_root.find('REPORTINFO').find('PHYSICIAN').text if xml_root.find('REPORTINFO').find('PHYSICIAN') is not None else None),
-                            'NURSETECH' : (xml_root.find('REPORTINFO').find('NURSETECH').text if xml_root.find('REPORTINFO').find('NURSETECH') is not None else None),
-                            'STATUS' : (xml_root.find('REPORTINFO').find('STATUS').text if xml_root.find('REPORTINFO').find('STATUS') is not None else None),
-                            'CALIPERSUMMARY' : {'COUNT' :
-                                (xml_root.find('REPORTINFO').find('CALIPERSUMMARY').find('COUNT').text if xml_root.find('REPORTINFO').find('CALIPERSUMMARY') is not None else None)}}
-        }
+        self.metadata = self._etree_to_dict(xml_root)['XML']
 
     def deidentify(self, subject_id=None):
         """
@@ -105,9 +98,14 @@ class SpacelabsReader:
         else:
             self.subject = 'xxxxxx'
 
-        # Removing XML metadata
-        for key in self.metadata:
-            self.metadata[key] = None
+        self.metadata = {
+            'PATIENTINFO' : {'DOB' : None,
+                             'RACE' : None},
+            'REPORTINFO' : {'PHYSICIAN' : None,
+                            'NURSETECH' : None,
+                            'STATUS' : None,
+                            'CALIPERSUMMARY' : {'COUNT' : None}}
+        }
 
     def write(self, path):
         """
@@ -144,8 +142,34 @@ class SpacelabsReader:
             printing_df.replace('-9998', '"EB"', inplace=True)
             printing_df.replace('-9997', '"AB"', inplace=True)
             printing_df.to_csv(f, header=None, index=None, quoting=csv.QUOTE_NONE)
-            f.write(xmltodict.unparse({'XML': self.metadata}).split('\n')[1])
 
+            xml_node = ET.Element('XML')
+            xml_node.extend(self._dict_to_etree(self.metadata))
+            xml_line = ET.dump(xml_node)
+            f.write(xml_line)
+        
+    def _etree_to_dict(self, etree_node):
+        children = list(iter(etree_node))
+        if len(children) == 0:
+            return {etree_node.tag: etree_node.text}
+        else:
+            dict_ = dict()
+            for child in children:
+                dict_ = {**dict_, **self._etree_to_dict(child)}
+            return {etree_node.tag: dict_}
+
+    def _dict_to_etree(self, dict_):
+        def rec(key, value):
+            node = ET.Element(key)
+            if isinstance(value, dict):
+                for child_key in value:
+                    node.append(rec(child_key, value[child_key]))
+            else:
+                node.text = str(value) if value else ''
+            return node
+
+        return [rec(k, v) for k, v in dict_.items()]
+    
     def timeshift(self, shift='random'):
         """
         Timeshifts the data by shifting all time related columns.
@@ -198,6 +222,7 @@ class SpacelabsReader:
                 self.data.window_start += shift.round('min')
                 self.data.window_end += shift.round('min')
 
+
     def drop_EB(self):
         """
         Drops all entries with "EB"-errors from the DataFrame
@@ -215,7 +240,6 @@ class SpacelabsReader:
             self.data.set_index('timestamp', inplace=True)
         else:
             print('No EB values found.')
-
 
     def set_window(self, window_duration, window_type):
         """
