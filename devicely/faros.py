@@ -74,8 +74,6 @@ class FarosReader:
 
         self.data = self._get_joined_df()
 
-        a = 0
-
     def _get_joined_df(self):
         # get index for joined dataframe
         joined_idx = pd.concat(map(pd.Series, [self.ECG.index, self.ACC.index, self.Marker.index, self.HRV.index]))
@@ -84,40 +82,33 @@ class FarosReader:
         joined_df = pd.DataFrame(index=joined_idx, columns=col_names)
 
         joined_df.loc[self.ECG.index, 'ECG'] = self.ECG
-        joined_df.loc[self.ACC.index, ['Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z', 'Accelerometer_mag']] = self.ACC[['X', 'Y', 'Z', 'mag']]
+        joined_df.loc[self.ACC.index, 'Accelerometer_X'] = self.ACC['X']
+        joined_df.loc[self.ACC.index, 'Accelerometer_Y'] = self.ACC['Y']
+        joined_df.loc[self.ACC.index, 'Accelerometer_Z'] = self.ACC['Z']
+        joined_df.loc[self.ACC.index, 'Accelerometer_mag'] = self.ACC['mag']
         joined_df.loc[self.Marker.index, 'Marker'] = self.Marker
         joined_df.loc[self.HRV.index, 'HRV'] = self.HRV
 
         return joined_df
-
 
     def write(self, path):
         writer = edf.EdfWriter(path, len(self.signal_headers), 0)
         writer.setHeader(self.file_header)
         writer.setSignalHeaders(self.signal_headers)
 
+        ecg_freq = int(self.sample_freqs['ECG'])
+        acc_freq = int(self.sample_freqs['Accelerometer_X'])
+        marker_freq = int(self.sample_freqs['Marker'])
+        hrv_freq = int(self.sample_freqs['HRV'])
+
         for i in range(self._n_datarecords):
-            ecg_freq = self.sample_freqs['ECG']
-            writer.writePhysicalSamples(self.ECG[ecg_freq * i: ecg_freq * (i + 1)])
-            
-            acc_freq = self.sample_freqs['Accelerometer_X']
-            writer.writePhysicalSamples(self.ACC.loc[acc_freq * i: acc_freq * (i + 1), 'X'])
-            writer.writePhysicalSamples(self.ACC.loc[acc_freq * i: acc_freq * (i + 1), 'Y'])
-            writer.writePhysicalSamples(self.ACC.loc[acc_freq * i: acc_freq * (i + 1), 'Z'])
-            
-            marker_freq = self.sample_freqs['Marker']
-            writer.writePhysicalSamples(self.Marker[marker_freq * i: marker_freq * (i + 1)])
-
-            hrv_freq = self.sample_freqs['HRV']
-            writer.writePhysicalSamples(self.HRV[hrv_freq * i: hrv_freq * (i + 1)])
-
+            writer.writePhysicalSamples(self.ECG.values[ecg_freq * i: ecg_freq * (i + 1)])
+            writer.writePhysicalSamples(self.ACC['X'].values[acc_freq * i: acc_freq * (i + 1)])
+            writer.writePhysicalSamples(self.ACC['Y'].values[acc_freq * i: acc_freq * (i + 1)])
+            writer.writePhysicalSamples(self.ACC['Z'].values[acc_freq * i: acc_freq * (i + 1)])
+            writer.writePhysicalSamples(self.Marker.values[marker_freq * i: marker_freq * (i + 1)])
+            writer.writePhysicalSamples(self.HRV.values[hrv_freq * i: hrv_freq * (i + 1)])
         writer.close()
-
-
-    def _add_acc_mag(self):
-        if all(label in self.data.columns for label in ['Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z']):
-            self.data['acc_mag'] = np.linalg.norm(self.data[['Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z']], axis=1)
-            self.sample_freqs['acc_mag'] = self.sample_freqs['Accelerometer_X']
 
     def timeshift(self, shift='random'):
         """
