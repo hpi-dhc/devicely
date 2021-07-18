@@ -1,95 +1,260 @@
 import os
+import shutil
 import unittest
 
 import numpy as np
 import pandas as pd
 
-import sys
-sys.path.insert(0, '/home/jost/DHC/devicely')
+
 import devicely
 
 class FarosTestCase(unittest.TestCase):
-    READ_PATH = 'tests/Faros_test_data/testfilename.EdF'
-    WRITE_PATH = 'tests/Faros_test_data/writtentestfile.csv'
-
+    EDF_READ_PATH = 'tests/Faros_test_data/testfile_read.EDF'
+    EDF_WRITE_PATH = 'tests/Faros_test_data/testfile_write.EDF'
+    DIR_READ_PATH = 'tests/Faros_test_data/testdir_read'
+    DIR_WRITE_PATH = 'tests/Faros_test_data/testdir_write'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.reader = devicely.FarosReader(self.READ_PATH)
-
-    def setUp(self):
+        self.reader_from_edf = devicely.FarosReader(self.EDF_READ_PATH)
+        self.reader_from_dir = devicely.FarosReader(self.DIR_READ_PATH)
+        
+        self.expected_start_time = pd.Timestamp('2018-10-12 16:54:12')
         self.expected_sample_freqs = {
-            'ECG': pd.DateOffset(seconds=1/1000),
-            'Accelerometer_X': pd.DateOffset(seconds=1/100),
-            'Accelerometer_Y': pd.DateOffset(seconds=1/100),
-            'Accelerometer_Z': pd.DateOffset(seconds=1/100),
-            'Marker': pd.DateOffset(seconds=1/1),
-            'HRV': pd.DateOffset(seconds=1/5),
-            'acc_mag': pd.DateOffset(seconds=1/100)
+            'ECG': 500.0,
+            'ACC': 25.0,
+            'Marker': 1.0,
+            'HRV': 5.0
         }
-        self.expected_signal_heads = {
-            'ECG': np.array([ 26.,  -6., -31., -39., -17.]),
-            'Accelerometer_X': np.array([164., 152., 152., 117., -47.]),
-            'Accelerometer_Y': np.array([ 23.,  23., -24.,  11., 246.]),
-            'Accelerometer_Z': np.array([-1172., -1172., -1079.,  -985., -1125.]),
-            'Marker': np.array([0., 0., 0., 0., 0.]),
-            'HRV': np.array([0., 0., 0., 0., 0.]),
-            'acc_mag': np.array([1183.64226014, 1182.03933945, 1089.91788682, 991.98538296, 1152.54067173])
+        self.expected_units = {
+            'ECG': 'uV',
+            'ACC': 'mg',
+            'HRV': 'ms'
         }
-        self.expected_start_time = pd.Timestamp("3.1.2019 16:12:43")
+        self.expected_edf_metadata = [
+            {'label': 'ECG',
+            'dimension': 'uV',
+            'sample_rate': 500.0,
+            'physical_max': 32767.0,
+            'physical_min': -32768.0,
+            'digital_max': 32767,
+            'digital_min': -32768,
+            'prefilter': '',
+            'transducer': 'ECG electrode'},
+            {'label': 'Accelerometer_X',
+            'dimension': 'mg',
+            'sample_rate': 25.0,
+            'physical_max': 4000.0,
+            'physical_min': -4000.0,
+            'digital_max': 8000,
+            'digital_min': -8000,
+            'prefilter': '',
+            'transducer': 'X-axis'},
+            {'label': 'Accelerometer_Y',
+            'dimension': 'mg',
+            'sample_rate': 25.0,
+            'physical_max': 4000.0,
+            'physical_min': -4000.0,
+            'digital_max': 8000,
+            'digital_min': -8000,
+            'prefilter': '',
+            'transducer': 'Y-axis'},
+            {'label': 'Accelerometer_Z',
+            'dimension': 'mg',
+            'sample_rate': 25.0,
+            'physical_max': 4000.0,
+            'physical_min': -4000.0,
+            'digital_max': 8000,
+            'digital_min': -8000,
+            'prefilter': '',
+            'transducer': 'Z-axis'},
+            {'label': 'Marker',
+            'dimension': '',
+            'sample_rate': 1.0,
+            'physical_max': 32767.0,
+            'physical_min': -32768.0,
+            'digital_max': 32767,
+            'digital_min': -32768,
+            'prefilter': '',
+            'transducer': 'Event marker'},
+            {'label': 'HRV',
+            'dimension': 'ms',
+            'sample_rate': 5.0,
+            'physical_max': 65535.0,
+            'physical_min': 0.0,
+            'digital_max': 32767,
+            'digital_min': -32768,
+            'prefilter': '',
+            'transducer': 'Heart Rate Variability'}
+        ]
 
-    def test_basic_read(self):
-        self.assertEqual(self.reader.sample_freqs, self.expected_sample_freqs)
-        self.assertEqual(set(self.reader.data.columns), set(self.expected_signal_heads.keys()))
-        self.assertEqual(self.reader.start_time, self.expected_start_time)
-        for label, expected_first_values in self.expected_signal_heads.items():
-            np.testing.assert_almost_equal(self.reader.data[label].dropna().head(), expected_first_values)
+        self.expected_ECG_head = pd.Series(
+            [-2134., -1631.,  -944.,   -45.,   538.],
+            name='ECG',
+            index=pd.DatetimeIndex(['2018-10-12 16:54:12', '2018-10-12 16:54:12.002000',
+                                    '2018-10-12 16:54:12.004000', '2018-10-12 16:54:12.006000',
+                                    '2018-10-12 16:54:12.008000'],
+                                    dtype='datetime64[ns]', freq='2L')
+        )
+        self.expected_ACC_head = pd.DataFrame(
+            {'X': [ 308.5,  289. ,  335.5,  375. ,  382.5],
+             'Y': [-645. , -668. , -682. , -707.5, -670. ],
+             'Z': [-523.5, -623.5, -674. , -623.5, -621.5],
+             'mag': [ 886.14304714,  958.38262192, 1015.85444331, 1014.85639378, 990.69092052]},
+             index=pd.DatetimeIndex(['2018-10-12 16:54:12', '2018-10-12 16:54:12.040000',
+                                     '2018-10-12 16:54:12.080000', '2018-10-12 16:54:12.120000',
+                                     '2018-10-12 16:54:12.160000'],
+                                     dtype='datetime64[ns]', freq='40L')
+        )
+        self.expected_Marker_head = pd.Series(
+            [0., 0., 0., 0., 0.],
+            name='Marker',
+            index=pd.DatetimeIndex(['2018-10-12 16:54:12', '2018-10-12 16:54:13',
+                                    '2018-10-12 16:54:14', '2018-10-12 16:54:15',
+                                    '2018-10-12 16:54:16'],
+                                    dtype='datetime64[ns]', freq='S')
+        )
+        self.expected_HRV_head = pd.Series(
+            [0., 0., 0., 0., 0.],
+            name='HRV',
+            index=pd.DatetimeIndex(['2018-10-12 16:54:12', '2018-10-12 16:54:12.200000',
+                                    '2018-10-12 16:54:12.400000', '2018-10-12 16:54:12.600000',
+                                    '2018-10-12 16:54:12.800000'],
+                                    dtype='datetime64[ns]', freq='200L')
+        )
 
-    def test_write(self):
-        self.reader.write(self.WRITE_PATH)
-        write_reader = devicely.FarosReader(self.WRITE_PATH)
-        self.assertEqual(write_reader.start_time, self.reader.start_time)
-        self.assertEqual(write_reader.sample_freqs, self.reader.sample_freqs)
-        pd.testing.assert_frame_equal(write_reader.data, self.reader.data, check_like=True)
-        os.remove(self.WRITE_PATH)
 
-    def test_timeshift_by_timedelta(self):
-        reader = devicely.FarosReader(self.READ_PATH)
-        shift = pd.Timedelta('1 days, 2 hours, 3 minutes, 4 seconds, 5 milliseconds')
-        reader.timeshift(shift)
-        expected_shifted_index_head = pd.DatetimeIndex(['2019-03-02 18:15:47.005000', '2019-03-02 18:15:47.006000',
-                                                        '2019-03-02 18:15:47.007000', '2019-03-02 18:15:47.008000',
-                                                        '2019-03-02 18:15:47.009000'])
-        pd.testing.assert_index_equal(reader.data.head().index, expected_shifted_index_head, check_names=False)
-        self.assertEqual(reader.start_time, pd.Timestamp('2019-03-02 18:15:47.005000'))
+    def _compare_reader_with_expected_attrs(self, reader, expected_start_time, expected_sample_freqs,
+                                                   expected_units, expected_ECG_head,
+                                                   expected_ACC_head, expected_Marker_head,
+                                                   expected_HRV_head, expected_edf_metadata=None):
+        self.assertEqual(reader.start_time, expected_start_time)
+        self.assertEqual(reader.sample_freqs, expected_sample_freqs)
+        self.assertEqual(reader.units, expected_units)
+        self.assertEqual(reader.edf_metadata, expected_edf_metadata)
+        pd.testing.assert_series_equal(reader.ECG.head(), expected_ECG_head, check_freq=False, check_dtype=False)
+        pd.testing.assert_frame_equal(reader.ACC.head(), expected_ACC_head, check_freq=False, check_dtype=False)
+        pd.testing.assert_series_equal(reader.Marker.head(), expected_Marker_head, check_freq=False, check_dtype=False)
+        pd.testing.assert_series_equal(reader.HRV.head(), expected_HRV_head, check_freq=False, check_dtype=False)
 
-    def test_timeshift_to_timestamp(self):
-        reader = devicely.FarosReader(self.READ_PATH)
-        shift = pd.Timestamp(day=23, month=4, year=2009, hour=6, minute=42, second=21, microsecond=int(593.32e3))
-        reader.timeshift(shift)
-        expected_shifted_index_head = pd.DatetimeIndex(['2009-04-23 06:42:21.593320', '2009-04-23 06:42:21.594320',
-                                                        '2009-04-23 06:42:21.595320', '2009-04-23 06:42:21.596320',
-                                                        '2009-04-23 06:42:21.597320'])
-        pd.testing.assert_index_equal(reader.data.head().index, expected_shifted_index_head, check_names=False)
-        self.assertEqual(reader.start_time, shift)
+        # test if the reader's joined dataframe is correct
+        pd.testing.assert_series_equal(
+            reader.data['ECG'].dropna().head(), expected_ECG_head,
+            check_freq=False, check_dtype=False
+        )
+        pd.testing.assert_frame_equal(
+            reader.data[['Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z', 'Accelerometer_mag']].dropna().head(),
+            expected_ACC_head.rename(columns={'X': 'Accelerometer_X',
+                                              'Y': 'Accelerometer_Y',
+                                              'Z': 'Accelerometer_Z',
+                                              'mag': 'Accelerometer_mag'}),
+                                     check_freq=False,
+                                     check_dtype=False
+        )
+        pd.testing.assert_series_equal(
+            reader.data['Marker'].dropna().head(),
+            expected_Marker_head, check_freq=False, check_dtype=False
+        )
+        pd.testing.assert_series_equal(
+            reader.data['HRV'].dropna().head(),
+            expected_HRV_head, check_freq=False, check_dtype=False
+        )
 
-    def test_random_timeshift(self):
-        reader = devicely.FarosReader(self.READ_PATH)
-        earliest_possible_index = pd.DatetimeIndex(['2017-03-01 16:12:43', '2017-03-01 16:12:43.001000',
-                                                    '2017-03-01 16:12:43.002000', '2017-03-01 16:12:43.003000',
-                                                    '2017-03-01 16:12:43.004000'])
-        latest_possible_index = pd.DatetimeIndex(['2019-01-30 16:12:43', '2019-01-30 16:12:43.001000',
-                                                  '2019-01-30 16:12:43.002000', '2019-01-30 16:12:43.003000',
-                                                  '2019-01-30 16:12:43.004000'])
+    def test_read_from_edf(self):
+        """
+        Tests if the reader that's created from a Faros-generated EDF file contains the expected values.
+        """
+        self._compare_reader_with_expected_attrs(self.reader_from_edf,
+                                          self.expected_start_time, self.expected_sample_freqs,
+                                          self.expected_units, self.expected_ECG_head,
+                                          self.expected_ACC_head, self.expected_Marker_head,
+                                          self.expected_HRV_head,
+                                          expected_edf_metadata=self.expected_edf_metadata)
 
-        earliest_possible_start_time = pd.Timestamp('2017-03-01 16:12:43')
-        latest_possible_start_time = pd.Timestamp('2019-01-30 16:12:43')
+    def test_read_from_dir(self):
+        """
+        Tests if the reader that's created from a devicely-generated Faros directory contains the expected values.
+        """
+        self._compare_reader_with_expected_attrs(self.reader_from_dir,
+                                          self.expected_start_time, self.expected_sample_freqs,
+                                          self.expected_units, self.expected_ECG_head,
+                                          self.expected_ACC_head, self.expected_Marker_head,
+                                          self.expected_HRV_head)
 
-        reader.timeshift()
-        self.assertTrue((earliest_possible_index <= reader.data.head().index).all())
-        self.assertTrue((reader.data.head().index <= latest_possible_index).all())
-        self.assertLess(earliest_possible_start_time, reader.start_time)
-        self.assertLess(reader.start_time, latest_possible_start_time)
+    def test_write_to_dir(self):
+        """
+        Tests if both a reader created from an edf file and a reader created from a directory
+        can be written back to a directory.
+        """
+        self.reader_from_edf.write(self.DIR_WRITE_PATH)
+        new_reader = devicely.FarosReader(self.DIR_WRITE_PATH)
+        
+        self._compare_reader_with_expected_attrs(new_reader,
+                                        self.expected_start_time, self.expected_sample_freqs,
+                                        self.expected_units, self.expected_ECG_head,
+                                        self.expected_ACC_head, self.expected_Marker_head,
+                                        self.expected_HRV_head)
+
+        
+        shutil.rmtree(self.DIR_WRITE_PATH)
+
+    def test_write_to_edf(self):
+        """
+        Tests if a reader's data can be written to an EDF file.
+        """
+        self.reader_from_edf.write(self.EDF_WRITE_PATH, format='edf')
+        new_reader = devicely.FarosReader(self.EDF_WRITE_PATH)
+        
+        self._compare_reader_with_expected_attrs(new_reader,
+                                          self.expected_start_time, self.expected_sample_freqs,
+                                          self.expected_units, self.expected_ECG_head,
+                                          self.expected_ACC_head, self.expected_Marker_head,
+                                          self.expected_HRV_head,
+                                          expected_edf_metadata=self.expected_edf_metadata)
+
+        os.remove(self.EDF_WRITE_PATH)
+    
+
+    
+
+
+    # def test_timeshift_by_timedelta(self):
+    #     reader = devicely.FarosReader(self.READ_PATH)
+    #     shift = pd.Timedelta('1 days, 2 hours, 3 minutes, 4 seconds, 5 milliseconds')
+    #     reader.timeshift(shift)
+    #     expected_shifted_index_head = pd.DatetimeIndex(['2019-03-02 18:15:47.005000', '2019-03-02 18:15:47.006000',
+    #                                                     '2019-03-02 18:15:47.007000', '2019-03-02 18:15:47.008000',
+    #                                                     '2019-03-02 18:15:47.009000'])
+    #     pd.testing.assert_index_equal(reader.data.head().index, expected_shifted_index_head, check_names=False)
+    #     self.assertEqual(reader.start_time, pd.Timestamp('2019-03-02 18:15:47.005000'))
+
+    # def test_timeshift_to_timestamp(self):
+    #     reader = devicely.FarosReader(self.READ_PATH)
+    #     shift = pd.Timestamp(day=23, month=4, year=2009, hour=6, minute=42, second=21, microsecond=int(593.32e3))
+    #     reader.timeshift(shift)
+    #     expected_shifted_index_head = pd.DatetimeIndex(['2009-04-23 06:42:21.593320', '2009-04-23 06:42:21.594320',
+    #                                                     '2009-04-23 06:42:21.595320', '2009-04-23 06:42:21.596320',
+    #                                                     '2009-04-23 06:42:21.597320'])
+    #     pd.testing.assert_index_equal(reader.data.head().index, expected_shifted_index_head, check_names=False)
+    #     self.assertEqual(reader.start_time, shift)
+
+    # def test_random_timeshift(self):
+    #     reader = devicely.FarosReader(self.READ_PATH)
+    #     earliest_possible_index = pd.DatetimeIndex(['2017-03-01 16:12:43', '2017-03-01 16:12:43.001000',
+    #                                                 '2017-03-01 16:12:43.002000', '2017-03-01 16:12:43.003000',
+    #                                                 '2017-03-01 16:12:43.004000'])
+    #     latest_possible_index = pd.DatetimeIndex(['2019-01-30 16:12:43', '2019-01-30 16:12:43.001000',
+    #                                               '2019-01-30 16:12:43.002000', '2019-01-30 16:12:43.003000',
+    #                                               '2019-01-30 16:12:43.004000'])
+
+    #     earliest_possible_start_time = pd.Timestamp('2017-03-01 16:12:43')
+    #     latest_possible_start_time = pd.Timestamp('2019-01-30 16:12:43')
+
+    #     reader.timeshift()
+    #     self.assertTrue((earliest_possible_index <= reader.data.head().index).all())
+    #     self.assertTrue((reader.data.head().index <= latest_possible_index).all())
+    #     self.assertLess(earliest_possible_start_time, reader.start_time)
+    #     self.assertLess(reader.start_time, latest_possible_start_time)
 
 if __name__ == '__main__':
     unittest.main()

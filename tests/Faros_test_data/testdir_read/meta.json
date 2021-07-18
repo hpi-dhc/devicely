@@ -1,0 +1,14 @@
+{
+    "start_time" : "2018-10-12 16:54:12",
+    "sample_freqs" : {
+        "ECG" : 500.0,
+        "ACC" : 25.0,
+        "Marker" : 1.0,
+        "HRV" : 5.0
+    },
+    "units" : {
+        "ECG" : "uV",
+        "ACC" : "mg",
+        "HRV" : "ms"
+    }
+}
