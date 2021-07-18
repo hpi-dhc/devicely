@@ -25,7 +25,7 @@ class FarosReader:
 
     def __init__(self, path):
         """
-        Reads an Faros-generated EDF file or a directory created by this class.
+        Reads a Faros-generated EDF file or a directory created by a FarosReader.
 
         Parameters
         ----------
@@ -141,6 +141,17 @@ class FarosReader:
         return joined_df
 
     def write(self, path, format='directory'):
+        """
+        Writes the data.
+
+        Parameters
+        ----------
+        path : str
+            Name of the file or directory to write the data to.
+        format: {'directory', 'edf'}, default 'directory'
+            Format of the written data.
+        """
+
         if format == 'directory':
             self._write_to_directory(path)
         if format == 'edf':
@@ -210,8 +221,9 @@ class FarosReader:
             self.timeshift(random_timedelta)
         if isinstance(shift, pd.Timestamp):
             self.start_time = shift
-            timedeltas = self.data.index - self.data.index.min()
-            self.data.index = shift + timedeltas
+            for df in [self.ECG, self.ACC, self.Marker, self.HRV, self.data]:
+                timedeltas = df.index - df.index.min()
+                df.index = shift + timedeltas
         if isinstance(shift, pd.Timedelta):
-            self.start_time += shift
-            self.data.index += shift
+            for df in [self.ECG, self.ACC, self.Marker, self.HRV, self.data]:
+                df.index += shift
