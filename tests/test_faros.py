@@ -213,48 +213,80 @@ class FarosTestCase(unittest.TestCase):
                                           expected_edf_metadata=self.expected_edf_metadata)
 
         os.remove(self.EDF_WRITE_PATH)
-    
 
-    
+    def test_timeshift_to_timestamp(self):
+        timestamp = pd.Timestamp('1.2.2019, 21:43:23')
+
+        expected_shifted_ecg_index_head = pd.DatetimeIndex(['2019-01-02 21:43:23', '2019-01-02 21:43:23.002000',
+                                                            '2019-01-02 21:43:23.004000', '2019-01-02 21:43:23.006000',
+                                                            '2019-01-02 21:43:23.008000'])
+        expected_shifted_acc_index_head = pd.DatetimeIndex(['2019-01-02 21:43:23', '2019-01-02 21:43:23.040000',
+                                                            '2019-01-02 21:43:23.080000', '2019-01-02 21:43:23.120000',
+                                                            '2019-01-02 21:43:23.160000'])
+        expected_shifted_marker_index_head = pd.DatetimeIndex(['2019-01-02 21:43:23', '2019-01-02 21:43:24',
+                                                               '2019-01-02 21:43:25', '2019-01-02 21:43:26',
+                                                               '2019-01-02 21:43:27'])
+        expected_shifted_hrv_index_head = pd.DatetimeIndex(['2019-01-02 21:43:23', '2019-01-02 21:43:23.200000',
+                                                            '2019-01-02 21:43:23.400000', '2019-01-02 21:43:23.600000',
+                                                            '2019-01-02 21:43:23.800000'])
+        expected_shifted_data_index_head = pd.DatetimeIndex(['2019-01-02 21:43:23', '2019-01-02 21:43:23.002000',
+                                                            '2019-01-02 21:43:23.004000', '2019-01-02 21:43:23.006000',
+                                                            '2019-01-02 21:43:23.008000'])
+
+        # We need to use a reader other then self.reader_from_edf or self.reader_from_dir
+        # to not change any of their attributes.
+        reader = devicely.FarosReader(self.EDF_READ_PATH)
+        reader.timeshift(timestamp)
+
+        self.assertEqual(reader.start_time, timestamp)
+        pd.testing.assert_index_equal(reader.ECG.head().index, expected_shifted_ecg_index_head)
+        pd.testing.assert_index_equal(reader.ACC.head().index, expected_shifted_acc_index_head)
+        pd.testing.assert_index_equal(reader.Marker.head().index, expected_shifted_marker_index_head)
+        pd.testing.assert_index_equal(reader.HRV.head().index, expected_shifted_hrv_index_head)
+        pd.testing.assert_index_equal(reader.data.head().index, expected_shifted_data_index_head)
 
 
-    # def test_timeshift_by_timedelta(self):
-    #     reader = devicely.FarosReader(self.READ_PATH)
-    #     shift = pd.Timedelta('1 days, 2 hours, 3 minutes, 4 seconds, 5 milliseconds')
-    #     reader.timeshift(shift)
-    #     expected_shifted_index_head = pd.DatetimeIndex(['2019-03-02 18:15:47.005000', '2019-03-02 18:15:47.006000',
-    #                                                     '2019-03-02 18:15:47.007000', '2019-03-02 18:15:47.008000',
-    #                                                     '2019-03-02 18:15:47.009000'])
-    #     pd.testing.assert_index_equal(reader.data.head().index, expected_shifted_index_head, check_names=False)
-    #     self.assertEqual(reader.start_time, pd.Timestamp('2019-03-02 18:15:47.005000'))
+    def test_timeshift_by_timedelta(self):
+        timedelta = pd.Timedelta('- 32 days, 9 hours, 34 minutes, 12 seconds')
 
-    # def test_timeshift_to_timestamp(self):
-    #     reader = devicely.FarosReader(self.READ_PATH)
-    #     shift = pd.Timestamp(day=23, month=4, year=2009, hour=6, minute=42, second=21, microsecond=int(593.32e3))
-    #     reader.timeshift(shift)
-    #     expected_shifted_index_head = pd.DatetimeIndex(['2009-04-23 06:42:21.593320', '2009-04-23 06:42:21.594320',
-    #                                                     '2009-04-23 06:42:21.595320', '2009-04-23 06:42:21.596320',
-    #                                                     '2009-04-23 06:42:21.597320'])
-    #     pd.testing.assert_index_equal(reader.data.head().index, expected_shifted_index_head, check_names=False)
-    #     self.assertEqual(reader.start_time, shift)
+        expected_shifted_ecg_index_head = pd.DatetimeIndex(['2018-09-10 07:20:00', '2018-09-10 07:20:00.002000',
+                                                            '2018-09-10 07:20:00.004000', '2018-09-10 07:20:00.006000',
+                                                            '2018-09-10 07:20:00.008000'])
+        expected_shifted_acc_index_head = pd.DatetimeIndex(['2018-09-10 07:20:00', '2018-09-10 07:20:00.040000',
+                                                            '2018-09-10 07:20:00.080000', '2018-09-10 07:20:00.120000',
+                                                            '2018-09-10 07:20:00.160000'])
+        expected_shifted_marker_index_head = pd.DatetimeIndex(['2018-09-10 07:20:00', '2018-09-10 07:20:01',
+                                                               '2018-09-10 07:20:02', '2018-09-10 07:20:03',
+                                                               '2018-09-10 07:20:04'])
+        expected_shifted_hrv_index_head = pd.DatetimeIndex(['2018-09-10 07:20:00', '2018-09-10 07:20:00.200000',
+                                                            '2018-09-10 07:20:00.400000', '2018-09-10 07:20:00.600000',
+                                                            '2018-09-10 07:20:00.800000'])
+        expected_shifted_data_index_head = pd.DatetimeIndex(['2018-09-10 07:20:00', '2018-09-10 07:20:00.002000',
+                                                             '2018-09-10 07:20:00.004000', '2018-09-10 07:20:00.006000',
+                                                             '2018-09-10 07:20:00.008000'])
 
-    # def test_random_timeshift(self):
-    #     reader = devicely.FarosReader(self.READ_PATH)
-    #     earliest_possible_index = pd.DatetimeIndex(['2017-03-01 16:12:43', '2017-03-01 16:12:43.001000',
-    #                                                 '2017-03-01 16:12:43.002000', '2017-03-01 16:12:43.003000',
-    #                                                 '2017-03-01 16:12:43.004000'])
-    #     latest_possible_index = pd.DatetimeIndex(['2019-01-30 16:12:43', '2019-01-30 16:12:43.001000',
-    #                                               '2019-01-30 16:12:43.002000', '2019-01-30 16:12:43.003000',
-    #                                               '2019-01-30 16:12:43.004000'])
+        reader = devicely.FarosReader(self.EDF_READ_PATH)
+        reader.timeshift(timedelta)
 
-    #     earliest_possible_start_time = pd.Timestamp('2017-03-01 16:12:43')
-    #     latest_possible_start_time = pd.Timestamp('2019-01-30 16:12:43')
+        pd.testing.assert_index_equal(reader.ECG.head().index, expected_shifted_ecg_index_head)
+        pd.testing.assert_index_equal(reader.ACC.head().index, expected_shifted_acc_index_head)
+        pd.testing.assert_index_equal(reader.Marker.head().index, expected_shifted_marker_index_head)
+        pd.testing.assert_index_equal(reader.HRV.head().index, expected_shifted_hrv_index_head)
+        pd.testing.assert_index_equal(reader.data.head().index, expected_shifted_data_index_head)
 
-    #     reader.timeshift()
-    #     self.assertTrue((earliest_possible_index <= reader.data.head().index).all())
-    #     self.assertTrue((reader.data.head().index <= latest_possible_index).all())
-    #     self.assertLess(earliest_possible_start_time, reader.start_time)
-    #     self.assertLess(reader.start_time, latest_possible_start_time)
+    def test_random_timeshift(self):
+        latest_possible_shifted_data_index = pd.DatetimeIndex(['2018-09-12 16:54:12', '2018-09-12 16:54:12.002000',
+                                                               '2018-09-12 16:54:12.004000', '2018-09-12 16:54:12.006000',
+                                                               '2018-09-12 16:54:12.008000'])
+        earliest_possible_shifted_data_index = pd.DatetimeIndex(['2016-10-12 16:54:12', '2016-10-12 16:54:12.002000',
+                                                                 '2016-10-12 16:54:12.004000', '2016-10-12 16:54:12.006000',
+                                                                 '2016-10-12 16:54:12.008000'])
+
+        reader = devicely.FarosReader(self.EDF_READ_PATH)
+        reader.timeshift()
+
+        self.assertTrue((earliest_possible_shifted_data_index <= reader.data.head().index).all())
+        self.assertTrue((reader.data.head().index <= latest_possible_shifted_data_index).all())
 
 if __name__ == '__main__':
     unittest.main()
