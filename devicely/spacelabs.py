@@ -8,7 +8,6 @@ import random
 from xml.etree import ElementTree as ET
 
 import pandas as pd
-import xmltodict
 
 
 class SpacelabsReader:
@@ -55,10 +54,8 @@ class SpacelabsReader:
             metadata = pd.read_csv(path, nrows=6, header=None)
             self.valid_measurements = str(metadata.loc[5, 0])
 
-        column_names = ['hour', 'minutes', 'SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']
-        self.data = pd.read_csv(path, sep=',', skiprows=51, skipfooter=1, header=None,
-                                names=column_names,
-                                engine='python')
+        column_names = ['hour', 'minutes', 'SYS(mmHg)', 'DIA(mmHg)', 'ACC_x', 'ACC_y', 'error', 'ACC_z']
+        self.data = pd.read_csv(path, sep=',', skiprows=51, skipfooter=1, header=None, names=column_names, engine='python')
 
         # Adjusting Date
         dates = [base_date]
@@ -74,7 +71,7 @@ class SpacelabsReader:
         self.data['date'] = dates
         self.data['time'] = times
 
-        order = ['timestamp', 'date', 'time', 'SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'z', 'error']
+        order = ['timestamp', 'date', 'time', 'SYS(mmHg)', 'DIA(mmHg)', 'ACC_x', 'ACC_y', 'ACC_z', 'error']
         self.data = self.data[order]
 
         xml_line = open(path, 'r').readlines()[-1]
@@ -96,15 +93,15 @@ class SpacelabsReader:
         if subject_id:
             self.subject = subject_id
         else:
-            self.subject = 'xxxxxx'
+            self.subject = ''
 
         self.metadata = {
-            'PATIENTINFO' : {'DOB' : None,
-                             'RACE' : None},
-            'REPORTINFO' : {'PHYSICIAN' : None,
-                            'NURSETECH' : None,
-                            'STATUS' : None,
-                            'CALIPERSUMMARY' : {'COUNT' : None}}
+            'PATIENTINFO' : {'DOB' : '',
+                             'RACE' : ''},
+            'REPORTINFO' : {'PHYSICIAN' : '',
+                            'NURSETECH' : '',
+                            'STATUS' : '',
+                            'CALIPERSUMMARY' : {'COUNT' : ''}}
         }
 
     def write(self, path):
@@ -131,21 +128,21 @@ class SpacelabsReader:
             printing_df = self.data.drop(columns=['date', 'time'])
             printing_df['hours'] = self.data.time.map(lambda x: x.strftime("%H"))
             printing_df['minutes'] = self.data.time.map(lambda x: x.strftime("%M"))
-            order = ['hours', 'minutes', 'SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']
+            order = ['hours', 'minutes', 'SYS(mmHg)', 'DIA(mmHg)', 'ACC_x', 'ACC_y', 'error', 'ACC_z']
             printing_df = printing_df[order]
             printing_df.fillna(-9999, inplace=True)
             printing_df.replace('EB', -9998, inplace=True)
             printing_df.replace('AB', -9997, inplace=True)
-            printing_df[['SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']] = printing_df[
-                ['SYS(mmHg)', 'DIA(mmHg)', 'x', 'y', 'error', 'z']].astype(int).astype(str)
+            printing_df[['SYS(mmHg)', 'DIA(mmHg)', 'ACC_x', 'ACC_y', 'error', 'ACC_z']] = printing_df[
+                ['SYS(mmHg)', 'DIA(mmHg)', 'ACC_x', 'ACC_y', 'error', 'ACC_z']].astype(int).astype(str)
             printing_df.replace('-9999', '""', inplace=True)
             printing_df.replace('-9998', '"EB"', inplace=True)
             printing_df.replace('-9997', '"AB"', inplace=True)
             printing_df.to_csv(f, header=None, index=None, quoting=csv.QUOTE_NONE)
 
-            xml_node = etree.Element('XML')
+            xml_node = ET.Element('XML')
             xml_node.extend(self._dict_to_etree(self.metadata))
-            xml_line = ET.dump(xml_node)
+            xml_line = ET.tostring(xml_node, encoding="unicode")
             f.write(xml_line)
         
     def _etree_to_dict(self, etree_node):
@@ -169,7 +166,7 @@ class SpacelabsReader:
             return node
 
         return [rec(k, v) for k, v in dict_.items()]
-    
+
     def timeshift(self, shift='random'):
         """
         Timeshifts the data by shifting all time related columns.
@@ -187,40 +184,34 @@ class SpacelabsReader:
         """
 
         eb_dropped = self.data.index.name == 'timestamp'
+        timestamp_col = self.data.index if eb_dropped else self.data['timestamp']
 
         if shift == 'random':
             one_month = pd.Timedelta('30 days').value
             two_years = pd.Timedelta('730 days').value
             random_timedelta = - pd.Timedelta(random.uniform(one_month, two_years)).round('min')
             self.timeshift(random_timedelta)
+        
         if isinstance(shift, pd.Timestamp):
-            if eb_dropped:
-                timedeltas = self.data.index - self.data.index[0]
-                self.data.index = shift.round('min') + timedeltas
-            else:
-                timedeltas = self.data.timestamp - self.data.timestamp[0]
-                self.data.timestamp = shift.round('min') + timedeltas
+            timedeltas = timestamp_col - timestamp_col[0]
+            timestamp_col = shift.round('min') + timedeltas
+        
         if isinstance(shift, pd.Timedelta):
-            if eb_dropped:
-                self.data.index += shift.round('min')
-            else:
-                self.data.timestamp += shift.round('min')
-        if eb_dropped:
-            self.data.date = self.data.index.map(lambda timestamp: timestamp.date())
-            self.data.time = self.data.index.map(lambda timestamp: timestamp.time())
-        else:
-            self.data.date = self.data.timestamp.map(lambda timestamp: timestamp.date())
-            self.data.time = self.data.timestamp.map(lambda timestamp: timestamp.time())
+            timestamp_col += shift.round('min')
+            
+        self.data.date = timestamp_col.map(lambda timestamp: timestamp.date())
+        self.data.time = timestamp_col.map(lambda timestamp: timestamp.time())
+
         if 'window_start' in self.data.columns:
             if isinstance(shift, pd.Timestamp):
-                timedeltas = self.data.window_start - self.data.window_start[0]
-                self.data.window_start = shift.round('min') + timedeltas
+                timedeltas = self.data['window_start'] - self.data['window_start'][0]
+                self.data['window_start'] = shift.round('min') + timedeltas
 
-                timedeltas = self.data.window_end - self.data.window_end[0]
-                self.data.window_end = shift.round('min') + timedeltas
+                timedeltas = self.data['window_end'] - self.data['window_end'][0]
+                self.data['window_end'] = shift.round('min') + timedeltas
             if isinstance(shift, pd.Timedelta):
-                self.data.window_start += shift.round('min')
-                self.data.window_end += shift.round('min')
+                self.data['window_start'] += shift.round('min')
+                self.data['window_end'] += shift.round('min')
 
 
     def drop_EB(self):
