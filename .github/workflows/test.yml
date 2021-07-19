@@ -35,7 +35,7 @@ jobs:
     - if: ${{ matrix.python-version == '3.9' }}
       name: Calculate coverage
       run: |
-         coverage run --source=tests -m pytest
+         coverage run --source=devicely -m pytest
          coverage xml
          COVERAGE=$(python -c "import xml.etree.ElementTree as ET; print(int(float(ET.parse('coverage.xml').getroot().attrib['line-rate']) * 100))")
          COLOR=$(echo $COVERAGE | python -c "import sys; from bisect import bisect; i=bisect([0,60,70,80,95,100], int(sys.stdin.read()))-1; print(['red', 'orange', 'yellow', 'yellowgreen', 'green', 'brightgreen'][i])")
