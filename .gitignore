@@ -210,7 +210,5 @@ data/
 # Pycharm config
 .idea
 
-#Extra
-pyproject.toml
 
 # End of https://www.gitignore.io/api/macos,linux,python,windows,jupyternotebook,visualstudiocode

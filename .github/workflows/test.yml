@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.7, 3.8, 3.9]
     steps:
     - uses: actions/checkout@v2
     
@@ -22,21 +22,26 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      
+    - name: show Poetry version
+      run: |
+        poetry -V
+
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install pytest coverage
-        pip install .
+        poetry install
     
     - name: Test with pytest
       run: |
-         python -m pytest
+         poetry run python -m pytest
 
     - if: ${{ matrix.python-version == '3.9' }}
       name: Calculate coverage
       run: |
-         coverage run --source=devicely -m pytest
-         coverage xml
+         poetry run coverage run --source=devicely -m pytest
+         poetry run coverage xml
          COVERAGE=$(python -c "import xml.etree.ElementTree as ET; print(int(float(ET.parse('coverage.xml').getroot().attrib['line-rate']) * 100))")
          COLOR=$(echo $COVERAGE | python -c "import sys; from bisect import bisect; i=bisect([0,60,70,80,95,100], int(sys.stdin.read()))-1; print(['red', 'orange', 'yellow', 'yellowgreen', 'green', 'brightgreen'][i])")
          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
