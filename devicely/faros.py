@@ -19,8 +19,30 @@ class FarosReader:
 
     Attributes
     ----------
+    start_time : pandas.Timestamp
+        start time of all measurements
+    
+    sample_freqs : dict
+        sampling frequencies of all signals in Hz
+
+    units : dict
+        units of all signals
+
+    ECG : pandas.Series
+        ECG signal, indexed by timestamp
+    
+    ACC : pandas.DataFrame
+        three ACC axes, indexed by timestamp
+
+    Marker : pandas.Series
+        Markers, indexed by timestamp
+    
+    HRV : pandas.Series
+        HRV signal, indexed by timestamp
+
     data : DataFrame
-        DataFrame with the values that were read from the .edf or .csv file.
+        contains all signals (ECG, ACC, Marker, HRV) indexed by timestamp
+        Because the signals have different sampling frequencies, a lot of values are nan.
     """
 
     def __init__(self, path):
@@ -36,7 +58,7 @@ class FarosReader:
         self.start_time = None
         self.sample_freqs = None
         self.units = None
-        self.edf_metadata = None
+        self._edf_metadata = None
         self.ECG = None
         self.ACC = None
         self.Marker = None
@@ -63,7 +85,7 @@ class FarosReader:
             'ACC': reader.getSignalHeader(1)['dimension'],
             'HRV': reader.getSignalHeader(5)['dimension'],
         }
-        self.edf_metadata = reader.getSignalHeaders()
+        self._edf_metadata = reader.getSignalHeaders()
 
         self._n_samples = reader.getNSamples()
         self._n_datarecords = reader.datarecords_in_file
@@ -142,7 +164,11 @@ class FarosReader:
 
     def write(self, path, format='directory'):
         """
-        Writes the data.
+        Writes the data either to an EDF file or to several files into a new directory.
+        Because of the `special structure of EDF files <https://www.edfplus.info/specs/edf.html>`_ 
+        writing to EDF is only possible for readers that have been created from an EDF file and without any changes to the ACC, ECG, Marker, HRV and sample_freqs attributes.
+        Because we want users to be able to modify the signals, we allow writing to a directory.
+        Writing to a directory always works, even if signal entries have been dropped.
 
         Parameters
         ----------
@@ -158,12 +184,12 @@ class FarosReader:
             self._write_to_edf(path)
 
     def _write_to_edf(self, path):
-        if self.edf_metadata is None:
+        if self._edf_metadata is None:
             raise Exception("There is no EDF metadata in this reader, most likely because it was initialized from a directory. Writing to EDF file not possible.")
         
         writer = edf.EdfWriter(path, 6, 0)
         writer.setStartdatetime(self.start_time.to_pydatetime())
-        writer.setSignalHeaders(self.edf_metadata)
+        writer.setSignalHeaders(self._edf_metadata)
 
         ecg_freq = int(self.sample_freqs['ECG'])
         acc_freq = int(self.sample_freqs['ACC'])
