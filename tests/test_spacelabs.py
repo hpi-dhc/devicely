@@ -98,6 +98,8 @@ class SpacelabsTestCase(unittest.TestCase):
         )
 
     def test_write(self):
+        # Tests the SpacelabsReader.write operation by writing, reading again and comparing the old and new signals.
+
         self.spacelabs_reader.write(self.WRITE_PATH)
         new_reader = devicely.SpacelabsReader(self.WRITE_PATH)
 
