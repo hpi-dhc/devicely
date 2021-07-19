@@ -106,13 +106,14 @@ class SpacelabsReader:
 
     def write(self, path):
         """
-        Writes the DataFrame, subject id, valid measurements and metadata to the
+        Writes the signals and metadata to the
         writing path in the same format as it was read.
 
         Parameters
         ----------
         path : str
-            Path to writing csv. Writing mode: 'w'.
+            Path to writing file. Writing mode: 'w'.
+            Use the file extension 'abp' to keep the SpaceLabs standard.
         """
 
         with open(path, 'w') as f:
