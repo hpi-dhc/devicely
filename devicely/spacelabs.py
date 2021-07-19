@@ -81,8 +81,6 @@ class SpacelabsReader:
         xml_root = ET.fromstring(xml_line)
         self.metadata = self._etree_to_dict(xml_root)['XML']
 
-        a = 0
-
     def deidentify(self, subject_id=None):
         """
         Deidentifies the data by removing the original XML metadata and
@@ -247,46 +245,29 @@ class SpacelabsReader:
         """
         Set a window around, before or after the blood pressure measurement by
         creating two new columns with the window_start and window_end times.
-
         Parameters
         ----------
-        window_size : pd.Timedelta, datetime.timedelta
+        window_duration : pd.Timedelta, datetime.timedelta
             Duration of the window.
         window_type : bffill, bfill, ffill
             Bffill stands for backward-forward fill. The window is defined as
             half after and half before the start of the measurement.
-
             Bfill stands for backward fill.
             The window is defined before the start of the measurement.
-
             Ffill stands for forward fill.
             The window is defined after the start of the measurement.
         """
         if self.data.index.name == 'timestamp':
-            new_dataframe = self.data.copy()
-            time = new_dataframe.index
+            time_col = self.data.index
+        else:
+            time_col = self.data['timestamp']
 
-            if window_type == 'bffill':
-                new_dataframe.loc[:, 'window_start'] = time - window_duration // 2
-                new_dataframe.loc[:, 'window_end'] = time + window_duration // 2
-            elif window_type == 'bfill':
-                new_dataframe.loc[:, 'window_start'] = time - window_duration
-                new_dataframe.loc[:, 'window_end'] = time
-            elif window_type == 'ffill':
-                new_dataframe.loc[:, 'window_start'] = time
-                new_dataframe.loc[:, 'window_end'] = time + window_duration
-
-            self.data = new_dataframe.copy()
-
-        elif 'timestamp' in self.data.columns:
-            time = self.data['timestamp']
-
-            if window_type == 'bffill':
-                self.data[['window_start']] = time - window_duration // 2
-                self.data[['window_end']] = time + window_duration // 2
-            elif window_type == 'bfill':
-                self.data[['window_start']] = time - window_duration
-                self.data[['window_end']] = time
-            elif window_type == 'ffill':
-                self.data[['window_start']] = time
-                self.data[['window_end']] = time + window_duration
+        if window_type == 'bffill':
+            self.data['window_start'] = time_col - window_duration // 2
+            self.data['window_end'] = time_col + window_duration // 2
+        elif window_type == 'bfill':
+            self.data['window_start'] = time_col - window_duration
+            self.data['window_end'] = time_col
+        elif window_type == 'ffill':
+            self.data['window_start'] = time_col
+            self.data['window_end'] = time_col + window_duration
