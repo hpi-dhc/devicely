@@ -131,7 +131,7 @@ class FarosTestCase(unittest.TestCase):
         self.assertEqual(reader.start_time, expected_start_time)
         self.assertEqual(reader.sample_freqs, expected_sample_freqs)
         self.assertEqual(reader.units, expected_units)
-        self.assertEqual(reader.edf_metadata, expected_edf_metadata)
+        self.assertEqual(reader._edf_metadata, expected_edf_metadata)
         pd.testing.assert_series_equal(reader.ECG.head(), expected_ECG_head, check_freq=False, check_dtype=False)
         pd.testing.assert_frame_equal(reader.ACC.head(), expected_ACC_head, check_freq=False, check_dtype=False)
         pd.testing.assert_series_equal(reader.Marker.head(), expected_Marker_head, check_freq=False, check_dtype=False)
