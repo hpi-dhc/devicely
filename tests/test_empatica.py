@@ -10,165 +10,225 @@ class EmpaticaTestCase(unittest.TestCase):
     READ_PATH = 'tests/Empatica_test_data/test_data_read'
     WRITE_PATH = 'tests/Empatica_test_data/test_data_write'
 
-    def setUp(self):
-        self.empatica_reader = devicely.EmpaticaReader(self.READ_PATH)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        self.start_times = {
-            'acc': pd.Timestamp(1551453301, unit='s'),
-            'bvp': pd.Timestamp(1551453301, unit='s'),
-            'eda': pd.Timestamp(1551453301, unit='s'),
-            'hr': pd.Timestamp(1551453311, unit='s'),
-            'ibi': pd.Timestamp(1551453301, unit='s'),
-            'temp': pd.Timestamp(1551453301, unit='s'),
+        self.reader = devicely.EmpaticaReader(self.READ_PATH)
+
+        self.expected_start_times = {
+            'ACC': pd.Timestamp(1551453301, unit='s'),
+            'BVP': pd.Timestamp(1551453301, unit='s'),
+            'EDA': pd.Timestamp(1551453301, unit='s'),
+            'HR': pd.Timestamp(1551453311, unit='s'),
+            'IBI': pd.Timestamp(1551453301, unit='s'),
+            'TEMP': pd.Timestamp(1551453301, unit='s'),
         }
-        self.sample_freqs = {
-            'acc': 32,
-            'bvp': 64,
-            'eda': 4,
-            'hr': 1,
-            'temp': 4,
+
+        self.expected_sample_freqs = {
+            'ACC': 32,
+            'BVP': 64,
+            'EDA': 4,
+            'HR': 1,
+            'TEMP': 4,
         }
-        self.acc_df = pd.DataFrame({
-            'acc_x': [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 0.0, 0.0, -1.0, -1.0,
-                      -1.0, -1.0, -1.0, -1.0],
-            'acc_y': [65.0, 65.0, 65.0, 65.0, 64.0, 64.0, 65.0, 65.0, 65.0, 65.0, 65.0, 64.0, 65.0, 65.0, 65.0,
-                      64.0, 64.0, 64.0, 65.0, 65.0],
-            'acc_z': [5.0, 5.0, 4.0, 5.0, 5.0, 5.0, 5.0, 4.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 4.0, 5.0, 5.0,
-                      5.0],
-            'acc_mag': [65.19969325081216, 65.19969325081216, 65.13063795173512, 65.19969325081216,
-                        64.20280367709809, 64.20280367709809, 65.19969325081216, 65.13063795173512,
-                        65.19969325081216, 65.19969325081216, 65.19969325081216, 64.20280367709809,
-                        65.19202405202648, 65.19202405202648, 65.19969325081216, 64.20280367709809,
-                        64.13267497929586, 64.20280367709809, 65.19969325081216, 65.19969325081216]
-        })
-        self.acc_df.index = pd.to_datetime(['2019-03-01 15:15:01', '2019-03-01 15:15:01.031250',
-                                           '2019-03-01 15:15:01.062500', '2019-03-01 15:15:01.093750',
-                                           '2019-03-01 15:15:01.125000', '2019-03-01 15:15:01.156250',
-                                           '2019-03-01 15:15:01.187500', '2019-03-01 15:15:01.218750',
-                                           '2019-03-01 15:15:01.250000', '2019-03-01 15:15:01.281250',
-                                           '2019-03-01 15:15:01.312500', '2019-03-01 15:15:01.343750',
-                                           '2019-03-01 15:15:01.375000', '2019-03-01 15:15:01.406250',
-                                           '2019-03-01 15:15:01.437500', '2019-03-01 15:15:01.468750',
-                                           '2019-03-01 15:15:01.500000', '2019-03-01 15:15:01.531250',
-                                           '2019-03-01 15:15:01.562500', '2019-03-01 15:15:01.593750'])
+        
+        self.expected_ACC_head = pd.DataFrame(
+            {'X': [-1.0, -1.0, -1.0, -1.0, -1.0],
+             'Y': [65.0, 65.0, 65.0, 65.0, 64.0],
+             'Z': [5.0, 5.0, 4.0, 5.0, 5.0],
+             'mag': [65.19969325, 65.19969325, 65.13063795, 65.19969325, 64.20280368]},
+            index=pd.DatetimeIndex(['2019-03-01 15:15:01', '2019-03-01 15:15:01.031250',
+                                    '2019-03-01 15:15:01.062500', '2019-03-01 15:15:01.093750',
+                                    '2019-03-01 15:15:01.125000'])
+        )
+        
+        self.expected_BVP_head = pd.Series(
+            [0.0, 0.0, 0.0, 0.0, 0.0],
+            index=pd.DatetimeIndex(['2019-03-01 15:15:01', '2019-03-01 15:15:01.015625',
+                                    '2019-03-01 15:15:01.031250', '2019-03-01 15:15:01.046875',
+                                    '2019-03-01 15:15:01.062500']),
+            name='BVP'
+        )
 
-        self.bvp_df = pd.DataFrame({
-            'bvp': [-0.0, -0.0, 1.37, 1.72, -0.0, -93.32, -104.05, -118.82, -137.78, -160.29, -184.86, -210.06, -233.45,
-                    -251.99, -262.04, -261.2, -0.0, -0.0, -0.0, -0.0]
-        })
-        self.bvp_df.index = pd.to_datetime(['2019-03-01 15:15:01', '2019-03-01 15:15:01.015625',
-                                            '2019-03-01 15:15:01.031250', '2019-03-01 15:15:01.046875',
-                                            '2019-03-01 15:15:01.062500', '2019-03-01 15:15:01.078125',
-                                            '2019-03-01 15:15:01.093750', '2019-03-01 15:15:01.109375',
-                                            '2019-03-01 15:15:01.125000', '2019-03-01 15:15:01.140625',
-                                            '2019-03-01 15:15:01.156250', '2019-03-01 15:15:01.171875',
-                                            '2019-03-01 15:15:01.187500', '2019-03-01 15:15:01.203125',
-                                            '2019-03-01 15:15:01.218750', '2019-03-01 15:15:01.234375',
-                                            '2019-03-01 15:15:01.250000', '2019-03-01 15:15:01.265625',
-                                            '2019-03-01 15:15:01.281250', '2019-03-01 15:15:01.296875'])
+        self.expected_EDA_head = pd.Series(
+            [0.0, 0.0, 0.005126, 0.003844, 0.003844],
+            index=pd.DatetimeIndex(['2019-03-01 15:15:01', '2019-03-01 15:15:01.250000',
+                                    '2019-03-01 15:15:01.500000', '2019-03-01 15:15:01.750000',
+                                    '2019-03-01 15:15:02']),
+            name='EDA'
+        )
 
-        self.eda_df = pd.DataFrame({
-            'eda': [0.0, 0.0, 0.005126, 0.003844, 0.003844, 0.002563, 0.0, 0.005126, 0.005126, 0.002563, 0.002563,
-                    0.005126, 0.003844, 0.003844, 0.002563, 0.005126, 0.003844, 0.002563, 0.002563, 0.0]
-        })
-        self.eda_df.index = pd.to_datetime(['2019-03-01 15:15:01', '2019-03-01 15:15:01.250000',
-                                            '2019-03-01 15:15:01.500000', '2019-03-01 15:15:01.750000',
-                                            '2019-03-01 15:15:02', '2019-03-01 15:15:02.250000',
-                                            '2019-03-01 15:15:02.500000', '2019-03-01 15:15:02.750000',
-                                            '2019-03-01 15:15:03', '2019-03-01 15:15:03.250000',
-                                            '2019-03-01 15:15:03.500000', '2019-03-01 15:15:03.750000',
-                                            '2019-03-01 15:15:04', '2019-03-01 15:15:04.250000',
-                                            '2019-03-01 15:15:04.500000', '2019-03-01 15:15:04.750000',
-                                            '2019-03-01 15:15:05', '2019-03-01 15:15:05.250000',
-                                            '2019-03-01 15:15:05.500000', '2019-03-01 15:15:05.750000'])
+        self.expected_HR_head = pd.Series(
+            [88.0, 88.0, 88.67, 85.0, 89.8],
+            index=pd.DatetimeIndex(['2019-03-01 15:15:11', '2019-03-01 15:15:12',
+                                    '2019-03-01 15:15:13', '2019-03-01 15:15:14',
+                                    '2019-03-01 15:15:15']),
+            name='HR'
+        )
 
-        self.hr_df = pd.DataFrame({
-            'hr': [88.0, 88.0, 88.67, 85.0, 89.8, 88.5, 93.0, 97.88, 100.33, 102.3, 104.36, 106.25, 107.38, 108.29,
-                   109.27, 110.62, 110.76, 111.0, 110.32, 109.5]
-        })
-        self.hr_df.index = pd.to_datetime(['2019-03-01 15:15:11', '2019-03-01 15:15:12',
-                                           '2019-03-01 15:15:13', '2019-03-01 15:15:14',
-                                           '2019-03-01 15:15:15', '2019-03-01 15:15:16',
-                                           '2019-03-01 15:15:17', '2019-03-01 15:15:18',
-                                           '2019-03-01 15:15:19', '2019-03-01 15:15:20',
-                                           '2019-03-01 15:15:21', '2019-03-01 15:15:22',
-                                           '2019-03-01 15:15:23', '2019-03-01 15:15:24',
-                                           '2019-03-01 15:15:25', '2019-03-01 15:15:26',
-                                           '2019-03-01 15:15:27', '2019-03-01 15:15:28',
-                                           '2019-03-01 15:15:29', '2019-03-01 15:15:30'])
+        self.expected_TEMP_head = pd.Series(
+            [23.75, 23.75, 23.75, 23.75, 23.75],
+            index=pd.DatetimeIndex(['2019-03-01 15:15:01', '2019-03-01 15:15:01.250000',
+                                    '2019-03-01 15:15:01.500000', '2019-03-01 15:15:01.750000',
+                                    '2019-03-01 15:15:02']),
+            name='TEMP'
+        )
 
-        self.temp_df = pd.DataFrame({
-            'temp': [23.75, 23.75, 23.75, 23.75, 23.75, 23.75, 23.75, 23.75, 23.6, 23.71, 23.71, 23.712, 23.69, 23.69,
-                     23.69, 23.69, 23.65, 23.65, 23.65, 23.65]
-        })
-        self.temp_df.index = pd.to_datetime(['2019-03-01 15:15:01', '2019-03-01 15:15:01.250000',
-                                             '2019-03-01 15:15:01.500000', '2019-03-01 15:15:01.750000',
-                                             '2019-03-01 15:15:02', '2019-03-01 15:15:02.250000',
-                                             '2019-03-01 15:15:02.500000', '2019-03-01 15:15:02.750000',
-                                             '2019-03-01 15:15:03', '2019-03-01 15:15:03.250000',
-                                             '2019-03-01 15:15:03.500000', '2019-03-01 15:15:03.750000',
-                                             '2019-03-01 15:15:04', '2019-03-01 15:15:04.250000',
-                                             '2019-03-01 15:15:04.500000', '2019-03-01 15:15:04.750000',
-                                             '2019-03-01 15:15:05', '2019-03-01 15:15:05.250000',
-                                             '2019-03-01 15:15:05.500000', '2019-03-01 15:15:05.750000'])
+        self.expected_IBI_head = pd.DataFrame(
+            {'seconds_from_start': [145.631666, 146.522332, 151.725695, 152.835121, 153.710161],
+             'IBI': [0.62509, 0.890666, 1.062549, 1.109426, 0.875040]}
+        )
 
-        self.ibi_df = pd.DataFrame({
-            'timedelta': [145.631666, 146.522332, 151.725695, 152.835121, 153.710161, 154.725832, 161.679276,
-                          162.741824, 163.773122, 164.757542, 165.757587, 166.69513, 167.585796, 168.429585,
-                          169.288999, 170.148413, 170.929699, 171.695359, 172.539148, 173.492316, 174.398608],
-            'ibi': [0.62509, 0.890666, 1.062549, 1.109426, 0.87504, 1.015671, 1.031297, 1.062549, 1.031297, 0.98442,
-                    1.000046, 0.937543, 0.890666, 0.843789, 0.859414, 0.859414, 0.781286, 0.76566, 0.843789, 0.953169,
-                    0.906291]
-        })
-        self.ibi_df.index = pd.to_datetime(['2019-03-01 15:17:26.631666', '2019-03-01 15:17:27.522332',
-                                            '2019-03-01 15:17:32.725695', '2019-03-01 15:17:33.835121',
-                                            '2019-03-01 15:17:34.710161', '2019-03-01 15:17:35.725832',
-                                            '2019-03-01 15:17:42.679276', '2019-03-01 15:17:43.741824',
-                                            '2019-03-01 15:17:44.773122', '2019-03-01 15:17:45.757542',
-                                            '2019-03-01 15:17:46.757587', '2019-03-01 15:17:47.695130',
-                                            '2019-03-01 15:17:48.585796', '2019-03-01 15:17:49.429585',
-                                            '2019-03-01 15:17:50.288999', '2019-03-01 15:17:51.148413',
-                                            '2019-03-01 15:17:51.929699', '2019-03-01 15:17:52.695359',
-                                            '2019-03-01 15:17:53.539148', '2019-03-01 15:17:54.492316',
-                                            '2019-03-01 15:17:55.398608'])
+        self.expected_tags = pd.Series(pd.to_datetime([1551453311.68, 1551453318.17, 1551453319.49, 1551453328.04], unit='s'), name='tags')
 
-        self.tags_df = pd.DataFrame(
-            [pd.Timestamp(x, unit='s') for x in [1549015050.68, 1549014523.17, 1549014702.49, 1549014872.04]])
+
+    def _test_compare_real_and_expected(self, reader, expected_start_times, expected_sample_freqs,
+                                              expected_ACC_head, expected_BVP_head,
+                                              expected_EDA_head, expected_HR_head,
+                                              expected_TEMP_head, expected_IBI_head,
+                                              expected_tags):
+        # helper method to test if a readers attributes match up with expected values
+
+        # test metadata
+        self.assertEqual(reader.start_times, expected_start_times)
+        self.assertEqual(reader.sample_freqs, expected_sample_freqs)
+        
+        # test individual dataframes
+        pd.testing.assert_frame_equal(reader.ACC.head(), expected_ACC_head, check_dtype=False, check_freq=False)
+        pd.testing.assert_series_equal(reader.BVP.head(), expected_BVP_head, check_dtype=False, check_freq=False)
+        pd.testing.assert_series_equal(reader.EDA.head(), expected_EDA_head, check_dtype=False, check_freq=False)
+        pd.testing.assert_series_equal(reader.HR.head(), expected_HR_head, check_dtype=False, check_freq=False)
+        pd.testing.assert_series_equal(reader.TEMP.head(), expected_TEMP_head, check_dtype=False, check_freq=False)
+        pd.testing.assert_frame_equal(reader.IBI.head(), expected_IBI_head, check_dtype=False, check_freq=False)
+        pd.testing.assert_series_equal(reader.tags, expected_tags, check_freq=False)
+
+        # test joined dataframe
+        pd.testing.assert_frame_equal(reader.data[['ACC_X', 'ACC_Y', 'ACC_Z']].dropna().head(),
+                                      expected_ACC_head.drop(columns='mag').rename(columns={'X': 'ACC_X', 'Y': 'ACC_Y', 'Z': 'ACC_Z'}), check_dtype=False)
+        pd.testing.assert_series_equal(reader.data['BVP'].dropna().head(), expected_BVP_head, check_dtype=False)
+        pd.testing.assert_series_equal(reader.data['EDA'].dropna().head(), expected_EDA_head, check_dtype=False)
+        pd.testing.assert_series_equal(reader.data['HR'].dropna().head(), expected_HR_head, check_dtype=False)
+        pd.testing.assert_series_equal(reader.data['TEMP'].dropna().head(), expected_TEMP_head, check_dtype=False)
 
     def test_read(self):
-        pd.testing.assert_frame_equal(self.empatica_reader.ACC, self.acc_df, check_freq=False)
-        pd.testing.assert_frame_equal(self.empatica_reader.BVP, self.bvp_df, check_freq=False)
-        pd.testing.assert_frame_equal(self.empatica_reader.EDA, self.eda_df, check_freq=False)
-        pd.testing.assert_frame_equal(self.empatica_reader.HR, self.hr_df, check_freq=False)
-        pd.testing.assert_frame_equal(self.empatica_reader.TEMP, self.temp_df, check_freq=False)
-        pd.testing.assert_frame_equal(self.empatica_reader.IBI, self.ibi_df, check_freq=False)
-        pd.testing.assert_frame_equal(self.empatica_reader.tags, self.tags_df, check_freq=False)
-        self.assertEqual(self.empatica_reader.start_times, self.start_times)
-        self.assertEqual(self.empatica_reader.sample_freqs, self.sample_freqs)
+        # tests the basic reading capability by comparing the read data to the expected values
+        
+        self._test_compare_real_and_expected(self.reader, self.expected_start_times, self.expected_sample_freqs,
+                                                          self.expected_ACC_head, self.expected_BVP_head,
+                                                          self.expected_EDA_head, self.expected_HR_head,
+                                                          self.expected_TEMP_head, self.expected_IBI_head,
+                                                          self.expected_tags)
 
     def test_write(self):
-        self.empatica_reader.write(self.WRITE_PATH)
-        for filename in ['ACC.csv', 'BVP.csv', 'EDA.csv', 'IBI.csv', 'HR.csv', 'TEMP.csv']:
-            read = pd.read_csv(os.path.join(self.READ_PATH, filename), header=None).replace(' IBI', 0).astype(float)
-            written = pd.read_csv(os.path.join(self.WRITE_PATH, filename), header=None).replace(' IBI', 0).astype(float)
-            pd.testing.assert_frame_equal(read, written)
+        # test the writing capability by writing, reading with a new reader and comparing to the old reader
+        
+        self.reader.write(self.WRITE_PATH)
+        new_reader = devicely.EmpaticaReader(self.WRITE_PATH)
+        self._test_compare_real_and_expected(new_reader, self.expected_start_times, self.expected_sample_freqs,
+                                                         self.expected_ACC_head, self.expected_BVP_head,
+                                                         self.expected_EDA_head, self.expected_HR_head,
+                                                         self.expected_TEMP_head, self.expected_IBI_head,
+                                                         self.expected_tags)
+
         shutil.rmtree(self.WRITE_PATH)
 
-    def test_joined_dataframe(self):
-        acc_part_of_joined_df = self.empatica_reader.data[['acc_x', 'acc_y', 'acc_z', 'acc_mag']].dropna()
-        pd.testing.assert_frame_equal(self.empatica_reader.ACC, acc_part_of_joined_df, check_freq=False)
+    def test_timeshift_to_timestamp(self):
+        # tests timeshifting all of the reader's time-related data to a timestamp
 
-        ibi_part_of_joined_df = self.empatica_reader.data[['timedelta', 'ibi']].dropna()
-        pd.testing.assert_frame_equal(self.empatica_reader.IBI, ibi_part_of_joined_df, check_freq=False)
+        shift = pd.Timestamp('23.04.2009 06:55:42')
+        expected_start_times = {
+            'ACC': shift,
+            'BVP': shift,
+            'EDA': shift,
+            'HR': pd.Timestamp('23.04.2009 06:55:52'),
+            'IBI': shift,
+            'TEMP':shift
+        }
+        expected_ACC_index_head = pd.DatetimeIndex(['2009-04-23 06:55:42', '2009-04-23 06:55:42.031250',
+                                                    '2009-04-23 06:55:42.062500', '2009-04-23 06:55:42.093750',
+                                                    '2009-04-23 06:55:42.125000'])
+        expected_data_index_head = pd.DatetimeIndex(['2009-04-23 06:55:42', '2009-04-23 06:55:42.015625',
+                                                     '2009-04-23 06:55:42.031250', '2009-04-23 06:55:42.046875',
+                                                     '2009-04-23 06:55:42.062500'])
+        
+        reader = devicely.EmpaticaReader(self.READ_PATH)
+        reader.timeshift(shift)
 
-        signal_dfs_from_joined = dict()
-        for signal_name in ['bvp', 'eda', 'hr', 'temp']:
-            signal_dfs_from_joined[signal_name] = pd.DataFrame(self.empatica_reader.data[signal_name].dropna())
+        self.assertEqual(reader.start_times, expected_start_times)
+        pd.testing.assert_index_equal(reader.ACC.head().index, expected_ACC_index_head)
+        pd.testing.assert_index_equal(reader.data.head().index, expected_data_index_head)
 
-        pd.testing.assert_frame_equal(signal_dfs_from_joined['bvp'], self.bvp_df)
-        pd.testing.assert_frame_equal(signal_dfs_from_joined['eda'], self.eda_df)
-        pd.testing.assert_frame_equal(signal_dfs_from_joined['hr'], self.hr_df)
-        pd.testing.assert_frame_equal(signal_dfs_from_joined['temp'], self.temp_df)
+    def test_timeshift_by_timedelta(self):
+        # tests timeshifting all of the reader's time-related data by a timedelta
+
+        shift = pd.Timedelta('- 7 days, 4 hours, 21 minutes, 32 seconds')
+        expected_start_times = {
+            'ACC': pd.Timestamp('2019-02-22 10:53:29'),
+            'BVP': pd.Timestamp('2019-02-22 10:53:29'),
+            'EDA': pd.Timestamp('2019-02-22 10:53:29'),
+            'HR': pd.Timestamp('2019-02-22 10:53:39'),
+            'IBI': pd.Timestamp('2019-02-22 10:53:29'),
+            'TEMP':pd.Timestamp('2019-02-22 10:53:29')
+        }
+        expected_EDA_index_head = pd.DatetimeIndex(['2019-02-22 10:53:29', '2019-02-22 10:53:29.250000',
+                                                    '2019-02-22 10:53:29.500000', '2019-02-22 10:53:29.750000',
+                                                    '2019-02-22 10:53:30'])
+        expected_data_index_head = pd.DatetimeIndex(['2019-02-22 10:53:29', '2019-02-22 10:53:29.015625',
+                                                     '2019-02-22 10:53:29.031250', '2019-02-22 10:53:29.046875',
+                                                     '2019-02-22 10:53:29.062500'])
+
+        reader = devicely.EmpaticaReader(self.READ_PATH)
+        reader.timeshift(shift)
+
+        self.assertEqual(reader.start_times, expected_start_times)
+        pd.testing.assert_index_equal(reader.EDA.head().index, expected_EDA_index_head)
+        pd.testing.assert_index_equal(reader.data.head().index, expected_data_index_head)
+
+    def test_random_timeshift(self):
+        earliest_possible_start_times = {
+            'ACC': pd.Timestamp('2017-03-01 15:15:01'),
+            'BVP': pd.Timestamp('2017-03-01 15:15:01'),
+            'EDA': pd.Timestamp('2017-03-01 15:15:01'),
+            'HR': pd.Timestamp('2017-03-01 15:15:11'),
+            'IBI': pd.Timestamp('2017-03-01 15:15:01'),
+            'TEMP':pd.Timestamp('2017-03-01 15:15:01')
+        }
+        latest_possible_start_times = {
+            'ACC': pd.Timestamp('2019-01-30 15:15:01'),
+            'BVP': pd.Timestamp('2019-01-30 15:15:01'),
+            'EDA': pd.Timestamp('2019-01-30 15:15:01'),
+            'HR': pd.Timestamp('2019-01-30 15:15:11'),
+            'IBI': pd.Timestamp('2019-01-30 15:15:01'),
+            'TEMP': pd.Timestamp('2019-01-30 15:15:01')
+        }
+        earliest_possible_TEMP_index_head = pd.DatetimeIndex(['2017-03-01 15:15:01', '2017-03-01 15:15:01.250000',
+                                                              '2017-03-01 15:15:01.500000', '2017-03-01 15:15:01.750000',
+                                                              '2017-03-01 15:15:02'])
+        latest_possible_TEMP_index_head = pd.DatetimeIndex(['2019-01-30 15:15:01', '2019-01-30 15:15:01.250000',
+                                                            '2019-01-30 15:15:01.500000', '2019-01-30 15:15:01.750000',
+                                                            '2019-01-30 15:15:02'])
+
+        earliest_possible_data_index_head = pd.DatetimeIndex(['2017-03-01 15:15:01', '2017-03-01 15:15:01.015625',
+                                                              '2017-03-01 15:15:01.031250', '2017-03-01 15:15:01.046875',
+                                                              '2017-03-01 15:15:01.062500'])
+        latest_possible_data_index_head = pd.DatetimeIndex(['2019-01-30 15:15:01', '2019-01-30 15:15:01.015625',
+                                                            '2019-01-30 15:15:01.031250', '2019-01-30 15:15:01.046875',
+                                                            '2019-01-30 15:15:01.062500'])
+
+        reader = devicely.EmpaticaReader(self.READ_PATH)
+        reader.timeshift()
+
+        for signal_name, start_time in reader.start_times.items():
+            self.assertLess(earliest_possible_start_times[signal_name], start_time)
+            self.assertLess(start_time, latest_possible_start_times[signal_name])
+
+        self.assertTrue((earliest_possible_TEMP_index_head <= reader.TEMP.head().index).all())
+        self.assertTrue((reader.TEMP.head().index <= latest_possible_TEMP_index_head).all())
+
+        self.assertTrue((earliest_possible_data_index_head <= reader.data.head().index).all())
+        self.assertTrue((reader.data.head().index <= latest_possible_data_index_head).all())
+
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -57,9 +57,6 @@ class EmpaticaReader:
         across signals.
     """
 
-    signal_names = ['acc', 'bvp', 'eda', 'hr', 'temp']
-    acc_names = ['acc_x', 'acc_y', 'acc_z']
-
     def __init__(self, path):
         """
         Parse the csv files located in the specified directory into dataframes.
@@ -77,29 +74,23 @@ class EmpaticaReader:
             In case path is not specified.
         """
 
-        self._init_filelist(path)
         self.start_times = {}
         self.sample_freqs = {}
 
-        self.BVP = self._read_signal('bvp')
-        self.EDA = self._read_signal('eda')
-        self.HR = self._read_signal('hr')
-        self.TEMP = self._read_signal('temp')
-        self.ACC = self._read_acc()
-        self.IBI = self._read_ibi()
+        self.ACC = self._read_signal(os.path.join(path, 'ACC.csv'), 'ACC', col_names=['X', 'Y', 'Z'])
+        if self.ACC is not None:
+            self.ACC['mag'] = np.linalg.norm(self.ACC.values, axis=1)
+        self.BVP = self._read_signal(os.path.join(path, 'BVP.csv'), 'BVP')
+        self.EDA = self._read_signal(os.path.join(path, 'EDA.csv'), 'EDA')
+        self.HR = self._read_signal(os.path.join(path, 'HR.csv'), 'HR')
+        self.TEMP = self._read_signal(os.path.join(path, 'TEMP.csv'), 'TEMP')
+        self.IBI = self._read_ibi(os.path.join(path, 'IBI.csv'))
 
-        if not file_empty_or_not_existing(self.filelist['tags']):
-            self.tags = pd.read_csv(self.filelist['tags'], header=None, parse_dates=[0],
-                                    date_parser=lambda x: pd.Timestamp(float(x), unit='s'))
-        else:
-            self.tags = None
+        self.tags = self._read_tags(os.path.join(path, 'tags.csv'))
+        
+        self.data = self._get_joined_dataframe()
 
-        if ((self.BVP is None) & (self.EDA is None) & (self.HR is None)
-            & (self.TEMP is None) & (self.ACC is None) & (self.IBI is None)):
-            raise Exception('All Files are Empty.')
-        self._update_joined_dataframe()
-
-    def write(self, path):
+    def write(self, dir_path):
         """
         Write the signal dataframes back to individual csv files formatted the
         same way as the read csv files.
@@ -120,88 +111,75 @@ class EmpaticaReader:
             In case path is not specified.
         """
 
-        if not path:
-            raise Exception('Please specify a path to save the files.')
-        if not os.path.exists(path):
-            os.mkdir(path)
-        self._write_signal(path, self.BVP)
-        self._write_signal(path, self.EDA)
-        self._write_signal(path, self.HR)
-        self._write_signal(path, self.TEMP)
-        self._write_acc(path)
-        self._write_ibi(path)
+        if not os.path.exists(dir_path):
+            os.mkdir(dir_path)
+        self._write_signal(os.path.join(dir_path, 'ACC.csv'), self.ACC.drop(columns='mag'), 'ACC')
+        self._write_signal(os.path.join(dir_path, 'BVP.csv'), self.BVP, 'BVP')
+        self._write_signal(os.path.join(dir_path, 'EDA.csv'), self.EDA, 'EDA')
+        self._write_signal(os.path.join(dir_path, 'HR.csv'), self.HR, 'HR')
+        self._write_signal(os.path.join(dir_path, 'TEMP.csv'), self.TEMP, 'TEMP')
+        self._write_ibi(os.path.join(dir_path, 'IBI.csv'))
+        self._write_tags(os.path.join(dir_path, 'tags.csv'))
 
-        if self.tags is not None:
-            numeric_tags = pd.to_numeric(self.tags[0]) / 1e9
-            numeric_tags.to_csv(os.path.join(path, 'tags.csv'), header=None, index=None)
-
-    def _read_signal(self, signal_name):
-        if file_empty_or_not_existing(self.filelist[signal_name]):
-            print(f"File {self.filelist[signal_name]} is empty or doesn't exist. Skipping")
-            return None
-        with open(self.filelist[signal_name]) as f:
-            self.start_times[signal_name] = pd.Timestamp(float(f.readline()), unit='s')
-            self.sample_freqs[signal_name] = float(f.readline())
-            df = pd.read_csv(f, names=[signal_name], float_precision='high')
+    def _read_signal(self, path, signal_name, col_names=None):
+        with open(path, 'r') as f:
+            start_time_str = f.readline().split(',')[0]
+            self.start_times[signal_name] = pd.Timestamp(float(start_time_str), unit='s')
+            sample_freq_str = f.readline().split(',')[0]
+            self.sample_freqs[signal_name] = float(sample_freq_str)
+            col_names = [signal_name] if col_names is None else col_names
+            df = pd.read_csv(f, header=None, names=col_names)
             df.index = pd.date_range(
                 start=self.start_times[signal_name],
                 freq=f"{1 / self.sample_freqs[signal_name]}S",
                 periods=len(df))
+            if col_names is not None:
+                df.rename(dict(enumerate(col_names)), inplace=True)
+            else:
+                df.rename({0: signal_name}, inplace=True)
+            
+            return df.squeeze()
+
+    def _write_signal(self, path, df, signal_name):
+        n_cols = len(df.columns) if isinstance(df, pd.DataFrame) else 1
+        meta = np.array([[self.start_times[signal_name].value / 1e9] * n_cols,
+                            [self.sample_freqs[signal_name]] * n_cols])
+        meta_df = pd.DataFrame(meta)
+        with open(path, 'w') as f:
+            meta_df.to_csv(f, index=None, header=None)
+            df.to_csv(f, index=None, header=None)
+
+    def _read_ibi(self, path):
+        with open(path, 'r') as f:
+            self.start_times['IBI'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
+            df = pd.read_csv(f, names=['seconds_from_start', 'IBI'], header=None)
             return df
 
-    def _write_signal(self, dir_path, dataframe):
-        if dataframe is not None:
-            signal_name = dataframe.columns[0]
-            file_path = os.path.join(dir_path, f"{signal_name.upper()}.csv")
-            with open(file_path, 'w') as f:
-                f.write(f"{str(self.start_times[signal_name].value / 10 ** 9)}\n")
-                f.write(f"{str(self.sample_freqs[signal_name])}\n")
-                f.write('\n'.join([str(x) for x in dataframe[signal_name]]))
+    def _write_ibi(self, path):
+        with open(path, 'w') as f:
+            f.write(f"{float(self.start_times['IBI'].value / 1e9)}, IBI\n")
+            f.write(self.IBI.to_csv(index=None, header=None))
 
-    def _read_acc(self):
-        if file_empty_or_not_existing(self.filelist['acc']):
-            print(f"File {self.filelist['acc']} is empty or doesn't exist. Skipping")
-            return None
-        with open(self.filelist['acc']) as f:
-            start_times = [pd.Timestamp(float(x), unit='s') for x in f.readline().split(', ')]
-            sample_freqs = [float(x) for x in f.readline().split(', ')]
-            self.start_times['acc'] = start_times[0]
-            self.sample_freqs['acc'] = sample_freqs[0]
-            df = pd.read_csv(f, names=self.acc_names)
-            df['acc_mag'] = np.linalg.norm(df.to_numpy(), axis=1)
-            df.index = pd.date_range(
-                start=self.start_times['acc'],
-                freq=f"{1 / self.sample_freqs['acc']}S",
-                periods=len(df))
-            return df
+    def _read_tags(self, path):
+        try:
+            if os.stat(path).st_size > 0:
+                return pd.read_csv(path, header=None,
+                                         parse_dates=[0],
+                                         date_parser=lambda x : pd.to_datetime(x, unit='s'),
+                                         names=['tags'],
+                                         squeeze=True)
 
-    def _write_acc(self, dir_path):
-        if self.ACC is not None:
-            file_path = os.path.join(dir_path, "ACC.csv")
-            with open(file_path, 'w') as f:
-                start_time_as_string = str(self.start_times['acc'].value / 10 ** 9)
-                sample_freq_as_string = str(self.sample_freqs['acc'])
-                f.write(', '.join([start_time_as_string] * 3) + '\n')
-                f.write(', '.join([sample_freq_as_string] * 3) + '\n')
-                f.write(self.ACC.drop(columns='acc_mag').to_csv(header=None, index=None))
+            else:
+                print(f"Not reading tags because the file {path} is empty.")
+        except OSError:
+            print(f"Not reading tags because the file {path} does not exist.")
 
-    def _read_ibi(self):
-        if file_empty_or_not_existing(self.filelist['ibi']):
-            print(f"File {self.filelist['ibi']} is empty or doesn't exist. Skipping")
-            return None
-        with open(self.filelist['ibi']) as f:
-            self.start_times['ibi'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
-            df = pd.read_csv(f, names=['timedelta', 'ibi'], float_precision='high')
-            df.index = self.start_times['ibi'] + pd.to_timedelta(df.timedelta, unit='s')
-            df.index.name = None
-            return df
+        return None
 
-    def _write_ibi(self, dir_path):
-        if self.IBI is not None:
-            file_path = os.path.join(dir_path, "IBI.csv")
-            with open(file_path, 'w') as f:
-                f.write(f"{self.start_times['ibi'].value / 1e9}, IBI\n")
-                f.write(self.IBI.to_csv(index=None, header=None))
+    def _write_tags(self, path):
+        if self.tags is not None:
+            tags_write_series = self.tags.map(lambda x: x.value / 1e9)
+            tags_write_series.to_csv(path, header=None, index=None)
 
     def timeshift(self, shift='random'):
         """
@@ -226,39 +204,42 @@ class EmpaticaReader:
             random_timedelta = pd.Timedelta(random.uniform(one_month, two_years))
             self.timeshift(random_timedelta)
 
-        dfs = [df for df in [self.BVP, self.EDA, self.HR, self.TEMP, self.ACC, self.IBI] if df is not None]
+        dfs = [self.ACC, self.BVP, self.EDA, self.HR, self.TEMP, self.data]
 
         if isinstance(shift, pd.Timestamp):
-            for signal_name in self.start_times.keys():
-                self.start_times[signal_name] = shift
+            min_start_time = min(self.start_times.values())
+            new_start_times = dict()
+            for signal_name, start_time in self.start_times.items():
+                new_start_times[signal_name] = shift + (start_time - min_start_time)
+            self.start_times = new_start_times
             if self.tags is not None:
-                timedeltas = self.tags - self.tags.loc[0, 0]
+                timedeltas = self.tags - self.tags.min()
                 self.tags = shift + timedeltas
             for df in dfs:
-                timedeltas = df.index - df.index[0]
+                timedeltas = df.index - df.index.min()
                 df.index = shift + timedeltas
 
         if isinstance(shift, pd.Timedelta):
-            for signal_name in self.start_times.keys():
+            for signal_name in self.start_times:
                 self.start_times[signal_name] += shift
             if self.tags is not None:
                 self.tags += shift
             for df in dfs:
                 df.index += shift
 
-        self._update_joined_dataframe()
+    def _get_joined_dataframe(self):
+        dfs = [self.ACC, self.BVP, self.EDA, self.HR, self.TEMP]
+        joined_idx = pd.concat([pd.Series(df.index) for df in dfs])
+        joined_idx = pd.Index(joined_idx.drop_duplicates().sort_values())
+        joined_columns = ['ACC_X', 'ACC_Y', 'ACC_Z', 'BVP', 'EDA', 'HR', 'TEMP']
 
-    def _update_joined_dataframe(self):
-        dfs = [df for df in [self.BVP, self.EDA, self.HR, self.TEMP, self.ACC, self.IBI] if df is not None]
-        self.data = reduce(lambda df1, df2: df1.join(df2, how='outer', sort=True), dfs)
+        joined_df = pd.DataFrame(columns=joined_columns, index=joined_idx)
+        joined_df.loc[self.ACC.index, 'ACC_X'] = self.ACC['X']
+        joined_df.loc[self.ACC.index, 'ACC_Y'] = self.ACC['Y']
+        joined_df.loc[self.ACC.index, 'ACC_Z'] = self.ACC['Z']
+        joined_df.loc[self.BVP.index, 'BVP'] = self.BVP
+        joined_df.loc[self.EDA.index, 'EDA'] = self.EDA
+        joined_df.loc[self.HR.index, 'HR'] = self.HR
+        joined_df.loc[self.TEMP.index, 'TEMP'] = self.TEMP
 
-    def _init_filelist(self, path):
-        self.filelist = {
-            'acc': os.path.join(path, 'ACC.csv'),
-            'bvp': os.path.join(path, 'BVP.csv'),
-            'eda': os.path.join(path, 'EDA.csv'),
-            'hr': os.path.join(path, 'HR.csv'),
-            'ibi': os.path.join(path, 'IBI.csv'),
-            'temp': os.path.join(path, 'TEMP.csv'),
-            'tags': os.path.join(path, 'tags.csv')
-        }
+        return joined_df
