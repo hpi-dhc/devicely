@@ -4,12 +4,9 @@ Module to process Empatica data
 
 import os
 import random
-from functools import reduce
 
 import numpy as np
 import pandas as pd
-
-from .helpers import file_empty_or_not_existing
 
 
 class EmpaticaReader:
@@ -26,33 +23,31 @@ class EmpaticaReader:
         Contains the sampling frequencies of all
         measured signals in Hz.
 
-    IBI : DataFrame
-        Contains inter-beat interval data with columns "timedelta"
-        and "ibi", indexed by time of measurement. The column "timedelta"
-        contains the passed time in seconds since the first measurement and
-        "ibi" contains the inter-beat interval in seconds since the last
-        measurement.
-
-    ACC : DataFrame
+    IBI : pandas.DataFrame
+        Contains inter-beat interval data.
+        The column "seconds_since_start" is the time in seconds between the start of measurements
+        and the column "IBI" is the duration in seconds between consecutive beats.
+        
+    ACC : pandas.DataFrame
         Contains the data measured with the onboard MEMS type 3-axis
         accelerometer, indexed by time of measurement.
 
-    BVP : DataFrame
+    BVP : pandas.DataFrame
         Contains blood volume pulse data, indexed by
         time of measurement.
 
-    EDA : DataFrame
+    EDA : pandas.DataFrame
         Contains data captured from the electrodermal activity
         sensor, indexed by time of measurement.
 
-    HR : DataFrame
+    HR : pandas.DataFrame
         Contains heart rate data, indexed by time of measurement.
 
-    TEMP : DataFrame
+    TEMP : pandas.DataFrame
         Contains temperature data, indexed by time of measurement.
 
-    data : DataFrame
-        Joined dataframe of all individual signal dataframes (see
+    data : pandas.DataFrame
+        Joined dataframe of the ACC, BVP, EDA, HR and TEMP dataframes (see
         above). May contain NaN values because sampling frequencies differ
         across signals.
     """
@@ -66,12 +61,7 @@ class EmpaticaReader:
         path : str
             Path of the directory that contains the individual signal csv
             files. The files must be named ACC.csv, BVP.csv, EDA.csv, HR.csv,
-            IBI.csv and TEMP.csv.
-
-        Raises
-        ------
-        Exception
-            In case path is not specified.
+            IBI.csv and TEMP.csv. If present, the file tags.csv is read too.
         """
 
         self.start_times = {}
@@ -104,11 +94,6 @@ class EmpaticaReader:
             ignoring other files in the directory.
 
             If the directory doe not exist, it will be created.
-
-        Raises
-        ------
-        Exception
-            In case path is not specified.
         """
 
         if not os.path.exists(dir_path):
@@ -152,7 +137,7 @@ class EmpaticaReader:
     def _read_ibi(self, path):
         with open(path, 'r') as f:
             self.start_times['IBI'] = pd.Timestamp(float(f.readline().split(',')[0]), unit='s')
-            df = pd.read_csv(f, names=['seconds_from_start', 'IBI'], header=None)
+            df = pd.read_csv(f, names=['seconds_since_start', 'IBI'], header=None)
             return df
 
     def _write_ibi(self, path):
@@ -191,7 +176,7 @@ class EmpaticaReader:
             If shift is not specified, shifts the data by a random time interval
             between one month and two years to the past.
 
-            If shift is a timdelta, shifts the data by that timedelta.
+            If shift is a timdelta, adds that timedelta to all time-related attributes. 
 
             If shift is a timestamp, shifts the data such that the earliest entry
             is at that timestamp and the remaining values keep the same

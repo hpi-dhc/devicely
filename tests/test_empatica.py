@@ -75,7 +75,7 @@ class EmpaticaTestCase(unittest.TestCase):
         )
 
         self.expected_IBI_head = pd.DataFrame(
-            {'seconds_from_start': [145.631666, 146.522332, 151.725695, 152.835121, 153.710161],
+            {'seconds_since_start': [145.631666, 146.522332, 151.725695, 152.835121, 153.710161],
              'IBI': [0.62509, 0.890666, 1.062549, 1.109426, 0.875040]}
         )
 
@@ -120,7 +120,7 @@ class EmpaticaTestCase(unittest.TestCase):
                                                           self.expected_tags)
 
     def test_write(self):
-        # test the writing capability by writing, reading with a new reader and comparing to the old reader
+        # test the writing capability by writing, reading with a new reader and comparing the old to the new data
         
         self.reader.write(self.WRITE_PATH)
         new_reader = devicely.EmpaticaReader(self.WRITE_PATH)
