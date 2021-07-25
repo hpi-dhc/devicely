@@ -74,9 +74,15 @@ class SpacelabsReader:
         order = ['timestamp', 'date', 'time', 'SYS(mmHg)', 'DIA(mmHg)', 'ACC_x', 'ACC_y', 'ACC_z', 'error']
         self.data = self.data[order]
 
+        self._eb_dropped = False
+        if (self.data['error'] != 'EB').all():
+            self.data.set_index('timestamp', inplace=True)
+            self._eb_dropped = True
+
         xml_line = open(path, 'r').readlines()[-1]
         xml_root = ET.fromstring(xml_line)
         self.metadata = self._etree_to_dict(xml_root)['XML']
+
 
     def deidentify(self, subject_id=None):
         """
@@ -184,31 +190,35 @@ class SpacelabsReader:
             is at that timestamp and the remaining values keep the same time distance to the first entry.
         """
 
-        eb_dropped = self.data.index.name == 'timestamp'
-        timestamp_col = self.data.index if eb_dropped else self.data['timestamp']
-
         if shift == 'random':
             one_month = pd.Timedelta('30 days').value
             two_years = pd.Timedelta('730 days').value
             random_timedelta = - pd.Timedelta(random.uniform(one_month, two_years)).round('min')
             self.timeshift(random_timedelta)
-        
-        if isinstance(shift, pd.Timestamp):
-            timedeltas = timestamp_col - timestamp_col[0]
-            timestamp_col = shift.round('min') + timedeltas
-        
-        if isinstance(shift, pd.Timedelta):
-            timestamp_col += shift.round('min')
-            
-        self.data.date = timestamp_col.map(lambda timestamp: timestamp.date())
-        self.data.time = timestamp_col.map(lambda timestamp: timestamp.time())
 
-        if 'window_start' in self.data.columns:
+        if self._eb_dropped:
             if isinstance(shift, pd.Timestamp):
-                timedeltas = self.data['window_start'] - self.data['window_start'][0]
-                self.data['window_start'] = shift.round('min') + timedeltas
+                timedeltas = self.data.index - self.data.index[0]
+                self.data.index = shift.round('min') + timedeltas
+            if isinstance(shift, pd.Timedelta):
+                self.data.index += shift.round('min')
+            self.data['date'] = self.data.index.map(lambda timestamp: timestamp.date())
+            self.data['time'] = self.data.index.map(lambda timestamp: timestamp.time())
+        else:
+            if isinstance(shift, pd.Timestamp):
+                timedeltas = self.data['timestamp'] - self.data['timestamp'].min()
+                self.data['timestamp'] = shift.round('min') + timedeltas
+            if isinstance(shift, pd.Timedelta):            
+                self.data['timestamp'] += shift.round('min')
+            self.data['date'] = self.data['timestamp'].map(lambda timestamp: timestamp.date())
+            self.data['time'] = self.data['timestamp'].map(lambda timestamp: timestamp.time())
 
-                timedeltas = self.data['window_end'] - self.data['window_end'][0]
+
+        if 'window_start' in self.data.columns and 'window_end' in self.data.columns:
+            if isinstance(shift, pd.Timestamp):
+                timedeltas = self.data['window_start'] - self.data['window_start'].min()
+                self.data['window_start'] = shift.round('min') + timedeltas
+                timedeltas = self.data['window_end'] - self.data['window_end'].min()
                 self.data['window_end'] = shift.round('min') + timedeltas
             if isinstance(shift, pd.Timedelta):
                 self.data['window_start'] += shift.round('min')
@@ -226,12 +236,10 @@ class SpacelabsReader:
         and is thus used as an index for easy indexing.
         """
 
-        has_EB = self.data[self.data.error == 'EB'].any(axis=1).values
-        if has_EB.size != 0:
-            self.data = self.data[self.data.error != 'EB']
+        if not self._eb_dropped:
+            self.data = self.data[self.data['error'] != 'EB']
             self.data.set_index('timestamp', inplace=True)
-        else:
-            print('No EB values found.')
+            self._eb_dropped = True
 
     def set_window(self, window_duration, window_type):
         """
@@ -249,17 +257,24 @@ class SpacelabsReader:
             Ffill stands for forward fill.
             The window is defined after the start of the measurement.
         """
-        if self.data.index.name == 'timestamp':
-            time_col = self.data.index
-        else:
-            time_col = self.data['timestamp']
 
-        if window_type == 'bffill':
-            self.data['window_start'] = time_col - window_duration // 2
-            self.data['window_end'] = time_col + window_duration // 2
-        elif window_type == 'bfill':
-            self.data['window_start'] = time_col - window_duration
-            self.data['window_end'] = time_col
-        elif window_type == 'ffill':
-            self.data['window_start'] = time_col
-            self.data['window_end'] = time_col + window_duration
+        if self._eb_dropped:
+            if window_type == 'bffill':
+                self.data['window_start'] = self.data.index - window_duration // 2
+                self.data['window_end'] = self.data.index + window_duration // 2
+            elif window_type == 'bfill':
+                self.data['window_start'] = self.data.index - window_duration
+                self.data['window_end'] = self.data.index
+            elif window_type == 'ffill':
+                self.data['window_start'] = self.data.index
+                self.data['window_end'] = self.data.index + window_duration
+        else:
+            if window_type == 'bffill':
+                self.data['window_start'] = self.data['timestamp'] - window_duration // 2
+                self.data['window_end'] = self.data['timestamp'] + window_duration // 2
+            elif window_type == 'bfill':
+                self.data['window_start'] = self.data['timestamp'] - window_duration
+                self.data['window_end'] = self.data['timestamp']
+            elif window_type == 'ffill':
+                self.data['window_start'] = self.data['timestamp']
+                self.data['window_end'] = self.data['timestamp'] + window_duration

@@ -148,15 +148,15 @@ class FarosReader:
         joined_idx = pd.Index(joined_idx.drop_duplicates().sort_values())
 
         # create joined dataframe
-        col_names = ['ECG', 'Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z', 'Accelerometer_mag', 'Marker', 'HRV']
+        col_names = ['ECG', 'ACC_X', 'ACC_Y', 'ACC_Z', 'ACC_mag', 'Marker', 'HRV']
         joined_df = pd.DataFrame(index=joined_idx, columns=col_names)
 
         # set non-nan values of joined dataframe
         joined_df.loc[self.ECG.index, 'ECG'] = self.ECG
-        joined_df.loc[self.ACC.index, 'Accelerometer_X'] = self.ACC['X']
-        joined_df.loc[self.ACC.index, 'Accelerometer_Y'] = self.ACC['Y']
-        joined_df.loc[self.ACC.index, 'Accelerometer_Z'] = self.ACC['Z']
-        joined_df.loc[self.ACC.index, 'Accelerometer_mag'] = self.ACC['mag']
+        joined_df.loc[self.ACC.index, 'ACC_X'] = self.ACC['X']
+        joined_df.loc[self.ACC.index, 'ACC_Y'] = self.ACC['Y']
+        joined_df.loc[self.ACC.index, 'ACC_Z'] = self.ACC['Z']
+        joined_df.loc[self.ACC.index, 'ACC_mag'] = self.ACC['mag']
         joined_df.loc[self.Marker.index, 'Marker'] = self.Marker
         joined_df.loc[self.HRV.index, 'HRV'] = self.HRV
 
@@ -167,8 +167,8 @@ class FarosReader:
         Writes the data either to an EDF file or to several files into a new directory.
         Because of the `special structure of EDF files <https://www.edfplus.info/specs/edf.html>`_ 
         writing to EDF is only possible for readers that have been created from an EDF file and without any changes to the ACC, ECG, Marker, HRV and sample_freqs attributes.
-        Because we want users to be able to modify the signals, we allow writing to a directory.
-        Writing to a directory always works, even if signal entries have been dropped.
+        Because we want you to be able to modify the signals, you can write the data back to a directory of individual files.
+        Writing to a directory is the preferred method and works in all cases.
 
         Parameters
         ----------

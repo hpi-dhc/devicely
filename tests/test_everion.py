@@ -11,7 +11,7 @@ import devicely
 
 class EverionTestCase(unittest.TestCase):
     READ_PATH = 'tests/Everion_test_data'
-    BROKEN_READ_PATH = 'tests/Everion_test_data_broken' #for testing with missing files
+    BROKEN_READ_PATH = 'tests/Everion_test_data_broken' # for testing with missing files
     WRITE_PATH = 'tests/Everion_test_data_write'
 
     def setUp(self):

@@ -217,7 +217,7 @@ class EverionReader:
         if selected_tags is not None:
             df = df[df['tag'].isin(selected_tags)]
 
-        df['time'] = df['time'].astype(int) / 10**9
+        df['time'] = df['time'].map(lambda x: x.value) / 10**9
         timestamps_min_and_count = df.groupby('time').agg(
             count_min=pd.NamedAgg(column='count', aggfunc='min'),
             count_range=pd.NamedAgg(
@@ -287,7 +287,7 @@ class EverionReader:
 
     def _write_single_df(self, df, filepath):
         writing_df = df.copy()
-        writing_df['time'] = (writing_df['time'].astype(int) / 10**9).astype(int)
+        writing_df['time'] = (writing_df['time'].map(lambda x: x.value) / 10**9).astype(int)
         if 'quality' in writing_df.columns:
             writing_df['values'] = writing_df['values'].astype(str)
             quality_col = writing_df['quality'].dropna().astype(str)
