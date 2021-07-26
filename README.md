@@ -6,7 +6,7 @@
 ![Devicely Logo](/imgs/logo/devicely-logo.png)
 
 devicely is a Python package for reading, anonymizing and writing data from various health monitoring sensors.
-With devicely, you can read sensor data and have it automatically accessible in dataframes.
+With devicely, you can read sensor data and have it easily accessible in dataframes.
 You can also anonymize data and write it back using the original data format. This makes it convenient to share health sensor data with other researchers.
 
 [Documentation](https://hpi-dhc.github.io/devicely/)

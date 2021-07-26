@@ -1,0 +1,904 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Module reference &mdash; devicely 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="How to contribute" href="contribution.html" />
+    <link rel="prev" title="Start Guide" href="example.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/devicely-logo-white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="example.html">Quick Start Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Module reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-devicely.empatica">devicely.EmpaticaReader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-devicely.spacelabs">devicely.SpacelabsReader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-devicely.faros">devicely.FarosReader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-devicely.everion">devicely.EverionReader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-devicely.shimmer_plus">devicely.ShimmerReader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-devicely.tag">devicely.TagReader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contribution.html">How to contribute</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">devicely</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Module reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/moduleref.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-reference">
+<h1>Module reference<a class="headerlink" href="#module-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-devicely.empatica">
+<span id="devicely-empaticareader"></span><h2>devicely.EmpaticaReader<a class="headerlink" href="#module-devicely.empatica" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">devicely.empatica.</span></span><span class="sig-name descname"><span class="pre">EmpaticaReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.empatica.EmpaticaReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses, timeshifts and writes data generated by Empatica E4.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader.start_times">
+<span class="sig-name descname"><span class="pre">start_times</span></span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.start_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the timestamp of the first measurement for all
+measured signals (BVP, ACC etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader.sample_freqs">
+<span class="sig-name descname"><span class="pre">sample_freqs</span></span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.sample_freqs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the sampling frequencies of all
+measured signals in Hz.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader.IBI">
+<span class="sig-name descname"><span class="pre">IBI</span></span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.IBI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains inter-beat interval data.
+The column “seconds_since_start” is the time in seconds between the start of measurements
+and the column “IBI” is the duration in seconds between consecutive beats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader.ACC">
+<span class="sig-name descname"><span class="pre">ACC</span></span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.ACC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the data measured with the onboard MEMS type 3-axis
+accelerometer, indexed by time of measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader.BVP">
+<span class="sig-name descname"><span class="pre">BVP</span></span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.BVP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains blood volume pulse data, indexed by
+time of measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader.EDA">
+<span class="sig-name descname"><span class="pre">EDA</span></span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.EDA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains data captured from the electrodermal activity
+sensor, indexed by time of measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader.HR">
+<span class="sig-name descname"><span class="pre">HR</span></span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.HR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains heart rate data, indexed by time of measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader.TEMP">
+<span class="sig-name descname"><span class="pre">TEMP</span></span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.TEMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains temperature data, indexed by time of measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Joined dataframe of the ACC, BVP, EDA, HR and TEMP dataframes (see
+above). May contain NaN values because sampling frequencies differ
+across signals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader.timeshift">
+<span class="sig-name descname"><span class="pre">timeshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.timeshift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift all time related columns as well as the starting_times dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the data by a random time interval
+between one month and two years to the past.</p>
+<p>If shift is a timdelta, adds that timedelta to all time-related attributes.</p>
+<p>If shift is a timestamp, shifts the data such that the earliest entry
+is at that timestamp and the remaining values keep the same
+time distance to the first entry.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.empatica.EmpaticaReader.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the signal dataframes back to individual csv files formatted the
+same way as the read csv files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – <p>Path of the directory in which the csv files are created.</p>
+<p>If the directory exists, the csv files are written using writing mode ‘w’
+ignoring other files in the directory.</p>
+<p>If the directory doe not exist, it will be created.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-devicely.spacelabs">
+<span id="devicely-spacelabsreader"></span><h2>devicely.SpacelabsReader<a class="headerlink" href="#module-devicely.spacelabs" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="devicely.spacelabs.SpacelabsReader">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">devicely.spacelabs.</span></span><span class="sig-name descname"><span class="pre">SpacelabsReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses, timeshifts, deidentifies and writes data
+generated by Spacelabs(SL90217).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.spacelabs.SpacelabsReader.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>DataFrame with the values that were read from the abp file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.spacelabs.SpacelabsReader.subject">
+<span class="sig-name descname"><span class="pre">subject</span></span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.subject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the sujbect’s id. Can be changed for
+deidentification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.spacelabs.SpacelabsReader.valid_measurements">
+<span class="sig-name descname"><span class="pre">valid_measurements</span></span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.valid_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the number of valid measurements in the
+abp file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.spacelabs.SpacelabsReader.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The measurements’ metadata. Read from the xml at the bottom
+of the abp file. Can be erased for deidentification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.spacelabs.SpacelabsReader.deidentify">
+<span class="sig-name descname"><span class="pre">deidentify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.deidentify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deidentifies the data by removing the original XML metadata and
+subject id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>subject_id</strong> (<em>str</em><em>, </em><em>optional</em>) – New subject id to be written in the
+deidentified file, by default None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.spacelabs.SpacelabsReader.drop_EB">
+<span class="sig-name descname"><span class="pre">drop_EB</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.drop_EB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drops all entries with “EB”-errors from the DataFrame</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Before dropping, the dataframe has a range index because the timestamps
+might not be unique. After dropping, the timestamp column will be unique
+and is thus used as an index for easy indexing.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.spacelabs.SpacelabsReader.set_window">
+<span class="sig-name descname"><span class="pre">set_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window_duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.set_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a window around, before or after the blood pressure measurement by
+creating two new columns with the window_start and window_end times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window_duration</strong> (<em>pd.Timedelta</em><em>, </em><em>datetime.timedelta</em>) – Duration of the window.</p></li>
+<li><p><strong>window_type</strong> (<em>bffill</em><em>, </em><em>bfill</em><em>, </em><em>ffill</em>) – Bffill stands for backward-forward fill. The window is defined as
+half after and half before the start of the measurement.
+Bfill stands for backward fill.
+The window is defined before the start of the measurement.
+Ffill stands for forward fill.
+The window is defined after the start of the measurement.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.spacelabs.SpacelabsReader.timeshift">
+<span class="sig-name descname"><span class="pre">timeshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.timeshift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timeshifts the data by shifting all time related columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the data by a random time interval
+between one month and two years to the past.</p>
+<p>If shift is a timdelta, shifts the data by that timedelta.</p>
+<p>If shift is a timestamp, shifts the data such that the earliest entry
+is at that timestamp and the remaining values keep the same time distance to the first entry.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.spacelabs.SpacelabsReader.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the signals and metadata to the
+writing path in the same format as it was read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to writing file. Writing mode: ‘w’.
+Use the file extension ‘abp’ to keep the SpaceLabs standard.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-devicely.faros">
+<span id="devicely-farosreader"></span><h2>devicely.FarosReader<a class="headerlink" href="#module-devicely.faros" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">devicely.faros.</span></span><span class="sig-name descname"><span class="pre">FarosReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.faros.FarosReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses, timeshifts and writes data
+generated by Bittium Faros devices.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader.start_time">
+<span class="sig-name descname"><span class="pre">start_time</span></span><a class="headerlink" href="#devicely.faros.FarosReader.start_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>start time of all measurements</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.Timestamp</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader.sample_freqs">
+<span class="sig-name descname"><span class="pre">sample_freqs</span></span><a class="headerlink" href="#devicely.faros.FarosReader.sample_freqs" title="Permalink to this definition">¶</a></dt>
+<dd><p>sampling frequencies of all signals in Hz</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader.units">
+<span class="sig-name descname"><span class="pre">units</span></span><a class="headerlink" href="#devicely.faros.FarosReader.units" title="Permalink to this definition">¶</a></dt>
+<dd><p>units of all signals</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader.ECG">
+<span class="sig-name descname"><span class="pre">ECG</span></span><a class="headerlink" href="#devicely.faros.FarosReader.ECG" title="Permalink to this definition">¶</a></dt>
+<dd><p>ECG signal, indexed by timestamp</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader.ACC">
+<span class="sig-name descname"><span class="pre">ACC</span></span><a class="headerlink" href="#devicely.faros.FarosReader.ACC" title="Permalink to this definition">¶</a></dt>
+<dd><p>three ACC axes, indexed by timestamp</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader.Marker">
+<span class="sig-name descname"><span class="pre">Marker</span></span><a class="headerlink" href="#devicely.faros.FarosReader.Marker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Markers, indexed by timestamp</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader.HRV">
+<span class="sig-name descname"><span class="pre">HRV</span></span><a class="headerlink" href="#devicely.faros.FarosReader.HRV" title="Permalink to this definition">¶</a></dt>
+<dd><p>HRV signal, indexed by timestamp</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#devicely.faros.FarosReader.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>contains all signals (ECG, ACC, Marker, HRV) indexed by timestamp
+Because the signals have different sampling frequencies, a lot of values are nan.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader.timeshift">
+<span class="sig-name descname"><span class="pre">timeshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.faros.FarosReader.timeshift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timeshifts the data by shifting all time related values (i.e. start_time and data.index).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the data by a random time interval
+between one month and two years to the past.</p>
+<p>If shift is a timdelta, shifts the data by that timedelta.</p>
+<p>If shift is a timestamp, shifts the data such that the earliest entry
+is at that timestamp and the remaining values keep the same time distance to the first entry.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'directory'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.faros.FarosReader.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the data either to an EDF file or to several files into a new directory.
+Because of the <a class="reference external" href="https://www.edfplus.info/specs/edf.html">special structure of EDF files</a>
+writing to EDF is only possible for readers that have been created from an EDF file and without any changes to the ACC, ECG, Marker, HRV and sample_freqs attributes.
+Because we want you to be able to modify the signals, you can write the data back to a directory of individual files.
+Writing to a directory is the preferred method and works in all cases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Name of the file or directory to write the data to.</p></li>
+<li><p><strong>format</strong> (<em>{'directory'</em><em>, </em><em>'edf'}</em><em>, </em><em>default 'directory'</em>) – Format of the written data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-devicely.everion">
+<span id="devicely-everionreader"></span><h2>devicely.EverionReader<a class="headerlink" href="#module-devicely.everion" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="devicely.everion.EverionReader">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">devicely.everion.</span></span><span class="sig-name descname"><span class="pre">EverionReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[6,</span> <span class="pre">7,</span> <span class="pre">11,</span> <span class="pre">12,</span> <span class="pre">15,</span> <span class="pre">19,</span> <span class="pre">20,</span> <span class="pre">21,</span> <span class="pre">118,</span> <span class="pre">119]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensor_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[80,</span> <span class="pre">81,</span> <span class="pre">82,</span> <span class="pre">83,</span> <span class="pre">84,</span> <span class="pre">85,</span> <span class="pre">86]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[14]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.everion.EverionReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses, timeshifts and writes data generated by Biovotion Everion. You can find example data <a class="reference external" href="https://github.com/jostmorgenstern/devicely-documentation-sample-data/tree/main/Everion/">here</a>.
+Each measurement has a tag which is an information about the type of measurement. By default, only some of the tags are read for signals, sensors and features.
+You can find these tags via self.default_signal_tags, self.default_sensor_tags and self.default_feature_tags.
+You can find out all available tags and what they mean by accessing the attributes EverionReader.SIGNAL_TAGS, EverionReader.SENSOR_TAGS and EverionReader.FEATURE_TAGS.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">raw</span> <span class="pre">dataframes</span></span></dt>
+<dd><p>These dataframes are accessible via the attributes aggregates, analytics_events, attributes_dailys, everion_events, features, sensors, signals.
+Each dataframe corresponds to a file in the reading path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dataframes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.everion.EverionReader.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#devicely.everion.EverionReader.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>joined version of the raw dataframes (aggregates, analytics_events, attributes_dailys, everion_events, features, sensors, signals)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.everion.EverionReader.SIGNAL_TAGS">
+<span class="sig-name descname"><span class="pre">SIGNAL_TAGS</span></span><a class="headerlink" href="#devicely.everion.EverionReader.SIGNAL_TAGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>signal tag numbers and their meaning</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.everion.EverionReader.SENSOR_TAGS">
+<span class="sig-name descname"><span class="pre">SENSOR_TAGS</span></span><a class="headerlink" href="#devicely.everion.EverionReader.SENSOR_TAGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>sensor tag numbers and their meaning</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.everion.EverionReader.FEATURE_TAGS">
+<span class="sig-name descname"><span class="pre">FEATURE_TAGS</span></span><a class="headerlink" href="#devicely.everion.EverionReader.FEATURE_TAGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>feature tag numbers and their meaning</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.everion.EverionReader.default_signal_tags">
+<span class="sig-name descname"><span class="pre">default_signal_tags</span></span><a class="headerlink" href="#devicely.everion.EverionReader.default_signal_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>subset of tags that are read by default for signals</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.everion.EverionReader.default_sensor_tags">
+<span class="sig-name descname"><span class="pre">default_sensor_tags</span></span><a class="headerlink" href="#devicely.everion.EverionReader.default_sensor_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>subset of tags that are read by default for sensors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.everion.EverionReader.default_feature_tags">
+<span class="sig-name descname"><span class="pre">default_feature_tags</span></span><a class="headerlink" href="#devicely.everion.EverionReader.default_feature_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>subset of tags that are read by default for features</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.everion.EverionReader.timeshift">
+<span class="sig-name descname"><span class="pre">timeshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.everion.EverionReader.timeshift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timeshifts the data by shifting all time related columns in the joined dataframe (data) and raw dataframes (aggregates, analytics_events, attributes_dailys, everion_events, features, sensors, signals).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the data by a random time interval
+between one month and two years to the past.</p>
+<p>If shift is a timdelta, shifts the data by that timedelta.</p>
+<p>If shift is a timestamp, shifts the data such that the earliest entry
+is at that timestamp and the remaining values keep the same time distance to the first entry.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.everion.EverionReader.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.everion.EverionReader.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the raw dataframes back to individual files in the same format as they were read.
+Thus, the resulting directory can be read again using an EverionReader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the writing directory.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-devicely.shimmer_plus">
+<span id="devicely-shimmerreader"></span><h2>devicely.ShimmerReader<a class="headerlink" href="#module-devicely.shimmer_plus" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="devicely.shimmer_plus.ShimmerPlusReader">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">devicely.shimmer_plus.</span></span><span class="sig-name descname"><span class="pre">ShimmerPlusReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.shimmer_plus.ShimmerPlusReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses, deidentifies (timeshifts) and writes data
+generated by Shimmer Consensys GSR.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.shimmer_plus.ShimmerPlusReader.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#devicely.shimmer_plus.ShimmerPlusReader.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>DataFrame with the read signals. The column ‘Shimmer_40AC_Timestamp_Unix_CAL’ contains the timestamps of measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.shimmer_plus.ShimmerPlusReader.units">
+<span class="sig-name descname"><span class="pre">units</span></span><a class="headerlink" href="#devicely.shimmer_plus.ShimmerPlusReader.units" title="Permalink to this definition">¶</a></dt>
+<dd><p>a unit for each column in the dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.shimmer_plus.ShimmerPlusReader.timeshift">
+<span class="sig-name descname"><span class="pre">timeshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.shimmer_plus.ShimmerPlusReader.timeshift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timeshifts the data by shifting all time related columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the data by a random time interval
+between one month and two years to the past.</p>
+<p>If shift is a timdelta, shifts the data by that timedelta.</p>
+<p>If shift is a timestamp, shifts the data such that the earliest entry
+is at that timestamp and the remaining values keep the same time distance to the first entry.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.shimmer_plus.ShimmerPlusReader.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.shimmer_plus.ShimmerPlusReader.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the DataFrame and units to the
+writing path in the same format as it was read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to writing csv file. Writing mode: ‘w’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-devicely.tag">
+<span id="devicely-tagreader"></span><h2>devicely.TagReader<a class="headerlink" href="#module-devicely.tag" title="Permalink to this headline">¶</a></h2>
+<p>Module to process Tag data</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="devicely.tag.TagReader">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">devicely.tag.</span></span><span class="sig-name descname"><span class="pre">TagReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.tag.TagReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses, anomnymizes and writes data generated by the Android app TimeStamp</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="devicely.tag.TagReader.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#devicely.tag.TagReader.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>DataFrame with datetime index and ‘tag’ column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.tag.TagReader.timeshift">
+<span class="sig-name descname"><span class="pre">timeshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.tag.TagReader.timeshift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Anonymizes the data by shifting the index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the ‘time’ column by a random time
+interval between one month and two years to the past.</p>
+<p>If shift is a timdelta, shift the index by that timedelta.</p>
+<p>If shift is a timestamp, shift the index such that the earliest entry
+is at that timestamp and the remaining values keep the same time
+distance to the first entry.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicely.tag.TagReader.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.tag.TagReader.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the DataFrame stored in ‘data’ to ‘path’
+in the same format as it was read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path to writing csv. Writing mode: ‘w’</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="contribution.html" class="btn btn-neutral float-right" title="How to contribute" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="example.html" class="btn btn-neutral float-left" title="Start Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Ariane Sasso, Jost Morgenstern.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

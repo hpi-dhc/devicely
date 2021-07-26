@@ -7,14 +7,18 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Introduction &mdash; devicely 1.0.0 documentation</title>
+  <title>devicely, a Python package for accessing health sensor data &mdash; devicely 1.0.0 documentation</title>
   
 
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
   
 
   
@@ -29,15 +33,18 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Start Guide" href="example.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -51,9 +58,12 @@
           
 
           
-            <a href="#" class="icon icon-home"> devicely
+            <a href="#">
           
 
+          
+            
+            <img src="_static/devicely-logo-white.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -82,21 +92,12 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Introduction</a></li>
-<li><a class="reference internal" href="#examples">Examples</a><ul>
-<li><a class="reference internal" href="#empatica">Empatica</a></li>
-<li><a class="reference internal" href="#spacelabs">SpaceLabs</a></li>
-<li><a class="reference internal" href="#everion">Everion</a></li>
-<li><a class="reference internal" href="#faros">Faros</a></li>
-<li><a class="reference internal" href="#shimmer">Shimmer</a></li>
-<li><a class="reference internal" href="#tags">Tags</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="moduleref.html">Module reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution.html">How to contribute</a></li>
 </ul>
-</li>
-<li><a class="reference internal" href="#module-reference">Module Reference</a></li>
-</ul>
-</div>
+
             
           
         </div>
@@ -143,7 +144,7 @@
     
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Introduction</li>
+      <li>devicely, a Python package for accessing health sensor data</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,9 +163,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>The devicely package is made for reading, writing and timeshifting health sensor data from:</p>
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="devicely-a-python-package-for-accessing-health-sensor-data">
+<h1>devicely, a Python package for accessing health sensor data<a class="headerlink" href="#devicely-a-python-package-for-accessing-health-sensor-data" title="Permalink to this headline">¶</a></h1>
+<p>The devicely package is made for reading, writing and anonymizing health sensor data from several sensors:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://e4.empatica.com/e4-wristband/">Empatica E4 (Firmware 2.1.0.4911)</a></p></li>
 <li><p><a class="reference external" href="https://www.biovotion.com/everion/">Biovotion Everion (Firmware 03.06)</a></p></li>
@@ -173,859 +198,28 @@
 <li><p><a class="reference external" href="https://play.google.com/store/apps/details?id=gj.timestamp&amp;hl=en/">Tags (obtained from the app: TimeStamp for Android Version 1.36)</a></p></li>
 <li><p><a class="reference external" href="https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab/">Shimmer Consensys GSR (Shimmer3 GSR Development Kit)</a></p></li>
 </ul>
+<p>devicely makes it easy to read sensor data and access it in common formats such as dataframes.</p>
+<p>We provice a custom reader class for each sensor which provides three core methods: read, timeshift and anonymize.
+The timeshift method changes the time of measurement, thereby automatically anonymizing the data.</p>
+<p>After timeshifting, you can write the data in the same original sensor format.
+Now you are safe to distribute the data with others.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="example.html"><span class="doc">Start Guide</span></a></p></li>
+<li><p><a class="reference internal" href="moduleref.html"><span class="doc">Module reference</span></a></p></li>
+</ul>
 </div>
-<div class="section" id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="empatica">
-<h2>Empatica<a class="headerlink" href="#empatica" title="Permalink to this headline">¶</a></h2>
-<p>The Empatice E4 wristband can be used to obtain data from inter-beat intervals, electrodermal activity, heart rate, temperature and blood volume pulse.
-The wristband outputs its measurements in <a class="reference external" href="https://github.com/jostmorgenstern/devicely-documentation-sample-data/tree/main/Empatica/">this directory structure</a>.</p>
-<p>Create an <code class="code docutils literal notranslate"><span class="pre">EmpaticaReader</span></code> object, passing as a parameter a path of the same directory structure:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">devicely</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">empatica_reader</span> <span class="o">=</span> <span class="n">devicely</span><span class="o">.</span><span class="n">EmpaticaReader</span><span class="p">(</span><span class="s1">&#39;path/to/empatica/dir&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Accessing the individual signal dataframes:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">empatica_reader</span><span class="o">.</span><span class="n">ACC</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-                           <span class="n">acc_x</span>  <span class="n">acc_y</span>  <span class="n">acc_z</span>    <span class="n">acc_mag</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">16</span> <span class="mi">17</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mf">29.000000</span>     <span class="o">-</span><span class="mi">3</span>     <span class="mi">11</span>     <span class="mi">60</span>  <span class="mf">61.073726</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">16</span> <span class="mi">17</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mf">29.031250</span>     <span class="o">-</span><span class="mi">3</span>     <span class="mi">11</span>     <span class="mi">60</span>  <span class="mf">61.073726</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">16</span> <span class="mi">17</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mf">29.062500</span>     <span class="o">-</span><span class="mi">2</span>     <span class="mi">11</span>     <span class="mi">60</span>  <span class="mf">61.032778</span>
-</pre></div>
-</div>
-<p>You can also access <code class="code docutils literal notranslate"><span class="pre">empatica_reader.IBI</span></code> (inter-beat intervals), <code class="code docutils literal notranslate"><span class="pre">empatica_reader.EDA</span></code> (electrodermal activity), <code class="code docutils literal notranslate"><span class="pre">empatica_reader.HR</span></code> (heart rate), <code class="code docutils literal notranslate"><span class="pre">empatica_reader.TEMP</span></code> (temperature) and <code class="code docutils literal notranslate"><span class="pre">empatica_reader.BVP</span></code> (blood volume pulse).</p>
-<p>An EmpaticaReader object also contains a dataframe of all signals, joined by time of sampling. Because of varying sampling frequencies across signals, expect to see a lot of nan values.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">empatica_reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-                           <span class="n">bvp</span>  <span class="n">eda</span>  <span class="n">hr</span>   <span class="n">temp</span>  <span class="n">acc_x</span>  <span class="n">acc_y</span>  <span class="n">acc_z</span>    <span class="n">acc_mag</span>  <span class="n">timedelta</span>  <span class="n">ibi</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">16</span> <span class="mi">17</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mf">29.000000</span> <span class="o">-</span><span class="mf">0.0</span>  <span class="mf">0.0</span> <span class="n">NaN</span>  <span class="mf">31.13</span>   <span class="o">-</span><span class="mf">3.0</span>   <span class="mf">11.0</span>   <span class="mf">60.0</span>  <span class="mf">61.073726</span>        <span class="n">NaN</span>  <span class="n">NaN</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">16</span> <span class="mi">17</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mf">29.015625</span> <span class="o">-</span><span class="mf">0.0</span>  <span class="n">NaN</span> <span class="n">NaN</span>    <span class="n">NaN</span>    <span class="n">NaN</span>    <span class="n">NaN</span>    <span class="n">NaN</span>        <span class="n">NaN</span>        <span class="n">NaN</span>  <span class="n">NaN</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">16</span> <span class="mi">17</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mf">29.031250</span> <span class="o">-</span><span class="mf">0.0</span>  <span class="n">NaN</span> <span class="n">NaN</span>    <span class="n">NaN</span>   <span class="o">-</span><span class="mf">3.0</span>   <span class="mf">11.0</span>   <span class="mf">60.0</span>  <span class="mf">61.073726</span>        <span class="n">NaN</span>  <span class="n">NaN</span>
-</pre></div>
-</div>
-<p>You can access the sampling frequency of each signal:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">empatica_reader</span><span class="o">.</span><span class="n">sample_freqs</span>
-<span class="p">{</span><span class="s1">&#39;bvp&#39;</span><span class="p">:</span> <span class="mf">64.0</span><span class="p">,</span> <span class="s1">&#39;eda&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">,</span> <span class="s1">&#39;hr&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;temp&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">,</span> <span class="s1">&#39;acc&#39;</span><span class="p">:</span> <span class="mf">32.0</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
-If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">EmpaticaReader.timeshift()</span></code>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">empatica_reader</span><span class="o">.</span><span class="n">start_times</span>
-<span class="p">{</span><span class="s1">&#39;bvp&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-10-16 17:04:29&#39;</span><span class="p">),</span>
- <span class="s1">&#39;eda&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-10-16 17:04:29&#39;</span><span class="p">),</span>
- <span class="s1">&#39;hr&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-10-16 17:04:39&#39;</span><span class="p">),</span>
- <span class="s1">&#39;temp&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-10-16 17:04:29&#39;</span><span class="p">),</span>
- <span class="s1">&#39;acc&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-10-16 17:04:29&#39;</span><span class="p">),</span>
- <span class="s1">&#39;ibi&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-10-16 17:04:29&#39;</span><span class="p">)}</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">empatica_reader</span><span class="o">.</span><span class="n">timeshift</span><span class="p">()</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">empatica_reader</span><span class="o">.</span><span class="n">start_times</span>
-<span class="p">{</span><span class="s1">&#39;bvp&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-03-07 03:02:16.693659368&#39;</span><span class="p">),</span>
-<span class="s1">&#39;eda&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-03-07 03:02:16.693659368&#39;</span><span class="p">),</span>
-<span class="s1">&#39;hr&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-03-07 03:02:26.693659368&#39;</span><span class="p">),</span>
-<span class="s1">&#39;temp&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-03-07 03:02:16.693659368&#39;</span><span class="p">),</span>
-<span class="s1">&#39;acc&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-03-07 03:02:16.693659368&#39;</span><span class="p">),</span>
-<span class="s1">&#39;ibi&#39;</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2020-03-07 03:02:16.693659368&#39;</span><span class="p">)}</span>
-</pre></div>
-</div>
-<p>Write the data back to csv files. The written data keeps the format of the original data, so you can use an <code class="code docutils literal notranslate"><span class="pre">EmpaticaReader</span></code> to read your written data.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">empatica_reader</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;write_path&#39;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;write_path&#39;</span><span class="p">)</span>
-<span class="p">[</span><span class="s1">&#39;HR.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;BVP.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;TEMP.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;EDA.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;tags.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;ACC.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;IBI.csv&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="spacelabs">
-<h2>SpaceLabs<a class="headerlink" href="#spacelabs" title="Permalink to this headline">¶</a></h2>
-<p>Look <a class="reference external" href="https://github.com/jostmorgenstern/devicely-documentation-sample-data/blob/main/Spacelabs/spacelabs.abp/">here</a> for an example file created by the Spacelabs ABPM monitoring system.</p>
-<p>Creating a <code class="code docutils literal notranslate"><span class="pre">SpacelabsReader</span></code> object, passing such a file as a parameter:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">spacelabs_reader</span> <span class="o">=</span> <span class="n">devicely</span><span class="o">.</span><span class="n">SpacelabsReader</span><span class="p">(</span><span class="s1">&#39;path/to/spacelabsfile.abp&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Accessing the data:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">spacelabs_reader</span><span class="o">.</span><span class="n">metadata</span>
-<span class="p">{</span><span class="s1">&#39;PATIENTINFO&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;DOB&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;RACE&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
-<span class="s1">&#39;REPORTINFO&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;PHYSICIAN&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-               <span class="s1">&#39;NURSETECH&#39;</span><span class="p">:</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;STATUS&#39;</span><span class="p">:</span> <span class="s1">&#39;NOTCONFIRMED&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;CALIPERSUMMARY&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;COUNT&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">}}}</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">spacelabs_reader</span><span class="o">.</span><span class="n">subject</span>
-<span class="s1">&#39;005F3&#39;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">spacelabs_reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
-            <span class="n">timestamp</span>        <span class="n">date</span>      <span class="n">time</span>  <span class="n">SYS</span><span class="p">(</span><span class="n">mmHg</span><span class="p">)</span>  <span class="n">DIA</span><span class="p">(</span><span class="n">mmHg</span><span class="p">)</span>     <span class="n">x</span>     <span class="n">y</span>   <span class="n">z</span> <span class="n">error</span>
-<span class="mi">0</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">16</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">00</span>        <span class="mi">107</span>         <span class="mi">76</span>  <span class="mf">78.0</span>  <span class="mf">78.0</span> <span class="n">NaN</span>   <span class="n">NaN</span>
-<span class="mi">1</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">19</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">16</span><span class="p">:</span><span class="mi">19</span><span class="p">:</span><span class="mi">00</span>         <span class="mi">96</span>         <span class="mi">62</span>  <span class="mf">63.0</span>  <span class="mf">63.0</span> <span class="n">NaN</span>   <span class="n">NaN</span>
-<span class="mi">2</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">16</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">00</span>        <span class="mi">100</span>         <span class="mi">68</span>  <span class="mf">64.0</span>  <span class="mf">64.0</span> <span class="n">NaN</span>   <span class="n">NaN</span>
-<span class="mi">3</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">16</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">00</span>        <span class="mi">103</span>         <span class="mi">68</span>  <span class="mf">68.0</span>  <span class="mf">68.0</span> <span class="n">NaN</span>   <span class="n">NaN</span>
-<span class="mi">4</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">25</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">16</span><span class="p">:</span><span class="mi">25</span><span class="p">:</span><span class="mi">00</span>        <span class="mi">101</span>         <span class="mi">67</span>  <span class="mf">65.0</span>  <span class="mf">65.0</span> <span class="n">NaN</span>   <span class="n">NaN</span>
-<span class="mi">5</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">16</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">00</span>         <span class="mi">11</span>          <span class="mi">0</span>   <span class="mf">0.0</span>   <span class="mf">0.0</span> <span class="n">NaN</span>    <span class="n">EB</span>
-</pre></div>
-</div>
-<p>EB-errors can be dropped using <code class="code docutils literal notranslate"><span class="pre">drop_EB</span></code>.</p>
-<p>The method <cite>set_window</cite> will create a timedelta window around the blood pressure measurement (e.g. 30 secs)
-The type of window is defined by: <cite>bfill</cite> (before the start of the measurement), <cite>bffil</cite> (half before and half after) of <cite>ffill</cite> (after the start of the measurement)</p>
-<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
-If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">SpaceLabsReader.timeshift()</span></code>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">spacelabs_reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-                           <span class="n">date</span>      <span class="n">time</span>  <span class="n">SYS</span><span class="p">(</span><span class="n">mmHg</span><span class="p">)</span>  <span class="n">DIA</span><span class="p">(</span><span class="n">mmHg</span><span class="p">)</span>     <span class="n">x</span>     <span class="n">y</span>   <span class="n">z</span> <span class="n">error</span>
-<span class="n">timestamp</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">16</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">00</span>        <span class="mi">107</span>         <span class="mi">76</span>  <span class="mf">78.0</span>  <span class="mf">78.0</span> <span class="n">NaN</span>   <span class="n">NaN</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">19</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">16</span><span class="p">:</span><span class="mi">19</span><span class="p">:</span><span class="mi">00</span>         <span class="mi">96</span>         <span class="mi">62</span>  <span class="mf">63.0</span>  <span class="mf">63.0</span> <span class="n">NaN</span>   <span class="n">NaN</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span>  <span class="mi">16</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">00</span>        <span class="mi">100</span>         <span class="mi">68</span>  <span class="mf">64.0</span>  <span class="mf">64.0</span> <span class="n">NaN</span>   <span class="n">NaN</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">spacelabs_reader</span><span class="o">.</span><span class="n">timeshift</span><span class="p">()</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">spacelabs_reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-                           <span class="n">date</span>      <span class="n">time</span>  <span class="n">SYS</span><span class="p">(</span><span class="n">mmHg</span><span class="p">)</span>  <span class="n">DIA</span><span class="p">(</span><span class="n">mmHg</span><span class="p">)</span>     <span class="n">x</span>     <span class="n">y</span>   <span class="n">z</span> <span class="n">error</span>
-<span class="n">timestamp</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">17</span> <span class="mi">11</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">17</span>  <span class="mi">11</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mi">00</span>        <span class="mi">107</span>         <span class="mi">76</span>  <span class="mf">78.0</span>  <span class="mf">78.0</span> <span class="n">NaN</span>   <span class="n">NaN</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">17</span> <span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">17</span>  <span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">00</span>         <span class="mi">96</span>         <span class="mi">62</span>  <span class="mf">63.0</span>  <span class="mf">63.0</span> <span class="n">NaN</span>   <span class="n">NaN</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">17</span> <span class="mi">11</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">00</span>  <span class="mi">2017</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">17</span>  <span class="mi">11</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">00</span>        <span class="mi">100</span>         <span class="mi">68</span>  <span class="mf">64.0</span>  <span class="mf">64.0</span> <span class="n">NaN</span>   <span class="n">NaN</span>
-</pre></div>
-</div>
-<p>Write the data back to disk. The written data keeps the same format as the original file, so you can use a SpacelabsReader to read it again.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">spacelabs_reader</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;spacelabs_write_file.abp&#39;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;spacelabs_write_file.abp&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">()</span>
-<span class="kc">True</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="everion">
-<h2>Everion<a class="headerlink" href="#everion" title="Permalink to this headline">¶</a></h2>
-<p>Look <a class="reference external" href="https://github.com/jostmorgenstern/devicely-documentation-sample-data/tree/main/Everion/">here</a> for an example directory.
-To read this data, create an <code class="code docutils literal notranslate"><span class="pre">EverionReader</span></code> object with such a path. Feel free to remove files you are not interested in from the directory before reading.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">devicely</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">devicely</span><span class="o">.</span><span class="n">EverionReader</span><span class="p">(</span><span class="s2">&quot;/home/jost/DHC/sample_data/devicely_documentation_sample_data/Everion&quot;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-                              <span class="n">heart_rate</span>  <span class="n">heart_rate_quality</span>  <span class="n">oxygen_saturation</span>  <span class="n">oxygen_saturation_quality</span>  <span class="o">...</span>  <span class="n">accx_data</span>  <span class="n">accy_data</span>  <span class="n">accz_data</span>      <span class="n">acc_mag</span>
-<span class="n">time</span>                                                                                                         <span class="o">...</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">13</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mf">05.000000000</span>         <span class="n">NaN</span>                 <span class="n">NaN</span>                <span class="n">NaN</span>                        <span class="n">NaN</span>  <span class="o">...</span>      <span class="mf">368.0</span>     <span class="mf">2096.0</span>    <span class="o">-</span><span class="mf">3536.0</span>  <span class="mf">4126.976617</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">13</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mf">05.019607808</span>         <span class="n">NaN</span>                 <span class="n">NaN</span>                <span class="n">NaN</span>                        <span class="n">NaN</span>  <span class="o">...</span>      <span class="mf">256.0</span>     <span class="mf">2016.0</span>    <span class="o">-</span><span class="mf">3808.0</span>  <span class="mf">4316.324362</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">13</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mf">05.039215872</span>         <span class="n">NaN</span>                 <span class="n">NaN</span>                <span class="n">NaN</span>                        <span class="n">NaN</span>  <span class="o">...</span>      <span class="mf">144.0</span>     <span class="mf">2288.0</span>    <span class="o">-</span><span class="mf">3728.0</span>  <span class="mf">4376.489918</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">13</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mf">05.058823680</span>         <span class="n">NaN</span>                 <span class="n">NaN</span>                <span class="n">NaN</span>                        <span class="n">NaN</span>  <span class="o">...</span>       <span class="mf">96.0</span>     <span class="mf">2352.0</span>    <span class="o">-</span><span class="mf">3600.0</span>  <span class="mf">4301.292829</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">13</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mf">05.078431488</span>         <span class="n">NaN</span>                 <span class="n">NaN</span>                <span class="n">NaN</span>                        <span class="n">NaN</span>  <span class="o">...</span>        <span class="mf">0.0</span>     <span class="mf">2384.0</span>    <span class="o">-</span><span class="mf">3904.0</span>  <span class="mf">4574.349353</span>
-</pre></div>
-</div>
-<p>You can access all different tags via <code class="code docutils literal notranslate"><span class="pre">EverionReader.SIGNAL_TAGS</span></code>, <code class="code docutils literal notranslate"><span class="pre">EverionReader.SENSOR_TAGS</span></code> and <code class="code docutils literal notranslate"><span class="pre">EverionReader.FEATURE_TAGS</span></code>.
-By default, the tags <code class="code docutils literal notranslate"><span class="pre">EverionReader.default_signal_tags</span></code>, <code class="code docutils literal notranslate"><span class="pre">EverionReader.default_sensor_tags</span></code> and <code class="code docutils literal notranslate"><span class="pre">EverionReader.default_feature_tags</span></code> are used but you can provide custom tags while creating the reader.</p>
-<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
-If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">EverionReader.timeshift()</span></code>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">timeshift</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-                              <span class="n">heart_rate</span>  <span class="n">heart_rate_quality</span>  <span class="n">oxygen_saturation</span>  <span class="n">oxygen_saturation_quality</span>  <span class="o">...</span>  <span class="n">accx_data</span>  <span class="n">accy_data</span>  <span class="n">accz_data</span>      <span class="n">acc_mag</span>
-<span class="n">time</span>                                                                                                         <span class="o">...</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">11</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">54.000000000</span>         <span class="n">NaN</span>                 <span class="n">NaN</span>                <span class="n">NaN</span>                        <span class="n">NaN</span>  <span class="o">...</span>      <span class="mf">368.0</span>     <span class="mf">2096.0</span>    <span class="o">-</span><span class="mf">3536.0</span>  <span class="mf">4126.976617</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">11</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">54.019607808</span>         <span class="n">NaN</span>                 <span class="n">NaN</span>                <span class="n">NaN</span>                        <span class="n">NaN</span>  <span class="o">...</span>      <span class="mf">256.0</span>     <span class="mf">2016.0</span>    <span class="o">-</span><span class="mf">3808.0</span>  <span class="mf">4316.324362</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">11</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">54.039215872</span>         <span class="n">NaN</span>                 <span class="n">NaN</span>                <span class="n">NaN</span>                        <span class="n">NaN</span>  <span class="o">...</span>      <span class="mf">144.0</span>     <span class="mf">2288.0</span>    <span class="o">-</span><span class="mf">3728.0</span>  <span class="mf">4376.489918</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">11</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">54.058823680</span>         <span class="n">NaN</span>                 <span class="n">NaN</span>                <span class="n">NaN</span>                        <span class="n">NaN</span>  <span class="o">...</span>       <span class="mf">96.0</span>     <span class="mf">2352.0</span>    <span class="o">-</span><span class="mf">3600.0</span>  <span class="mf">4301.292829</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">14</span> <span class="mi">11</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">54.078431488</span>         <span class="n">NaN</span>                 <span class="n">NaN</span>                <span class="n">NaN</span>                        <span class="n">NaN</span>  <span class="o">...</span>        <span class="mf">0.0</span>     <span class="mf">2384.0</span>    <span class="o">-</span><span class="mf">3904.0</span>  <span class="mf">4574.349353</span>
-</pre></div>
-</div>
-<p>Write the data back, maintaing the original directory structure:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;write_path&#39;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;write_path&#39;</span><span class="p">)</span>
-<span class="p">[</span><span class="s1">&#39;features.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;everion_events.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;attributes_dailys.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;analytics_events.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;sensor_data.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;aggregates.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;signals.csv&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="faros">
-<h2>Faros<a class="headerlink" href="#faros" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://shop.bittium.com/product/36/bittium-faros-180-solution-pack/">Faros ECG monitor</a> creates data in the EDF file format. See <a class="reference external" href="https://github.com/jostmorgenstern/devicely-documentation-sample-data/blob/main/Faros/faros.EDF/">this file</a> for an example.</p>
-<p>Create a <code class="code docutils literal notranslate"><span class="pre">FarosReader</span></code> object:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">devicely</span><span class="o">.</span><span class="n">FarosReader</span><span class="p">(</span><span class="s2">&quot;path/to/faros.EDF&quot;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">start_time</span>
-<span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2019-03-01 16:12:43&#39;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">sample_freqs</span>
-<span class="p">{</span><span class="s1">&#39;ECG&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">DateOffset</span><span class="p">:</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">0.001</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;Accelerometer_X&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">DateOffset</span><span class="p">:</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">0.01</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;Accelerometer_Y&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">DateOffset</span><span class="p">:</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">0.01</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;Accelerometer_Z&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">DateOffset</span><span class="p">:</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">0.01</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;Marker&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">DateOffset</span><span class="p">:</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">1.0</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;HRV&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">DateOffset</span><span class="p">:</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">0.2</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;acc_mag&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">DateOffset</span><span class="p">:</span> <span class="n">seconds</span><span class="o">=</span><span class="mf">0.01</span><span class="o">&gt;</span><span class="p">}</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-                        <span class="n">ECG</span>  <span class="n">Accelerometer_X</span>  <span class="n">Accelerometer_Y</span>  <span class="n">Accelerometer_Z</span>  <span class="n">Marker</span>  <span class="n">HRV</span>     <span class="n">acc_mag</span>
-<span class="n">time</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mf">43.000</span>  <span class="mf">26.0</span>            <span class="mf">164.0</span>             <span class="mf">23.0</span>          <span class="o">-</span><span class="mf">1172.0</span>     <span class="mf">0.0</span>  <span class="mf">0.0</span>  <span class="mf">1183.64226</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mf">43.001</span>  <span class="o">-</span><span class="mf">6.0</span>              <span class="n">NaN</span>              <span class="n">NaN</span>              <span class="n">NaN</span>     <span class="n">NaN</span>  <span class="n">NaN</span>         <span class="n">NaN</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mf">43.002</span> <span class="o">-</span><span class="mf">31.0</span>              <span class="n">NaN</span>              <span class="n">NaN</span>              <span class="n">NaN</span>     <span class="n">NaN</span>  <span class="n">NaN</span>         <span class="n">NaN</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mf">43.003</span> <span class="o">-</span><span class="mf">39.0</span>              <span class="n">NaN</span>              <span class="n">NaN</span>              <span class="n">NaN</span>     <span class="n">NaN</span>  <span class="n">NaN</span>         <span class="n">NaN</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mf">43.004</span> <span class="o">-</span><span class="mf">17.0</span>              <span class="n">NaN</span>              <span class="n">NaN</span>              <span class="n">NaN</span>     <span class="n">NaN</span>  <span class="n">NaN</span>         <span class="n">NaN</span>
-</pre></div>
-</div>
-<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
-If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">FarosReader.timeshift()</span></code>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">timeshift</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">start_time</span>
-<span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2017-11-01 08:52:44&#39;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-                        <span class="n">ECG</span>  <span class="n">Accelerometer_X</span>  <span class="n">Accelerometer_Y</span>  <span class="n">Accelerometer_Z</span>  <span class="n">Marker</span>  <span class="n">HRV</span>     <span class="n">acc_mag</span>
-<span class="n">time</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">01</span> <span class="mi">08</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">44.000</span>  <span class="mf">26.0</span>            <span class="mf">164.0</span>             <span class="mf">23.0</span>          <span class="o">-</span><span class="mf">1172.0</span>     <span class="mf">0.0</span>  <span class="mf">0.0</span>  <span class="mf">1183.64226</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">01</span> <span class="mi">08</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">44.001</span>  <span class="o">-</span><span class="mf">6.0</span>              <span class="n">NaN</span>              <span class="n">NaN</span>              <span class="n">NaN</span>     <span class="n">NaN</span>  <span class="n">NaN</span>         <span class="n">NaN</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">01</span> <span class="mi">08</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">44.002</span> <span class="o">-</span><span class="mf">31.0</span>              <span class="n">NaN</span>              <span class="n">NaN</span>              <span class="n">NaN</span>     <span class="n">NaN</span>  <span class="n">NaN</span>         <span class="n">NaN</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">01</span> <span class="mi">08</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">44.003</span> <span class="o">-</span><span class="mf">39.0</span>              <span class="n">NaN</span>              <span class="n">NaN</span>              <span class="n">NaN</span>     <span class="n">NaN</span>  <span class="n">NaN</span>         <span class="n">NaN</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">01</span> <span class="mi">08</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">44.004</span> <span class="o">-</span><span class="mf">17.0</span>              <span class="n">NaN</span>              <span class="n">NaN</span>              <span class="n">NaN</span>     <span class="n">NaN</span>  <span class="n">NaN</span>         <span class="n">NaN</span>
-</pre></div>
-</div>
-<p>Write the data to csv. You can read the written data using a <code class="code docutils literal notranslate"><span class="pre">FarosReader</span></code>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;write_path.csv&quot;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="s2">&quot;write_path.csv&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">()</span>
-<span class="kc">True</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="shimmer">
-<h2>Shimmer<a class="headerlink" href="#shimmer" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab/">Shimmer Consensys GSR (Shimmer3 GSR Development Kit)</a> uses a <code class="code docutils literal notranslate"><span class="pre">csv</span></code> format as seen <a class="reference external" href="https://github.com/jostmorgenstern/devicely-documentation-sample-data/blob/main/Shimmer/shimmer.csv/">here</a>.</p>
-<p>To create a <code class="code docutils literal notranslate"><span class="pre">ShimmerPlusReader</span></code>, simply pass the path to the csv file:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">devicely</span><span class="o">.</span><span class="n">ShimmerPlusReader</span><span class="p">(</span><span class="s2">&quot;path/to/shimmer.csv&quot;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-                        <span class="n">Shimmer_40AC_Accel_LN_X_CAL</span>  <span class="n">Shimmer_40AC_Accel_LN_Y_CAL</span>  <span class="o">...</span>  <span class="n">Shimmer_40AC_Temperature_BMP280_CAL</span>    <span class="n">acc_mag</span>
-<span class="n">time</span>                                                                               <span class="o">...</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mf">50.034</span>                    <span class="o">-</span><span class="mf">1.434783</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.117604</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mf">50.057</span>                    <span class="o">-</span><span class="mf">1.402174</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.113031</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mf">50.074</span>                    <span class="o">-</span><span class="mf">1.434783</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.117604</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mf">50.099</span>                    <span class="o">-</span><span class="mf">1.413043</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.112809</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">28</span> <span class="mi">10</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mf">50.111</span>                    <span class="o">-</span><span class="mf">1.445652</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.116862</span>
-</pre></div>
-</div>
-<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
-If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">ShimmerPlusReader.timeshift()</span></code>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">timeshift</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-                        <span class="n">Shimmer_40AC_Accel_LN_X_CAL</span>  <span class="n">Shimmer_40AC_Accel_LN_Y_CAL</span>  <span class="o">...</span>  <span class="n">Shimmer_40AC_Temperature_BMP280_CAL</span>    <span class="n">acc_mag</span>
-<span class="n">time</span>                                                                               <span class="o">...</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">06</span> <span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">05.814</span>                    <span class="o">-</span><span class="mf">1.434783</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.117604</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">06</span> <span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">05.837</span>                    <span class="o">-</span><span class="mf">1.402174</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.113031</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">06</span> <span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">05.854</span>                    <span class="o">-</span><span class="mf">1.434783</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.117604</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">06</span> <span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">05.879</span>                    <span class="o">-</span><span class="mf">1.413043</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.112809</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">06</span> <span class="mi">11</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mf">05.891</span>                    <span class="o">-</span><span class="mf">1.445652</span>                         <span class="mf">10.0</span>  <span class="o">...</span>                            <span class="mf">33.365878</span>  <span class="mf">10.116862</span>
-</pre></div>
-</div>
-<p>Write the data to file, maintaining the original format:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">reader</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;write_file.csv&quot;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="s2">&quot;write_file.csv&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">()</span>
-<span class="kc">True</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="tags">
-<h2>Tags<a class="headerlink" href="#tags" title="Permalink to this headline">¶</a></h2>
-<p>Tags are timestamps that are important to the measuring process, like the start and finishing time of measurements.
-The tag files can be obtained using the Android App <a class="reference external" href="https://play.google.com/store/apps/details?id=jp.m_c8bit.timestamp/">TimeStamp</a>.</p>
-<p>Read and access tags:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">tag_reader</span> <span class="o">=</span> <span class="n">devicely</span><span class="o">.</span><span class="n">TagReader</span><span class="p">(</span><span class="s1">&#39;path/to/readfile&#39;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">tag_reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-                     <span class="n">tag_number</span>                <span class="n">tag</span>
-<span class="n">time</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">37</span>           <span class="mi">1</span>              <span class="n">Shake</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">17</span><span class="p">:</span><span class="mi">43</span>           <span class="mi">2</span>              <span class="n">Start</span>
-<span class="mi">2019</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span> <span class="mi">16</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">20</span>           <span class="mi">3</span>     <span class="n">BP</span> <span class="n">Measurement</span>
-</pre></div>
-</div>
-<p>Change the data by timeshifting the time of sampling by a random interval between one month and two years to the past.
-If you would like to keep control over the shifting interval, you can provide either a <code class="code docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> or a <code class="code docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object as a parameter to <code class="code docutils literal notranslate"><span class="pre">TagReader.timeshift()</span></code>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">tag_reader</span><span class="o">.</span><span class="n">timeshift</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">tag_reader</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-                     <span class="n">tag_number</span>                <span class="n">tag</span>
-<span class="n">time</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">25</span> <span class="mi">01</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">47</span>           <span class="mi">1</span>              <span class="n">Shake</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">25</span> <span class="mi">01</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">53</span>           <span class="mi">2</span>              <span class="n">Start</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">25</span> <span class="mi">01</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">30</span>           <span class="mi">3</span>     <span class="n">BP</span> <span class="n">Measurement</span>
-</pre></div>
-</div>
-<p>Write the data to file:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">tag_reader</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;path/to/writingfile&#39;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;writingfile&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;path/to&#39;</span><span class="p">)</span>
-<span class="kc">True</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="module-reference">
-<h1>Module Reference<a class="headerlink" href="#module-reference" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p>
+<div class="section" id="about-devicely">
+<h2>About devicely<a class="headerlink" href="#about-devicely" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/hpi-dhc/devicely">GitHub</a></p></li>
+<li><p><a class="reference external" href="https://pypi.org/project/devicely/">PyPi</a></p></li>
+<li><p><a class="reference internal" href="contribution.html"><span class="doc">How to contribute</span></a></p></li>
+</ul>
 <div class="toctree-wrapper compound">
 </div>
-<span class="target" id="module-devicely.empatica"></span><p>Module to process Empatica data</p>
-<dl class="py class">
-<dt id="devicely.empatica.EmpaticaReader">
-<em class="property">class </em><code class="sig-prename descclassname">devicely.empatica.</code><code class="sig-name descname">EmpaticaReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.empatica.EmpaticaReader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses, timeshifts and writes data generated by Empatica E4.</p>
-<dl class="py attribute">
-<dt id="devicely.empatica.EmpaticaReader.start_times">
-<code class="sig-name descname">start_times</code><a class="headerlink" href="#devicely.empatica.EmpaticaReader.start_times" title="Permalink to this definition">¶</a></dt>
-<dd><p>Contains the timestamp of the first measurement for all
-measured signals (BVP, ACC etc.).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.empatica.EmpaticaReader.sample_freqs">
-<code class="sig-name descname">sample_freqs</code><a class="headerlink" href="#devicely.empatica.EmpaticaReader.sample_freqs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Contains the sampling frequencies of all
-measured signals in Hz.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.empatica.EmpaticaReader.IBI">
-<code class="sig-name descname">IBI</code><a class="headerlink" href="#devicely.empatica.EmpaticaReader.IBI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Contains inter-beat interval data with columns “timedelta”
-and “ibi”, indexed by time of measurement. The column “timedelta”
-contains the passed time in seconds since the first measurement and
-“ibi” contains the inter-beat interval in seconds since the last
-measurement.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.empatica.EmpaticaReader.ACC">
-<code class="sig-name descname">ACC</code><a class="headerlink" href="#devicely.empatica.EmpaticaReader.ACC" title="Permalink to this definition">¶</a></dt>
-<dd><p>Contains the data measured with the onboard MEMS type 3-axis
-accelerometer, indexed by time of measurement.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.empatica.EmpaticaReader.BVP">
-<code class="sig-name descname">BVP</code><a class="headerlink" href="#devicely.empatica.EmpaticaReader.BVP" title="Permalink to this definition">¶</a></dt>
-<dd><p>Contains blood volume pulse data, indexed by
-time of measurement.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.empatica.EmpaticaReader.EDA">
-<code class="sig-name descname">EDA</code><a class="headerlink" href="#devicely.empatica.EmpaticaReader.EDA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Contains data captured from the electrodermal activity
-sensor, indexed by time of measurement.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.empatica.EmpaticaReader.HR">
-<code class="sig-name descname">HR</code><a class="headerlink" href="#devicely.empatica.EmpaticaReader.HR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Contains heart rate data, indexed by time of measurement.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.empatica.EmpaticaReader.TEMP">
-<code class="sig-name descname">TEMP</code><a class="headerlink" href="#devicely.empatica.EmpaticaReader.TEMP" title="Permalink to this definition">¶</a></dt>
-<dd><p>Contains temperature data, indexed by time of measurement.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.empatica.EmpaticaReader.data">
-<code class="sig-name descname">data</code><a class="headerlink" href="#devicely.empatica.EmpaticaReader.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joined dataframe of all individual signal dataframes (see
-above). May contain NaN values because sampling frequencies differ
-across signals.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.empatica.EmpaticaReader.timeshift">
-<code class="sig-name descname">timeshift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shift</span><span class="o">=</span><span class="default_value">'random'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.timeshift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shift all time related columns as well as the starting_times dict.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the data by a random time interval
-between one month and two years to the past.</p>
-<p>If shift is a timdelta, shifts the data by that timedelta.</p>
-<p>If shift is a timestamp, shifts the data such that the earliest entry
-is at that timestamp and the remaining values keep the same
-time distance to the first entry.</p>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.empatica.EmpaticaReader.write">
-<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.empatica.EmpaticaReader.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the signal dataframes back to individual csv files formatted the
-same way as the read csv files.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – <p>Path of the directory in which the csv files are created.</p>
-<p>If the directory exists, the csv files are written using writing mode ‘w’
-ignoring other files in the directory.</p>
-<p>If the directory doe not exist, it will be created.</p>
-</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>Exception</strong> – In case path is not specified.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-devicely.spacelabs"></span><p>Module to process Spacelabs (SL 90217) data</p>
-<dl class="py class">
-<dt id="devicely.spacelabs.SpacelabsReader">
-<em class="property">class </em><code class="sig-prename descclassname">devicely.spacelabs.</code><code class="sig-name descname">SpacelabsReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses, timeshifts, deidentifies and writes data
-generated by Spacelabs(SL90217).</p>
-<dl class="py attribute">
-<dt id="devicely.spacelabs.SpacelabsReader.data">
-<code class="sig-name descname">data</code><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>DataFrame with the values that were read from the abp file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.spacelabs.SpacelabsReader.subject">
-<code class="sig-name descname">subject</code><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.subject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Contains the sujbect’s id. Can be changed for
-deidentification.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.spacelabs.SpacelabsReader.valid_measurements">
-<code class="sig-name descname">valid_measurements</code><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.valid_measurements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Contains the number of valid measurements in the
-abp file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.spacelabs.SpacelabsReader.metadata">
-<code class="sig-name descname">metadata</code><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>The measurements’ metadata. Read from the xml at the bottom
-of the abp file. Can be erased for deidentification.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.spacelabs.SpacelabsReader.deidentify">
-<code class="sig-name descname">deidentify</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">subject_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.deidentify" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deidentifies the data by removing the original XML metadata and
-subject id.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>subject_id</strong> (<em>str</em><em>, </em><em>optional</em>) – New subject id to be written in the
-deidentified file, by default None.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.spacelabs.SpacelabsReader.drop_EB">
-<code class="sig-name descname">drop_EB</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.drop_EB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Drops all entries with “EB”-errors from the DataFrame</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Before dropping, the dataframe has a range index because the timestamps
-might not be unique. After dropping, the timestamp column will be unique
-and is thus used as an index for easy indexing.</p>
 </div>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.spacelabs.SpacelabsReader.set_window">
-<code class="sig-name descname">set_window</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_duration</span></em>, <em class="sig-param"><span class="n">window_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.set_window" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set a window around, before or after the blood pressure measurement by
-creating two new columns with the window_start and window_end times.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>window_size</strong> (<em>pd.Timedelta</em><em>, </em><em>datetime.timedelta</em>) – Duration of the window.</p></li>
-<li><p><strong>window_type</strong> (<em>bffill</em><em>, </em><em>bfill</em><em>, </em><em>ffill</em>) – <p>Bffill stands for backward-forward fill. The window is defined as
-half after and half before the start of the measurement.</p>
-<p>Bfill stands for backward fill.
-The window is defined before the start of the measurement.</p>
-<p>Ffill stands for forward fill.
-The window is defined after the start of the measurement.</p>
-</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.spacelabs.SpacelabsReader.timeshift">
-<code class="sig-name descname">timeshift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shift</span><span class="o">=</span><span class="default_value">'random'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.timeshift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Timeshifts the data by shifting all time related columns.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the data by a random time interval
-between one month and two years to the past.</p>
-<p>If shift is a timdelta, shifts the data by that timedelta.</p>
-<p>If shift is a timestamp, shifts the data such that the earliest entry
-is at that timestamp and the remaining values keep the same time distance to the first entry.</p>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.spacelabs.SpacelabsReader.write">
-<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.spacelabs.SpacelabsReader.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes the DataFrame, subject id, valid measurements and metadata to the
-writing path in the same format as it was read.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to writing csv. Writing mode: ‘w’.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-devicely.faros"></span><p>Module to process Faros 180 data</p>
-<dl class="py class">
-<dt id="devicely.faros.FarosReader">
-<em class="property">class </em><code class="sig-prename descclassname">devicely.faros.</code><code class="sig-name descname">FarosReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.faros.FarosReader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses, timeshifts and writes data
-generated by Bittium Faros devices.
-This reader reads data from .edf files and writes it back a .csv file.
-It can read back data from a .csv file if it was written using this reader class.</p>
-<dl class="py attribute">
-<dt id="devicely.faros.FarosReader.data">
-<code class="sig-name descname">data</code><a class="headerlink" href="#devicely.faros.FarosReader.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>DataFrame with the values that were read from the .edf or .csv file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.faros.FarosReader.start_time">
-<code class="sig-name descname">start_time</code><a class="headerlink" href="#devicely.faros.FarosReader.start_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>global start time of all measurements</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>pandas.Timestamp</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.faros.FarosReader.sample_freqs">
-<code class="sig-name descname">sample_freqs</code><a class="headerlink" href="#devicely.faros.FarosReader.sample_freqs" title="Permalink to this definition">¶</a></dt>
-<dd><p>sampling frequencies of all columns</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.faros.FarosReader.timeshift">
-<code class="sig-name descname">timeshift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shift</span><span class="o">=</span><span class="default_value">'random'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.faros.FarosReader.timeshift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Timeshifts the data by shifting all time related values (i.e. start_time and data.index).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the data by a random time interval
-between one month and two years to the past.</p>
-<p>If shift is a timdelta, shifts the data by that timedelta.</p>
-<p>If shift is a timestamp, shifts the data such that the earliest entry
-is at that timestamp and the remaining values keep the same time distance to the first entry.</p>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.faros.FarosReader.write">
-<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.faros.FarosReader.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>writes the dataframe data to the path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to writing csv. Writing mode: ‘w’.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-devicely.everion"></span><p>Module to process Everion data</p>
-<dl class="py class">
-<dt id="devicely.everion.EverionReader">
-<em class="property">class </em><code class="sig-prename descclassname">devicely.everion.</code><code class="sig-name descname">EverionReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">signal_tags</span><span class="o">=</span><span class="default_value">[6, 7, 11, 12, 15, 19, 20, 21, 118, 119]</span></em>, <em class="sig-param"><span class="n">sensor_tags</span><span class="o">=</span><span class="default_value">[80, 81, 82, 83, 84, 85, 86]</span></em>, <em class="sig-param"><span class="n">feature_tags</span><span class="o">=</span><span class="default_value">[14]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.everion.EverionReader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses, timeshifts and writes data generated by Biovotion Everion. You can find example data <a class="reference external" href="https://github.com/jostmorgenstern/devicely-documentation-sample-data/tree/main/Everion/">here</a>.
-Each measurement has a tag which is an information about the type of measurement. By default, only some of the tags are read for signals, sensors and features.
-You can find these tags via self.default_signal_tags, self.default_sensor_tags and self.default_feature_tags.
-You can find out the meaning of all tags with self.SIGNAL_TAGS, self.SENSOR_TAGS and self.FEATURE_TAGS.</p>
-<dl class="py attribute">
-<dt>
-<code class="sig-name descname">raw dataframes</code></dt>
-<dd><p>These dataframes are accessible via the attributes aggregates, analytics_events, attributes_dailys, everion_events, features, sensors, signals.
-Each dataframe corresponds to a file in the reading path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dataframes</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.everion.EverionReader.data">
-<code class="sig-name descname">data</code><a class="headerlink" href="#devicely.everion.EverionReader.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>joined version of the raw dataframes (aggregates, analytics_events, attributes_dailys, everion_events, features, sensors, signals)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.everion.EverionReader.SIGNAL_TAGS">
-<code class="sig-name descname">SIGNAL_TAGS</code><a class="headerlink" href="#devicely.everion.EverionReader.SIGNAL_TAGS" title="Permalink to this definition">¶</a></dt>
-<dd><p>signal tag numbers and their meaning</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.everion.EverionReader.SENSOR_TAGS">
-<code class="sig-name descname">SENSOR_TAGS</code><a class="headerlink" href="#devicely.everion.EverionReader.SENSOR_TAGS" title="Permalink to this definition">¶</a></dt>
-<dd><p>sensor tag numbers and their meaning</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.everion.EverionReader.FEATURE_TAGS">
-<code class="sig-name descname">FEATURE_TAGS</code><a class="headerlink" href="#devicely.everion.EverionReader.FEATURE_TAGS" title="Permalink to this definition">¶</a></dt>
-<dd><p>feature tag numbers and their meaning</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.everion.EverionReader.default_signal_tags">
-<code class="sig-name descname">default_signal_tags</code><a class="headerlink" href="#devicely.everion.EverionReader.default_signal_tags" title="Permalink to this definition">¶</a></dt>
-<dd><p>subset of tags that are read by default for signals</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.everion.EverionReader.default_sensor_tags">
-<code class="sig-name descname">default_sensor_tags</code><a class="headerlink" href="#devicely.everion.EverionReader.default_sensor_tags" title="Permalink to this definition">¶</a></dt>
-<dd><p>subset of tags that are read by default for sensors</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.everion.EverionReader.default_feature_tags">
-<code class="sig-name descname">default_feature_tags</code><a class="headerlink" href="#devicely.everion.EverionReader.default_feature_tags" title="Permalink to this definition">¶</a></dt>
-<dd><p>subset of tags that are read by default for features</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.everion.EverionReader.timeshift">
-<code class="sig-name descname">timeshift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shift</span><span class="o">=</span><span class="default_value">'random'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.everion.EverionReader.timeshift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Timeshifts the data by shifting all time related columns in the joined dataframe (data) and raw dataframes (aggregates, analytics_events, attributes_dailys, everion_events, features, sensors, signals).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the data by a random time interval
-between one month and two years to the past.</p>
-<p>If shift is a timdelta, shifts the data by that timedelta.</p>
-<p>If shift is a timestamp, shifts the data such that the earliest entry
-is at that timestamp and the remaining values keep the same time distance to the first entry.</p>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.everion.EverionReader.write">
-<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.everion.EverionReader.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes the raw dataframes back to individual files in the same format as they were read.
-Thus, the resulting directory can be read again using an EverionReader.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the writing directory.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-devicely.shimmer_plus"></span><p>Module to process Shimmer Plus data</p>
-<dl class="py class">
-<dt id="devicely.shimmer_plus.ShimmerPlusReader">
-<em class="property">class </em><code class="sig-prename descclassname">devicely.shimmer_plus.</code><code class="sig-name descname">ShimmerPlusReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">delimiter</span><span class="o">=</span><span class="default_value">';'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.shimmer_plus.ShimmerPlusReader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses, deidentifies (timeshifts) and writes data
-generated by Shimmer Consensys GSR.</p>
-<dl class="py attribute">
-<dt id="devicely.shimmer_plus.ShimmerPlusReader.data">
-<code class="sig-name descname">data</code><a class="headerlink" href="#devicely.shimmer_plus.ShimmerPlusReader.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>DataFrame with the values that were read from the csv file</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="devicely.shimmer_plus.ShimmerPlusReader.units">
-<code class="sig-name descname">units</code><a class="headerlink" href="#devicely.shimmer_plus.ShimmerPlusReader.units" title="Permalink to this definition">¶</a></dt>
-<dd><p>a unit for each column in the dataframe</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>pandas.Series</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.shimmer_plus.ShimmerPlusReader.timeshift">
-<code class="sig-name descname">timeshift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shift</span><span class="o">=</span><span class="default_value">'random'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.shimmer_plus.ShimmerPlusReader.timeshift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Timeshifts the data by shifting all time related columns.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the data by a random time interval
-between one month and two years to the past.</p>
-<p>If shift is a timdelta, shifts the data by that timedelta.</p>
-<p>If shift is a timestamp, shifts the data such that the earliest entry
-is at that timestamp and the remaining values keep the same time distance to the first entry.</p>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.shimmer_plus.ShimmerPlusReader.write">
-<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.shimmer_plus.ShimmerPlusReader.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes the DataFrame and units to the
-writing path in the same format as it was read.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to writing csv file. Writing mode: ‘w’.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-devicely.tag"></span><p>Module to process Tag data</p>
-<dl class="py class">
-<dt id="devicely.tag.TagReader">
-<em class="property">class </em><code class="sig-prename descclassname">devicely.tag.</code><code class="sig-name descname">TagReader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.tag.TagReader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses, anomnymizes and writes data generated by the Android app TimeStamp</p>
-<dl class="py attribute">
-<dt id="devicely.tag.TagReader.data">
-<code class="sig-name descname">data</code><a class="headerlink" href="#devicely.tag.TagReader.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>DataFrame with datetime index and ‘tag’ column.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.tag.TagReader.timeshift">
-<code class="sig-name descname">timeshift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shift</span><span class="o">=</span><span class="default_value">'random'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.tag.TagReader.timeshift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Anonymizes the data by shifting the index.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>shift</strong> (<em>None/'random'</em><em>, </em><em>pd.Timestamp</em><em> or </em><em>pd.Timedelta</em>) – <p>If shift is not specified, shifts the ‘time’ column by a random time
-interval between one month and two years to the past.</p>
-<p>If shift is a timdelta, shift the index by that timedelta.</p>
-<p>If shift is a timestamp, shift the index such that the earliest entry
-is at that timestamp and the remaining values keep the same time
-distance to the first entry.</p>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicely.tag.TagReader.write">
-<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.tag.TagReader.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes the DataFrame stored in ‘data’ to ‘path’
-in the same format as it was read.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path to writing csv. Writing mode: ‘w’</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -1033,6 +227,9 @@ in the same format as it was read.</p>
            
           </div>
           <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="example.html" class="btn btn-neutral float-right" title="Start Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
