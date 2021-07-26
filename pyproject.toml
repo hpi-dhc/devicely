@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "devicely"
-version = "1.0.1"
+version = "1.0.2"
 description = "Read multiple signals from different sources."
 authors = [
     "Ariane Morassi Sasso <ariane.morassi-sasso@hpi.de>",
