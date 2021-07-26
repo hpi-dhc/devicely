@@ -347,6 +347,8 @@ Module Reference
    :maxdepth: 2
    :caption: Contents:
 
+   example
+
 .. automodule:: devicely.empatica
     :members:
 
