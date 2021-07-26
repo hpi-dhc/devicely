@@ -15,7 +15,7 @@ You can also anonymize data and write it back using the original data format. Th
 
 ## Getting started
 
-To get started quickly, follow the "Getting started"-section in our docs.
+To get started quickly, follow the [quick-start guide](https://hpi-dhc.github.io/devicely/example.html#) in our documentation.
 
 https://hpi-dhc.github.io/devicely/
 
