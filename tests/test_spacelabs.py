@@ -170,7 +170,7 @@ class SpacelabsTestCase(unittest.TestCase):
 
         pd.testing.assert_frame_equal(self.spacelabs_reader.data, self.expected_data)
 
-        # When run again, drop_EB should not do anythin.
+        # When run again, drop_EB should do nothing.
         self.spacelabs_reader.drop_EB()
         pd.testing.assert_frame_equal(self.spacelabs_reader.data, self.expected_data)
 
@@ -219,7 +219,6 @@ class SpacelabsTestCase(unittest.TestCase):
 
         self.assertEqual(window_start, self.spacelabs_reader.data[["window_start"]].iloc[0].values)
         self.assertEqual(window_end, self.spacelabs_reader.data[["window_end"]].iloc[0].values)
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -143,11 +143,11 @@ class FarosTestCase(unittest.TestCase):
             check_freq=False, check_dtype=False
         )
         pd.testing.assert_frame_equal(
-            reader.data[['Accelerometer_X', 'Accelerometer_Y', 'Accelerometer_Z', 'Accelerometer_mag']].dropna().head(),
-            expected_ACC_head.rename(columns={'X': 'Accelerometer_X',
-                                              'Y': 'Accelerometer_Y',
-                                              'Z': 'Accelerometer_Z',
-                                              'mag': 'Accelerometer_mag'}),
+            reader.data[['ACC_X', 'ACC_Y', 'ACC_Z', 'ACC_mag']].dropna().head(),
+            expected_ACC_head.rename(columns={'X': 'ACC_X',
+                                              'Y': 'ACC_Y',
+                                              'Z': 'ACC_Z',
+                                              'mag': 'ACC_mag'}),
                                      check_freq=False,
                                      check_dtype=False
         )

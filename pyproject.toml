@@ -27,6 +27,11 @@ numpy = "^1.21.1"
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
 coverage = "^5.5"
+ipykernel = "^6.0.3"
+jupyter = "^1.0.0"
+nbsphinx = "^0.8.6"
+insegel = "^1.1.0"
+sphinx-rtd-theme = "^0.5.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

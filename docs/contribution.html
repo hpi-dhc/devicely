@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>How to contribute &mdash; devicely 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Module reference" href="moduleref.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/devicely-logo-white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="example.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="moduleref.html">Module reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#add-a-sensor-class">Add a sensor class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#write-unit-tests">Write unit tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#write-documentation">Write documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#provide-example-data">Provide example data</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">devicely</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>How to contribute</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/contribution.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="how-to-contribute">
+<h1>How to contribute<a class="headerlink" href="#how-to-contribute" title="Permalink to this headline">¶</a></h1>
+<p>Whether you would like to add a new sensor, fix a bug or help with packaging, we would love for you to contribute!
+To make a contribution, please fork <a class="reference external" href="https://github.com/hpi-dhc/devicely">our repository</a> and open a pull request when you are done with your changes.</p>
+<p>If you wonder why we do not have a <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>, <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> or <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>, it is because we use <a class="reference external" href="https://python-poetry.org/">poetry</a> for packaging, building and dependency management.</p>
+<p>The following steps illustrate what you need to do to add a new sensor class to devicely:</p>
+<div class="section" id="add-a-sensor-class">
+<h2>Add a sensor class<a class="headerlink" href="#add-a-sensor-class" title="Permalink to this headline">¶</a></h2>
+<p>Your sensor class needs to have its own module in the devicely package:</p>
+<a class="reference internal image-reference" href="_images/devicely_structure.png"><img alt="devicely package structure" src="_images/devicely_structure.png" style="width: 600px;" /></a>
+<p>Please create a class member for each signal that your sensor records. To provide an example, if your sensor contains heart rate and acceleration data,
+use uppercase attribute names like <code class="docutils literal notranslate"><span class="pre">reader.ACC</span></code> and <code class="docutils literal notranslate"><span class="pre">reader.HR</span></code>. These attributes should be dataframes, indexed by time of measurement.
+For metadata, you can use basic data structures such as dictionaries.
+Apart from the individual signal dataframes, your sensor should have an attribute <code class="docutils literal notranslate"><span class="pre">reader.data</span></code> which is a joined dataframe of all individual signal dataframes.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">timeshift</span></code> method should accept three types of parameters: nothing, a <code class="docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> or a <code class="docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code>.
+With no parameter, all time-related data attributes are shifted between one month and two years to the past.
+With a <code class="docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code>, all attributes are shifted by adding the timedelta to them.
+With a <code class="docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code>, all attributes are shifted such that the provided timestamp is the earliest data entry and all other data entries keep the same distance to it.</p>
+<p>Timeshifting is not the only way to anonymize data. If your sensor uses other metadata such as a patient id, please add a method <code class="docutils literal notranslate"><span class="pre">deidentify</span></code> to clear such metadata.
+You can look at <code class="docutils literal notranslate"><span class="pre">devicely.SpacelabsReader.deidentify</span></code> for an example.</p>
+<p>With the <code class="docutils literal notranslate"><span class="pre">reader.write</span></code> method, users can write the identified data to be persistent, ideally in the same original sensor format.
+Keeping the original format is not strictly necessary, just make sure that your reader class can be instantiated with the written data.</p>
+</div>
+<div class="section" id="write-unit-tests">
+<h2>Write unit tests<a class="headerlink" href="#write-unit-tests" title="Permalink to this headline">¶</a></h2>
+<p>Unit tests ensure that our sensor classes work the way we expect them to, which is why we aim for a high test coverage.
+The existing test cases are a good example to see how your test case should be structured.
+In general, have one test case for your sensor and one directory with data for testing.
+Write test methods for the most important use cases of your sensor, e.g. reading, timeshifting and writing.
+Please make sure that your test cases run fairly quickly as this helps us run tests locally and keep the GitHub Actions jobs fast.
+It helps to use small sensor files for testing, e.g. only 30 seconds long.</p>
+</div>
+<div class="section" id="write-documentation">
+<h2>Write documentation<a class="headerlink" href="#write-documentation" title="Permalink to this headline">¶</a></h2>
+<p>At devicely, we live by the motto <strong>Docs or it didn’t happen</strong>.</p>
+<p>Therefore, all sensor classes need to be documented well.
+Most importantly, you need to add the following docstrings to your class:</p>
+<ol class="arabic simple">
+<li><p>a docstring on top of the class definition containing information about the sensor and what the most important class attributes are</p></li>
+<li><p>a docstring for each method that users are meant to call specifying the syntax, parameters and return values</p></li>
+</ol>
+<p>Apart from docstrings, all you need to do is add example code to the <a class="reference external" href="https://github.com/hpi-dhc/devicely/blob/docs/example.ipynb">example notebook</a>.
+Not only is this notebook meant to be run by users themselves, but it is also rendered in our <a class="reference internal" href="example.html"><span class="doc">Start Guide</span></a> documentation section.</p>
+<p>The docstrings and the notebook are basically all you have to do to document your sensor class. Feel free to look at the existing sensors as a guide!</p>
+</div>
+<div class="section" id="provide-example-data">
+<h2>Provide example data<a class="headerlink" href="#provide-example-data" title="Permalink to this headline">¶</a></h2>
+<p>If you want people to try out your reader class, you need to provide example data.
+For this purpose we maintain this <a class="reference external" href="https://github.com/jostmorgenstern/devicely-documentation-sample-data">example data repository</a>,
+to which you can create a PR to supply example data for your sensor.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="moduleref.html" class="btn btn-neutral float-left" title="Module reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Ariane Sasso, Jost Morgenstern.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
