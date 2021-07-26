@@ -1,10 +1,5 @@
-"""
-Module to process Faros 180 data
-"""
-from itertools import chain
 import json
 import os
-from posixpath import join
 import random
 
 import numpy as np

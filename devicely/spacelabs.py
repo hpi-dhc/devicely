@@ -1,9 +1,5 @@
-"""
-Module to process Spacelabs (SL 90217) data
-"""
 import csv
 import datetime as dt
-from pprint import pprint
 import random
 from xml.etree import ElementTree as ET
 
@@ -245,11 +241,13 @@ class SpacelabsReader:
         """
         Set a window around, before or after the blood pressure measurement by
         creating two new columns with the window_start and window_end times.
+        
         Parameters
         ----------
-        window_duration : pd.Timedelta, datetime.timedelta
+        window_duration: pd.Timedelta, datetime.timedelta
             Duration of the window.
-        window_type : bffill, bfill, ffill
+        
+        window_type: bffill, bfill, ffill
             Bffill stands for backward-forward fill. The window is defined as
             half after and half before the start of the measurement.
             Bfill stands for backward fill.

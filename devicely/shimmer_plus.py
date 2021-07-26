@@ -1,7 +1,3 @@
-"""
-Module to process Shimmer Plus data
-"""
-from os import sep
 import random
 import re
 

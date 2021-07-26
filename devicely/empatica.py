@@ -1,7 +1,3 @@
-"""
-Module to process Empatica data
-"""
-
 import os
 import random
 

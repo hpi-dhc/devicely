@@ -31,6 +31,7 @@ ipykernel = "^6.0.3"
 jupyter = "^1.0.0"
 nbsphinx = "^0.8.6"
 insegel = "^1.1.0"
+sphinx-rtd-theme = "^0.5.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
