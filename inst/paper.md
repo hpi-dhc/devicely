@@ -20,7 +20,7 @@ authors:
 affiliations:
  - name: Digital Health Center, Hasso Plattner Institute, University of Potsdam
    index: 1
-date: 08 March 2021
+date: 03 August 2021
 bibliography: paper.bib
 ---
 
@@ -28,15 +28,16 @@ bibliography: paper.bib
 
 Wearable devices can track a multitude of parameters such as heart rate, body
 temperature, blood oxygen saturation, acceleration, blood glucose and much more
-`[@Kamisalic2018:2018]`. Moreover, they are becoming increasingly popular with a steeping
-increase in market presence in 2020 alone `[@IDC2020:2020]`. Applications for wearable
+`[@Kamisalic2018:2018]`. Moreover, they are becoming increasingly popular with a
+steep increase in market presence in 2020 alone `[@IDC2020:2020]`. Applications
+for wearable
 devices vary from tracking cardiovascular risks `[@Bayoumy2021:2021]` to identifying
 COVID-19 onset `[@Mishra2020:2020]`. Therefore, there is a great need for scientists to
 easily go through data acquired from different wearables and to be able to share
 them while protecting patient privacy.
 In order to solve this problem and empower scientists working with biosignals,
 we developed the **devicely** package. It represents the data in a science-friendly
-format and contains tools for data deidentification. It allows scientists to focus
+format and contains tools for data de-identification. It allows scientists to focus
 on what they want: the analysis of biosignals guided by privacy principles.
 
 # Related Work
@@ -63,7 +64,7 @@ includes functionalities to extract features from electrodermal activity (EDA),
 acceleration and HRV. The main difference from FLIRT to **devicely** is the
 focus on feature extraction versus privacy and data sharing.
 FLIRT reads the data for extracting features, while **devicely** aims to provide users with
-a way to read the data, deidentify them as necessary and write them back. In this
+a way to read the data, de-identify them as necessary and write them back. In this
 way, researchers can protect even more data privacy and use the data easily for
 further analysis and sharing.
 
@@ -72,10 +73,10 @@ further analysis and sharing.
 
 Every wearable company has a different data format and reading them is
 usually a challenge for scientists. Therefore, in order for researchers to be able to use different sensor data in an easy and
-friendly way we developed the **devicely** package. The package also contains two methods to help with data deidentification, one
+friendly way we developed the **devicely** package. The package also contains two methods to help with data de-identification, one
 is called timeshift and the other is a write method. The idea behind them is
 that researchers can timeshift all their time series data to a different time from the one the
-actual experiments occurred and then write this new deidentified dataset back to
+actual experiments occurred and then write this new de-identified dataset back to
 the original or a similar data format. This will empower scientists to keep patient privacy
 and hopefully share more data to increase research reproducibility.
 
@@ -89,8 +90,8 @@ each wearable behind three common methods: reading, timeshifting and writing
 data.
 
 After reading, the data is accessible through the reader in common formats such as dataframes.
-Deidentification is achieved by timeshifting the data, either by providing a shifting interval or randomly.
-For writing back deidentified data **devicely** focuses on keeping a format that can be read again using the same reader class.
+De-identification is achieved by timeshifting the data, either by providing a shifting interval or randomly.
+For writing back de-identified data **devicely** focuses on keeping a format that can be read again using the same reader class.
 In almost all cases, this is the same format as the one the wearable originaly provides.
 This enables sharing data with the community while maintaining patient privacy.
 
@@ -103,7 +104,7 @@ parameter a path to the data created by the wearable. After reading, data can
 be accessed through the reader in convenient formats such as dictionaries
 and dataframes.
 
-After creating a reader object the method _timeshift_ can be applied upon it. This assures deidentification by shifting all time-related data points.
+After creating a reader object the method _timeshift_ can be applied upon it. This assures de-identification by shifting all time-related data points.
 To control the shifting interval, a parameter can be provided to _timeshift_.
 If no parameter is provided, the data is shifted by a random time interval to the past.
 The timeshifted data can be written back using the _write_ method.
