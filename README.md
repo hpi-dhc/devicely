@@ -55,6 +55,6 @@ If you want to be part of this mission, please check our documentation on how to
 * Jost Morgenstern
 * Lin Zhou
 * Pascal Hecker
-* Sidratul Moontaha
 * Philipp Hildebrandt
+* Sidratul Moontaha
 ```
