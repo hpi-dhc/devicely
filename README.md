@@ -13,7 +13,14 @@ You can also deidentify data and write them back using their original data forma
 
 [PyPi](https://pypi.org/project/devicely/)
 
-## Getting started
+## Sneak Peek
+
+Installing devicely is as easy as executing `pip install devicely`.
+
+You can also try this [notebook](https://github.com/hpi-dhc/devicely/blob/main/example.ipynb) with examples.
+The example data you can get by cloning [this repository](https://github.com/jostmorgenstern/devicely-documentation-sample-data).
+
+## Quick Start
 
 To get started quickly, follow the "Getting started"-section in our docs.
 
@@ -34,6 +41,9 @@ https://hpi-dhc.github.io/devicely/
 
 - [Shimmer Consensys GSR](https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab) is a device that is used to collect sensor data in real time and it contains sensors such as GSR / EDA, photoplethysmography (PPG), 3-axis accelerometer, 3-axis gyroscope, 3-axis magnetometer & integrated altimeter. 
 
+## How to Contribute
+
+If you want to be part of this mission, please check our documentation on how to contribute [here](https://hpi-dhc.github.io/devicely/contribution.html).
 
 ## Contributors
 
