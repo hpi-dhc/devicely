@@ -37,7 +37,7 @@ https://hpi-dhc.github.io/devicely/
 
 - [Spacelabs](https://www.spacelabshealthcare.com/products/diagnostic-cardiology/abp-monitoring/90217a/) is an oscillometric blood pressure (BP) monitor which can be used to automatically track a person's BP in specificed time intervals.
 
-- [TimeStamp for Android](https://play.google.com/store/apps/details?id=gj.timestamp&hl=en), it allows you to record the timestamp of an event at the time it occurs. It also allows you to create specific tags such as "Running" or "Walking" and timestamp those specific activities.
+- [TimeStamp for Android](https://play.google.com/store/apps/details?id=gj.timestamp&hl=en) allows you to record the timestamp of an event at the time it occurs. It also allows you to create specific tags such as "Running" or "Walking" and timestamp those specific activities.
 
 - [Shimmer Consensys GSR](https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab) is a device that is used to collect sensor data in real time and it contains sensors such as GSR / EDA, photoplethysmography (PPG), 3-axis accelerometer, 3-axis gyroscope, 3-axis magnetometer & integrated altimeter. 
 
