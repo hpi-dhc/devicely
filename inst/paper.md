@@ -15,7 +15,7 @@ authors:
   orcid: 0000-0001-5365-0785
   affiliation: 1
 - name: Bert Arnrich^[bert.arnrich@hpi.de]
-  orcid: 0000-0001-5365-0785
+  orcid: 0000-0001-8380-7667
   affiliation: 1
 affiliations:
  - name: Digital Health Center, Hasso Plattner Institute, University of Potsdam
