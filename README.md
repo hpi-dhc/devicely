@@ -22,7 +22,7 @@ The example data you can get by cloning [this repository](https://github.com/jos
 
 ## Quick Start
 
-To get started quickly, follow the "Getting started"-section in our docs.
+To get started quickly, follow the [quick-start guide](https://hpi-dhc.github.io/devicely/example.html#) in our documentation.
 
 https://hpi-dhc.github.io/devicely/
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "devicely"
-version = "1.0.0"
+version = "1.0.2"
 description = "Read multiple signals from different sources."
 authors = [
     "Ariane Morassi Sasso <ariane.morassi-sasso@hpi.de>",
@@ -17,6 +17,7 @@ classifiers=[
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9'
 ]
+readme='README.md'
 
 [tool.poetry.dependencies]
 python = "^3.7.1"
