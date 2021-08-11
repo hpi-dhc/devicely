@@ -18,7 +18,7 @@ You can also deidentify data and write them back using their original data forma
 Installing devicely is as easy as executing `pip install devicely`.
 
 You can also try this [notebook](https://github.com/hpi-dhc/devicely/blob/main/example.ipynb) with examples.
-The example data you can get by cloning [this repository](https://github.com/jostmorgenstern/devicely-documentation-sample-data).
+The example data you can get by cloning [this repository](https://github.com/hpi-dhc/devicely-documentation-sample-data).
 
 ## Quick Start
 

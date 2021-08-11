@@ -25,7 +25,7 @@ Usage
 
 - :doc:`example`
 - :doc:`moduleref`
-- :doc:`Example data <https://github.com/hpi-dhc/devicely-documentation-sample-data>`
+- `Example data <https://github.com/hpi-dhc/devicely-documentation-sample-data>`_
 
 About devicely
 --------------
