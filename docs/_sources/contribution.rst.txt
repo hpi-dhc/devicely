@@ -1,15 +1,21 @@
 How to contribute
 =================
 
-Whether you would like to add a new sensor, fix a bug or help with packaging, we would love for you to contribute!
+Whether you would like to add a new sensor, fix a bug or help with packaging, we would love for you to contribute.
 To make a contribution, please fork `our repository <https://github.com/hpi-dhc/devicely>`_ and open a pull request when you are done with your changes.
 
-If you wonder why we do not have a ``setup.py``, ``setup.cfg`` or ``requirements.txt``, it is because we use `poetry <https://python-poetry.org/>`_ for packaging, building and dependency management.
+Getting started with development
+--------------------------------
 
-The following steps illustrate what you need to do to add a new sensor class to devicely:
+If you wonder why we do not have a ``setup.py``, ``setup.cfg`` or ``requirements.txt``, it is because we use `poetry <https://python-poetry.org/>`_ for packaging, building and dependency management.
+To get a development environment, clone the repository and exeute ``poetry install``. This will create a virtual environment for the project and install all runtime- and development dependencies.
+Now you can run the tests with ``poetry run pytest``, work on the example jupyter notebook with ``poetry run jupyter notebook`` or enter the virtual environment with ``poetry shell``.
 
 Add a sensor class
 ------------------
+
+One reason why you might want to contribute to devicely is to add a new sensor class to the package.
+Please follow these steps if that is the case:
 
 Your sensor class needs to have its own module in the devicely package:
 

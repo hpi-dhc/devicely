@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="example.html">Quick Start Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="moduleref.html">Module reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">How to contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started-with-development">Getting started with development</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#add-a-sensor-class">Add a sensor class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#write-unit-tests">Write unit tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#write-documentation">Write documentation</a></li>
@@ -195,12 +196,18 @@
 </style>
 <div class="section" id="how-to-contribute">
 <h1>How to contribute<a class="headerlink" href="#how-to-contribute" title="Permalink to this headline">¶</a></h1>
-<p>Whether you would like to add a new sensor, fix a bug or help with packaging, we would love for you to contribute!
+<p>Whether you would like to add a new sensor, fix a bug or help with packaging, we would love for you to contribute.
 To make a contribution, please fork <a class="reference external" href="https://github.com/hpi-dhc/devicely">our repository</a> and open a pull request when you are done with your changes.</p>
-<p>If you wonder why we do not have a <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>, <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> or <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>, it is because we use <a class="reference external" href="https://python-poetry.org/">poetry</a> for packaging, building and dependency management.</p>
-<p>The following steps illustrate what you need to do to add a new sensor class to devicely:</p>
+<div class="section" id="getting-started-with-development">
+<h2>Getting started with development<a class="headerlink" href="#getting-started-with-development" title="Permalink to this headline">¶</a></h2>
+<p>If you wonder why we do not have a <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>, <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> or <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>, it is because we use <a class="reference external" href="https://python-poetry.org/">poetry</a> for packaging, building and dependency management.
+To get a development environment, clone the repository and exeute <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span></code>. This will create a virtual environment for the project and install all runtime- and development dependencies.
+Now you can run the tests with <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">pytest</span></code>, work on the example jupyter notebook with <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">jupyter</span> <span class="pre">notebook</span></code> or enter the virtual environment with <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">shell</span></code>.</p>
+</div>
 <div class="section" id="add-a-sensor-class">
 <h2>Add a sensor class<a class="headerlink" href="#add-a-sensor-class" title="Permalink to this headline">¶</a></h2>
+<p>One reason why you might want to contribute to devicely is to add a new sensor class to the package.
+Please follow these steps if that is the case:</p>
 <p>Your sensor class needs to have its own module in the devicely package:</p>
 <a class="reference internal image-reference" href="_images/devicely_structure.png"><img alt="devicely package structure" src="_images/devicely_structure.png" style="width: 600px;" /></a>
 <p>Please create a class member for each signal that your sensor records. To provide an example, if your sensor contains heart rate and acceleration data,
