@@ -71,5 +71,5 @@ Provide example data
 --------------------
 
 If you want people to try out your reader class, you need to provide example data.
-For this purpose we maintain this `example data repository <https://github.com/jostmorgenstern/devicely-documentation-sample-data>`_,
+For this purpose we maintain this `example data repository <https://github.com/hpi-dhc/devicely-documentation-sample-data>`_,
 to which you can create a PR to supply example data for your sensor.
