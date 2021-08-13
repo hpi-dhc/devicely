@@ -1,5 +1,5 @@
 """
-Spacelabs is an oscillometric blood pressure (BP) monitor which can be used to
+Spacelabs (SL 90217) is an oscillometric blood pressure (BP) monitor which can be used to
 automatically track a person's BP in specificed time intervals.
 
 """
