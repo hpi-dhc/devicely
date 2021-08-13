@@ -1,3 +1,6 @@
+"""
+Tests for the TimeStamp module
+"""
 import os
 import unittest
 
@@ -5,9 +8,9 @@ import pandas as pd
 
 import devicely
 
-class TagsTestCase(unittest.TestCase):
-    READ_PATH = os.path.join(os.getcwd(), 'tests/Tags_test_data/tags.csv')
-    WRITE_PATH = os.path.join(os.getcwd(), 'tests/Tags_test_data/tags_written.csv')
+class TimeStampTestCase(unittest.TestCase):
+    READ_PATH = os.path.join(os.getcwd(), 'tests/Timestamp_test_data/tags.csv')
+    WRITE_PATH = os.path.join(os.getcwd(), 'tests/Timestamp_test_data/tags_written.csv')
 
     def setUp(self):
         tag_number = [1, 2, 3, 4, 5, 6, 7, 8, 8, 12, 13, 14, 16, 17, 18, 19]
@@ -27,7 +30,7 @@ class TagsTestCase(unittest.TestCase):
 
         self.data = pd.DataFrame({'tag_number': tag_number, 'time': timestamps, 'tag': tags}).set_index('time')
 
-        self.tag_reader = devicely.TagReader(self.READ_PATH)
+        self.tag_reader = devicely.TimeStampReader(self.READ_PATH)
 
     def test_read(self):
         pd.testing.assert_frame_equal(self.tag_reader.data, self.data)

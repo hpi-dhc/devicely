@@ -1,3 +1,6 @@
+"""
+Tests for the Everion module
+"""
 import datetime as dt
 import glob
 import os
@@ -31,7 +34,7 @@ class EverionTestCase(unittest.TestCase):
                                 'accy_data', 'accx_data', 'led3_data', 'acc_mag']
         expected_feature_tags = ['inter_pulse_interval', 'inter_pulse_interval_deviation']
 
-        expected_columns = set(expected_signal_tags + expected_signal_quality_tags + 
+        expected_columns = set(expected_signal_tags + expected_signal_quality_tags +
                                expected_sensor_tags + expected_feature_tags)
 
         self.assertEqual(set(self.reader.data.columns), expected_columns)
@@ -40,7 +43,7 @@ class EverionTestCase(unittest.TestCase):
         signal_tags = [12, 15, 19, 119, 134]
         sensor_tags = [80, 83, 84, 85, 92]
         feature_tags = [17]
-        reader = devicely.EverionReader(self.READ_PATH, 
+        reader = devicely.EverionReader(self.READ_PATH,
                                         signal_tags=signal_tags,
                                         sensor_tags=sensor_tags,
                                         feature_tags=feature_tags)

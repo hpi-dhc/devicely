@@ -1,16 +1,15 @@
-import datetime as dt
+"""
+Tests for the ShimmerPlus module
+"""
 import os
-import shutil
+import sys
 import unittest
 
-import numpy as np
 import pandas as pd
-
-import sys
-sys.path.insert(0, '/home/jost/DHC/devicely')
 import devicely
 
-class ShimmerTestCase(unittest.TestCase):
+
+class ShimmerPlusTestCase(unittest.TestCase):
     READ_PATH = 'tests/Shimmer_test_data/read_test_data.csv'
     WRITE_PATH = 'tests/Shimmer_test_data/write_test_data.csv'
 
