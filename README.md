@@ -2,12 +2,13 @@
 ![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/jostmorgenstern/270a0114dfad9251945a146dd6d29fa6/raw/devicely_coverage_main.json)
 [![DOI](https://zenodo.org/badge/279395106.svg)](https://zenodo.org/badge/latestdoi/279395106)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hpi-dhc/devicely/HEAD)
 
 ![Devicely Logo](/imgs/logo/devicely-logo.png)
 
-devicely is a Python package for reading, deidentifying and writing data from various health monitoring sensors.
+devicely is a Python package for reading, de-identifying and writing data from various health monitoring sensors.
 With devicely, you can read sensor data and have it easily accessible in dataframes.
-You can also deidentify data and write them back using their original data format. This makes it convenient to share sensor data with other researchers while mantaining people's privacy.
+You can also de-identify data and write them back using their original data format. This makes it convenient to share sensor data with other researchers while mantaining people's privacy.
 
 [Documentation](https://hpi-dhc.github.io/devicely/)
 
@@ -15,19 +16,31 @@ You can also deidentify data and write them back using their original data forma
 
 ## Sneak Peek
 
-Installing devicely is as easy as executing `pip install devicely`.
+Installing devicely is as easy as executing: 
+
+`pip install devicely`
+
+All devices contain the following methods as exemplified through Empatica:
+
+```
+empatica_reader = devicely.EmpaticaReader(path_to_empatica_files)
+empatica_reader.timeshift()
+empatica_reader.write(path_to_write_files)
+```
 
 You can also try this [notebook](https://github.com/hpi-dhc/devicely/blob/main/example.ipynb) with examples.
-The example data you can get by cloning [this repository](https://github.com/hpi-dhc/devicely-documentation-sample-data).
+The example data you can get by cloning [this repository](https://github.com/hpi-dhc/devicely-documentation-sample-data) or check our binder:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hpi-dhc/devicely/HEAD) (don't forget to upload the example data)
 
 ## Quick Start
 
-To get started quickly, follow the [quick-start guide](https://hpi-dhc.github.io/devicely/example.html#) in our documentation.
+To get started quickly, follow our [quick-start guide](https://hpi-dhc.github.io/devicely/example.html#).
 
-https://hpi-dhc.github.io/devicely/
+Or check the full documentation: https://hpi-dhc.github.io/devicely/
 
 
-## Supported sensors
+## Supported Sensors
 
 - [Empatica E4](https://e4.empatica.com/e4-wristband) is a wearable device that offers real-time physiological data acquisition such as blood volume pulse, electrodermal activity (EDA), heart rate, interbeat intervals, 3-axis acceleration and skin temperature.
 
@@ -35,7 +48,7 @@ https://hpi-dhc.github.io/devicely/
 
 - [1-lead ECG monitor Faros<sup>TM</sup> 180 from Bittium](https://shop.bittium.com/product/36/bittium-faros-180-solution-pack) is a one channel ECG monitor with sampling frequency up to 1000 Hz and a 3D acceleration sampling up to 100Hz.
 
-- [Spacelabs](https://www.spacelabshealthcare.com/products/diagnostic-cardiology/abp-monitoring/90217a/) is an oscillometric blood pressure (BP) monitor which can be used to automatically track a person's BP in specificed time intervals.
+- [Spacelabs (SL 90217)](https://www.spacelabshealthcare.com/products/diagnostic-cardiology/abp-monitoring/90217a/) is an oscillometric blood pressure (BP) monitor which can be used to automatically track a person's BP in specificed time intervals.
 
 - [TimeStamp for Android](https://play.google.com/store/apps/details?id=gj.timestamp&hl=en) allows you to record the timestamp of an event at the time it occurs. It also allows you to create specific tags such as "Running" or "Walking" and timestamp those specific activities.
 
