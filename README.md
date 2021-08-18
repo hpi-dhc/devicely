@@ -28,10 +28,11 @@ empatica_reader.timeshift()
 empatica_reader.write(path_to_write_files)
 ```
 
-You can also try this [notebook](https://github.com/hpi-dhc/devicely/blob/main/example.ipynb) with examples.
-The example data you can get by cloning [this repository](https://github.com/hpi-dhc/devicely-documentation-sample-data) or check our binder:
+You can also try this [notebook](https://github.com/hpi-dhc/devicely/blob/main/example.ipynb) with examples or check our binder:
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hpi-dhc/devicely/HEAD) (don't forget to upload the example data)
+
+The example data can be obtained by cloning [this repository](https://github.com/hpi-dhc/devicely-documentation-sample-data).
 
 ## Quick Start
 
