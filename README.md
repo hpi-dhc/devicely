@@ -61,14 +61,20 @@ Or check the full documentation: https://hpi-dhc.github.io/devicely/
 
 If you want to be part of this mission, please check our documentation on how to contribute [here](https://hpi-dhc.github.io/devicely/contribution.html).
 
-## Contributors
+## Authors
 
 ```
 * Ariane Sasso
+* Jost Morgenstern
+* Felix Musmann
+* Bert Arnrich
+```
+
+## Contributors
+
+```
 * Arpita Kappattanavar
 * Bjarne Pfitzner
-* Felix Musmann
-* Jost Morgenstern
 * Lin Zhou
 * Pascal Hecker
 * Philipp Hildebrandt
