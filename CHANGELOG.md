@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0]
+- removed acceleration magnitude from devicely.EmpaticaReader and devicely.FarosReader since it was out of the scope of the package
+- added more flexibility to missing files (e.g. ACC.csv, EDA.csv) to devicely.EmpaticaReader
+- changed TagsReader to TimeStampReader to be more consistent with the class naming structure in devicely
+- deprecated methods in devicely.SpacelabsReader: set_window and drop_EB
+- fixed issue with the timestamp index and fixed column names in devicely.SpacelabsReader
+
 ## [1.0.0] - 2021-07-19
 ### Added
 - devicely.FarosReader can both read from and write to EDF files and directories

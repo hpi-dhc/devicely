@@ -1,8 +1,10 @@
+"""
+Tests for the Faros module
+"""
 import os
 import shutil
 import unittest
 
-import numpy as np
 import pandas as pd
 
 
@@ -18,7 +20,7 @@ class FarosTestCase(unittest.TestCase):
         super().__init__(*args, **kwargs)
         self.reader_from_edf = devicely.FarosReader(self.EDF_READ_PATH)
         self.reader_from_dir = devicely.FarosReader(self.DIR_READ_PATH)
-        
+
         self.expected_start_time = pd.Timestamp('2018-10-12 16:54:12')
         self.expected_sample_freqs = {
             'ECG': 500.0,
@@ -99,8 +101,7 @@ class FarosTestCase(unittest.TestCase):
         self.expected_ACC_head = pd.DataFrame(
             {'X': [ 308.5,  289. ,  335.5,  375. ,  382.5],
              'Y': [-645. , -668. , -682. , -707.5, -670. ],
-             'Z': [-523.5, -623.5, -674. , -623.5, -621.5],
-             'mag': [ 886.14304714,  958.38262192, 1015.85444331, 1014.85639378, 990.69092052]},
+             'Z': [-523.5, -623.5, -674. , -623.5, -621.5]},
              index=pd.DatetimeIndex(['2018-10-12 16:54:12', '2018-10-12 16:54:12.040000',
                                      '2018-10-12 16:54:12.080000', '2018-10-12 16:54:12.120000',
                                      '2018-10-12 16:54:12.160000'],
@@ -143,11 +144,10 @@ class FarosTestCase(unittest.TestCase):
             check_freq=False, check_dtype=False
         )
         pd.testing.assert_frame_equal(
-            reader.data[['ACC_X', 'ACC_Y', 'ACC_Z', 'ACC_mag']].dropna().head(),
+            reader.data[['ACC_X', 'ACC_Y', 'ACC_Z']].dropna().head(),
             expected_ACC_head.rename(columns={'X': 'ACC_X',
                                               'Y': 'ACC_Y',
-                                              'Z': 'ACC_Z',
-                                              'mag': 'ACC_mag'}),
+                                              'Z': 'ACC_Z'}),
                                      check_freq=False,
                                      check_dtype=False
         )
@@ -188,23 +188,23 @@ class FarosTestCase(unittest.TestCase):
         """
         self.reader_from_edf.write(self.DIR_WRITE_PATH)
         new_reader = devicely.FarosReader(self.DIR_WRITE_PATH)
-        
+
         self._compare_reader_with_expected_attrs(new_reader,
                                         self.expected_start_time, self.expected_sample_freqs,
                                         self.expected_units, self.expected_ECG_head,
                                         self.expected_ACC_head, self.expected_Marker_head,
                                         self.expected_HRV_head)
 
-        
+
         shutil.rmtree(self.DIR_WRITE_PATH)
 
     def test_write_to_edf(self):
         """
         Tests if a reader's data can be written to an EDF file.
         """
-        self.reader_from_edf.write(self.EDF_WRITE_PATH, format='edf')
+        self.reader_from_edf.write(self.EDF_WRITE_PATH, file_format='edf')
         new_reader = devicely.FarosReader(self.EDF_WRITE_PATH)
-        
+
         self._compare_reader_with_expected_attrs(new_reader,
                                           self.expected_start_time, self.expected_sample_freqs,
                                           self.expected_units, self.expected_ECG_head,

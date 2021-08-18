@@ -1,4 +1,6 @@
-import os
+"""
+Tests for the Empatica module
+"""
 import shutil
 import unittest
 
@@ -31,17 +33,16 @@ class EmpaticaTestCase(unittest.TestCase):
             'HR': 1,
             'TEMP': 4,
         }
-        
+
         self.expected_ACC_head = pd.DataFrame(
             {'X': [-1.0, -1.0, -1.0, -1.0, -1.0],
              'Y': [65.0, 65.0, 65.0, 65.0, 64.0],
-             'Z': [5.0, 5.0, 4.0, 5.0, 5.0],
-             'mag': [65.19969325, 65.19969325, 65.13063795, 65.19969325, 64.20280368]},
+             'Z': [5.0, 5.0, 4.0, 5.0, 5.0]},
             index=pd.DatetimeIndex(['2019-03-01 15:15:01', '2019-03-01 15:15:01.031250',
                                     '2019-03-01 15:15:01.062500', '2019-03-01 15:15:01.093750',
                                     '2019-03-01 15:15:01.125000'])
         )
-        
+
         self.expected_BVP_head = pd.Series(
             [0.0, 0.0, 0.0, 0.0, 0.0],
             index=pd.DatetimeIndex(['2019-03-01 15:15:01', '2019-03-01 15:15:01.015625',
@@ -92,7 +93,7 @@ class EmpaticaTestCase(unittest.TestCase):
         # test metadata
         self.assertEqual(reader.start_times, expected_start_times)
         self.assertEqual(reader.sample_freqs, expected_sample_freqs)
-        
+
         # test individual dataframes
         pd.testing.assert_frame_equal(reader.ACC.head(), expected_ACC_head, check_dtype=False, check_freq=False)
         pd.testing.assert_series_equal(reader.BVP.head(), expected_BVP_head, check_dtype=False, check_freq=False)
@@ -104,7 +105,7 @@ class EmpaticaTestCase(unittest.TestCase):
 
         # test joined dataframe
         pd.testing.assert_frame_equal(reader.data[['ACC_X', 'ACC_Y', 'ACC_Z']].dropna().head(),
-                                      expected_ACC_head.drop(columns='mag').rename(columns={'X': 'ACC_X', 'Y': 'ACC_Y', 'Z': 'ACC_Z'}), check_dtype=False)
+                                      expected_ACC_head.rename(columns={'X': 'ACC_X', 'Y': 'ACC_Y', 'Z': 'ACC_Z'}), check_dtype=False)
         pd.testing.assert_series_equal(reader.data['BVP'].dropna().head(), expected_BVP_head, check_dtype=False)
         pd.testing.assert_series_equal(reader.data['EDA'].dropna().head(), expected_EDA_head, check_dtype=False)
         pd.testing.assert_series_equal(reader.data['HR'].dropna().head(), expected_HR_head, check_dtype=False)
@@ -112,7 +113,7 @@ class EmpaticaTestCase(unittest.TestCase):
 
     def test_read(self):
         # tests the basic reading capability by comparing the read data to the expected values
-        
+
         self._test_compare_real_and_expected(self.reader, self.expected_start_times, self.expected_sample_freqs,
                                                           self.expected_ACC_head, self.expected_BVP_head,
                                                           self.expected_EDA_head, self.expected_HR_head,
@@ -121,7 +122,7 @@ class EmpaticaTestCase(unittest.TestCase):
 
     def test_write(self):
         # test the writing capability by writing, reading with a new reader and comparing the old to the new data
-        
+
         self.reader.write(self.WRITE_PATH)
         new_reader = devicely.EmpaticaReader(self.WRITE_PATH)
         self._test_compare_real_and_expected(new_reader, self.expected_start_times, self.expected_sample_freqs,
@@ -150,7 +151,7 @@ class EmpaticaTestCase(unittest.TestCase):
         expected_data_index_head = pd.DatetimeIndex(['2009-04-23 06:55:42', '2009-04-23 06:55:42.015625',
                                                      '2009-04-23 06:55:42.031250', '2009-04-23 06:55:42.046875',
                                                      '2009-04-23 06:55:42.062500'])
-        
+
         reader = devicely.EmpaticaReader(self.READ_PATH)
         reader.timeshift(shift)
 

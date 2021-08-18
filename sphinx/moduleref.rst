@@ -31,8 +31,8 @@ devicely.ShimmerReader
 .. automodule:: devicely.shimmer_plus
     :members:
 
-devicely.TagReader
-------------------
+devicely.TimeStampReader
+------------------------
 
-.. automodule:: devicely.tag
+.. automodule:: devicely.time_stamp
     :members:
