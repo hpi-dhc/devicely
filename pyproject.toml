@@ -5,7 +5,8 @@ description = "Read multiple signals from different sources."
 authors = [
     "Ariane Morassi Sasso <ariane.morassi-sasso@hpi.de>",
     "Jost Morgenstern <jost.morgenstern@student.hpi.uni-potsdam.de>",
-    "Felix Musmann <felix.musmann@student.hpi.de>"
+    "Felix Musmann <felix.musmann@student.hpi.de>",
+    "Bert Arnrich <bert.arnrich@hpi.de>"
 ]
 license = "MIT"
 repository = "https://github.com/hpi-dhc/devicely"
