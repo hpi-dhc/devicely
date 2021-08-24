@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.0]
+## [1.1.0] - 2021-08-24
 - removed acceleration magnitude from devicely.EmpaticaReader and devicely.FarosReader since it was out of the scope of the package
 - added more flexibility to missing files (e.g. ACC.csv, EDA.csv) to devicely.EmpaticaReader
 - changed TagsReader to TimeStampReader to be more consistent with the class naming structure in devicely
