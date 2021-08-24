@@ -38,7 +38,7 @@ with examples and sample data or check our binder:
 
 ## Quick Start
 
-To get started quickly, follow our [quick-start guide](https://hpi-dhc.github.io/devicely/example.html#).
+To get started quickly, follow our [quick-start guide](https://hpi-dhc.github.io/devicely/examples.html#).
 
 Or check the full documentation: https://hpi-dhc.github.io/devicely/
 
