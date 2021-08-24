@@ -4,7 +4,7 @@
 ![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/jostmorgenstern/270a0114dfad9251945a146dd6d29fa6/raw/devicely_coverage_main.json)
 [![DOI](https://zenodo.org/badge/279395106.svg)](https://zenodo.org/badge/latestdoi/279395106)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hpi-dhc/devicely/HEAD)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hpi-dhc/devicely-example/HEAD)
 
 ![Devicely Logo](/imgs/logo/devicely-logo.png)
 
@@ -18,7 +18,7 @@ You can also de-identify data and write them back using their original data form
 
 ## Sneak Peek
 
-Installing devicely is as easy as executing: 
+Installing devicely is as easy as executing:
 
 `pip install devicely`
 
@@ -30,11 +30,10 @@ empatica_reader.timeshift()
 empatica_reader.write(path_to_write_files)
 ```
 
-You can also try this [notebook](https://github.com/hpi-dhc/devicely/blob/main/example.ipynb) with examples or check our binder:
+You can also try this [notebook](https://github.com/hpi-dhc/devicely-example)
+with examples and sample data or check our binder:
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hpi-dhc/devicely/HEAD) (don't forget to upload the example data)
-
-The example data can be obtained by cloning [this repository](https://github.com/hpi-dhc/devicely-documentation-sample-data).
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hpi-dhc/devicely-example/HEAD)
 
 ## Quick Start
 

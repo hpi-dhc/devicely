@@ -17,11 +17,11 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'devicely'
-copyright = '2020, Ariane Sasso, Jost Morgenstern'
+copyright = '2020, Ariane Sasso, Jost Morgenstern, Felix Musmann, Bert Arnrich'
 author = 'Ariane Sasso, Jost Morgenstern'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.0'
+release = '1.1.0'
 
 
 # -- General configuration ---------------------------------------------------
