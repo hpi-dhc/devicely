@@ -23,9 +23,9 @@ Now you have one more safety measure in place that will facilitate data sharing.
 Usage
 -----
 
-- :doc:`example`
+- :doc:`examples`
 - :doc:`moduleref`
-- `Example data <https://github.com/hpi-dhc/devicely-documentation-sample-data>`_
+- `Example notebook and data <https://github.com/hpi-dhc/devicely-example>`_
 
 About devicely
 --------------
@@ -38,7 +38,7 @@ About devicely
 .. toctree::
    :hidden:
 
-   Quick Start Guide <example>
+   Quick Start Guide <examples>
    moduleref
    contribution
 

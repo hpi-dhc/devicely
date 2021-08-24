@@ -61,8 +61,8 @@ Most importantly, you need to add the following docstrings to your class:
 1. a docstring on top of the class definition containing information about the sensor and what the most important class attributes are
 2. a docstring for each method that users are meant to call specifying the syntax, parameters and return values
 
-Apart from docstrings, all you need to do is add example code to the `example notebook <https://github.com/hpi-dhc/devicely/blob/docs/example.ipynb>`_.
-Not only is this notebook meant to be run by users themselves, but it is also rendered in our :doc:`example` documentation section.
+Apart from docstrings, all you need to do is add example code to the `notebook with examples <https://github.com/hpi-dhc/devicely-example/blob/main/examples.ipynb>`_.
+Not only is this notebook meant to be run by users themselves, but it is also rendered in our :doc:`examples` documentation section.
 
 The docstrings and the notebook are basically all you have to do to document your sensor class. Feel free to look at the existing sensors as a guide!
 
@@ -71,5 +71,5 @@ Provide example data
 --------------------
 
 If you want people to try out your reader class, you need to provide example data.
-For this purpose we maintain this `example data repository <https://github.com/hpi-dhc/devicely-documentation-sample-data>`_,
+For this purpose we maintain this `example repository with examples and data <https://github.com/hpi-dhc/devicely-example/>`_,
 to which you can create a PR to supply example data for your sensor.
