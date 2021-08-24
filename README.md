@@ -7,7 +7,7 @@
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hpi-dhc/devicely-example/HEAD)
 
-![Devicely Logo](/imgs/logo/devicely-logo.png)
+![Devicely Logo](https://github.com/hpi-dhc/devicely/blob/main/imgs/logo/devicely-logo.png)
 
 Devicely is a Python package for reading, de-identifying and writing data from various health monitoring sensors.
 With devicely, you can read sensor data and have it easily accessible in dataframes.
