@@ -478,7 +478,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="Use-devicely">
 <h1>Use devicely<a class="headerlink" href="#Use-devicely" title="Permalink to this headline">¶</a></h1>
-<p>If you are running this notebook localy don’t forget to install the requirements in <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code></p>
+<p>To install devicely locally just run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">devicely</span></code></p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -487,7 +487,6 @@ div.rendered_html tbody tr:hover {
 <span></span><span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">import</span> <span class="nn">devicely</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="n">write_dir</span> <span class="o">=</span> <span class="s1">&#39;New&#39;</span>
 
@@ -696,12 +695,12 @@ Name: HR, dtype: float64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;ACC&#39;: Timestamp(&#39;2020-04-04 15:47:01.149220446&#39;),
- &#39;BVP&#39;: Timestamp(&#39;2020-04-04 15:47:01.149220446&#39;),
- &#39;EDA&#39;: Timestamp(&#39;2020-04-04 15:47:01.149220446&#39;),
- &#39;HR&#39;: Timestamp(&#39;2020-04-04 15:47:11.149220446&#39;),
- &#39;TEMP&#39;: Timestamp(&#39;2020-04-04 15:47:01.149220446&#39;),
- &#39;IBI&#39;: Timestamp(&#39;2020-04-04 15:47:01.149220446&#39;)}
+{&#39;ACC&#39;: Timestamp(&#39;2020-08-07 10:28:47.495956799&#39;),
+ &#39;BVP&#39;: Timestamp(&#39;2020-08-07 10:28:47.495956799&#39;),
+ &#39;EDA&#39;: Timestamp(&#39;2020-08-07 10:28:47.495956799&#39;),
+ &#39;HR&#39;: Timestamp(&#39;2020-08-07 10:28:57.495956799&#39;),
+ &#39;TEMP&#39;: Timestamp(&#39;2020-08-07 10:28:47.495956799&#39;),
+ &#39;IBI&#39;: Timestamp(&#39;2020-08-07 10:28:47.495956799&#39;)}
 </pre></div></div>
 </div>
 <p>By providing no parameter to <code class="docutils literal notranslate"><span class="pre">timeshift</span></code> the data is shifted by a random time interval between one month and two years to the past. You can also provide a <code class="docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> object to shift the data by that timedelta or a <code class="docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object to shift the data such that this timestamp is the earliest entry.</p>
@@ -960,9 +959,9 @@ Name: HR, dtype: float64
   </thead>
   <tbody>
     <tr>
-      <th>2018-06-23 01:53:00</th>
-      <td>2018-06-23</td>
-      <td>01:53:00</td>
+      <th>2018-04-12 06:11:00</th>
+      <td>2018-04-12</td>
+      <td>06:11:00</td>
       <td>107</td>
       <td>76</td>
       <td>78.0</td>
@@ -971,9 +970,9 @@ Name: HR, dtype: float64
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-06-23 01:54:00</th>
-      <td>2018-06-23</td>
-      <td>01:54:00</td>
+      <th>2018-04-12 06:12:00</th>
+      <td>2018-04-12</td>
+      <td>06:12:00</td>
       <td>96</td>
       <td>62</td>
       <td>63.0</td>
@@ -982,9 +981,9 @@ Name: HR, dtype: float64
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-06-23 01:57:00</th>
-      <td>2018-06-23</td>
-      <td>01:57:00</td>
+      <th>2018-04-12 06:15:00</th>
+      <td>2018-04-12</td>
+      <td>06:15:00</td>
       <td>100</td>
       <td>68</td>
       <td>64.0</td>
@@ -993,9 +992,9 @@ Name: HR, dtype: float64
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-06-23 01:58:00</th>
-      <td>2018-06-23</td>
-      <td>01:58:00</td>
+      <th>2018-04-12 06:16:00</th>
+      <td>2018-04-12</td>
+      <td>06:16:00</td>
       <td>103</td>
       <td>68</td>
       <td>68.0</td>
@@ -1004,9 +1003,9 @@ Name: HR, dtype: float64
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-06-23 02:00:00</th>
-      <td>2018-06-23</td>
-      <td>02:00:00</td>
+      <th>2018-04-12 06:18:00</th>
+      <td>2018-04-12</td>
+      <td>06:18:00</td>
       <td>101</td>
       <td>67</td>
       <td>65.0</td>
@@ -1335,7 +1334,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
   </thead>
   <tbody>
     <tr>
-      <th>2018-09-26 05:19:07.000</th>
+      <th>2018-07-09 05:38:56.000</th>
       <td>26.0</td>
       <td>164.0</td>
       <td>23.0</td>
@@ -1345,7 +1344,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>0.0</td>
     </tr>
     <tr>
-      <th>2018-09-26 05:19:07.001</th>
+      <th>2018-07-09 05:38:56.001</th>
       <td>-6.0</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1355,7 +1354,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-09-26 05:19:07.002</th>
+      <th>2018-07-09 05:38:56.002</th>
       <td>-31.0</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1365,7 +1364,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-09-26 05:19:07.003</th>
+      <th>2018-07-09 05:38:56.003</th>
       <td>-39.0</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1375,7 +1374,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-09-26 05:19:07.004</th>
+      <th>2018-07-09 05:38:56.004</th>
       <td>-17.0</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1934,7 +1933,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
   </thead>
   <tbody>
     <tr>
-      <th>2018-05-22 17:00:58.000000000</th>
+      <th>2018-08-23 05:53:14.000000000</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1958,7 +1957,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>4126.976617</td>
     </tr>
     <tr>
-      <th>2018-05-22 17:00:58.019607808</th>
+      <th>2018-08-23 05:53:14.019607808</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1982,7 +1981,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>4316.324362</td>
     </tr>
     <tr>
-      <th>2018-05-22 17:00:58.039215872</th>
+      <th>2018-08-23 05:53:14.039215872</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -2006,7 +2005,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>4376.489918</td>
     </tr>
     <tr>
-      <th>2018-05-22 17:00:58.058823680</th>
+      <th>2018-08-23 05:53:14.058823680</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -2030,7 +2029,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>4301.292829</td>
     </tr>
     <tr>
-      <th>2018-05-22 17:00:58.078431488</th>
+      <th>2018-08-23 05:53:14.078431488</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -2341,7 +2340,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
   <tbody>
     <tr>
       <th>0</th>
-      <td>2018-09-17 00:00:15.673</td>
+      <td>2020-01-26 02:30:59.919</td>
       <td>-1.434783</td>
       <td>10.0</td>
       <td>0.554348</td>
@@ -2365,7 +2364,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
     </tr>
     <tr>
       <th>1</th>
-      <td>2018-09-17 00:00:15.696</td>
+      <td>2020-01-26 02:30:59.942</td>
       <td>-1.402174</td>
       <td>10.0</td>
       <td>0.554348</td>
@@ -2389,7 +2388,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
     </tr>
     <tr>
       <th>2</th>
-      <td>2018-09-17 00:00:15.713</td>
+      <td>2020-01-26 02:30:59.959</td>
       <td>-1.434783</td>
       <td>10.0</td>
       <td>0.554348</td>
@@ -2413,7 +2412,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
     </tr>
     <tr>
       <th>3</th>
-      <td>2018-09-17 00:00:15.738</td>
+      <td>2020-01-26 02:30:59.984</td>
       <td>-1.413043</td>
       <td>10.0</td>
       <td>0.521739</td>
@@ -2437,7 +2436,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
     </tr>
     <tr>
       <th>4</th>
-      <td>2018-09-17 00:00:15.750</td>
+      <td>2020-01-26 02:30:59.996</td>
       <td>-1.445652</td>
       <td>10.0</td>
       <td>0.510870</td>
@@ -2619,27 +2618,27 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
   </thead>
   <tbody>
     <tr>
-      <th>2018-07-18 00:42:35</th>
+      <th>2018-10-13 10:22:09</th>
       <td>1</td>
       <td>Shake</td>
     </tr>
     <tr>
-      <th>2018-07-18 00:43:41</th>
+      <th>2018-10-13 10:23:15</th>
       <td>2</td>
       <td>Start</td>
     </tr>
     <tr>
-      <th>2018-07-18 00:44:18</th>
+      <th>2018-10-13 10:23:52</th>
       <td>3</td>
       <td>BP Measurement</td>
     </tr>
     <tr>
-      <th>2018-07-18 00:45:49</th>
+      <th>2018-10-13 10:25:23</th>
       <td>4</td>
       <td>BP Measurement</td>
     </tr>
     <tr>
-      <th>2018-07-18 00:47:58</th>
+      <th>2018-10-13 10:27:32</th>
       <td>5</td>
       <td>BP Measurement</td>
     </tr>
