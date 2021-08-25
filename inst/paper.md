@@ -4,24 +4,26 @@ tags:
   - Python
   - Wearables
   - Sensors
+  - Health
 authors:
   - name: Ariane Morassi Sasso^[ariane.morassi-sasso@hpi.de]
     orcid: 0000-0002-3669-4599
     affiliation: 1
- - name: Jost Morgenstern^[jost.morgenstern@student.hpi.de]
+ - name: Jost Morgenstern
     orcid: 0000-0001-6268-9948
     affiliation: 1
-- name: Felix Musmann^[felix.musmann@student.hpi.uni-potsdam.de]
+- name: Felix Musmann
   orcid: 0000-0001-5365-0785
   affiliation: 1
-- name: Bert Arnrich^[bert.arnrich@hpi.de]
+- name: Bert Arnrich
   orcid: 0000-0001-8380-7667
   affiliation: 1
 affiliations:
  - name: Digital Health Center, Hasso Plattner Institute, University of Potsdam
    index: 1
-date: 03 August 2021
+date: 25 August 2021
 bibliography: paper.bib
+
 ---
 
 # Summary
@@ -68,7 +70,6 @@ a way to read the data, de-identify them as necessary and write them back. In
 this way, researchers can protect even more data privacy and use the data easily
 for further analysis and sharing.
 
-
 # Statement of need
 
 Every wearable company has a different data format and reading them is
@@ -95,7 +96,6 @@ For writing back de-identified data **devicely** focuses on keeping a format tha
 In almost all cases, this is the same format as the one the wearable originaly provides.
 This enables sharing data with the community while maintaining patient privacy.
 
-
 # Functionalities
 
 All reader classes support three core functions: reading data created by a wearable, timeshifting them and writing them back.
@@ -114,7 +114,6 @@ class. Figure 1 depicts the class structure of the **devicely**
 package and serves as a guide for future implementation.
 
 ![Figure 1. Shows the structure of the devicely package.](devicely_structure.png)
-
 
 # Availability
 
