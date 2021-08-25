@@ -87,8 +87,7 @@ Different wearables come with different data formats which require different pre
 However, it should be easy for scientists to add data from a new wearable to an
 existing pipeline and easy for developers to add a new wearable to the
 **devicely** package. To achieve both **devicely** encapsulates data preparation for
-each wearable behind three common methods: reading, timeshifting and writing
-data.
+each wearable behind three common methods: reading, timeshifting and writing.
 
 After reading, the data is accessible through the reader in common formats such as dataframes.
 De-identification is achieved by timeshifting the data, either by providing a shifting interval or randomly.
