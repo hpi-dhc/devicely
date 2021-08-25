@@ -38,7 +38,7 @@ COVID-19 onset [@Mishra2020]. Therefore, there is a great need for scientists to
 easily go through data acquired from different wearables and to be able to share
 them while protecting patient privacy.
 In order to solve this problem and empower scientists working with biosignals,
-we developed the **devicely** package. It processes device data into a science-friendly
+we developed the **devicely** package. It processes the data into a science-friendly
 format and contains tools for data de-identification. It allows scientists to focus
 on what they want: the analysis of biosignals guided by privacy principles.
 
