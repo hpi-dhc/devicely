@@ -6,7 +6,7 @@ tags:
   - Sensors
   - Health
 authors:
-  - name: Ariane Sasso^[corresponding author]
+  - name: Ariane Sasso^[ariane.morassi-sasso@hpi.de]
     orcid: 0000-0002-3669-4599
     affiliation: 1
   - name: Jost Morgenstern
