@@ -9,18 +9,18 @@ authors:
   - name: Ariane Morassi Sasso^[ariane.morassi-sasso@hpi.de]
     orcid: 0000-0002-3669-4599
     affiliation: 1
- - name: Jost Morgenstern
+  - name: Jost Morgenstern
     orcid: 0000-0001-6268-9948
     affiliation: 1
-- name: Felix Musmann
-  orcid: 0000-0001-5365-0785
-  affiliation: 1
-- name: Bert Arnrich
-  orcid: 0000-0001-8380-7667
-  affiliation: 1
+  - name: Felix Musmann
+    orcid: 0000-0001-5365-0785
+    affiliation: 1
+  - name: Bert Arnrich
+    orcid: 0000-0001-8380-7667
+    affiliation: 1
 affiliations:
- - name: Digital Health Center, Hasso Plattner Institute, University of Potsdam
-   index: 1
+  - name: Digital Health Center, Hasso Plattner Institute, University of Potsdam
+    index: 1
 date: 25 August 2021
 bibliography: paper.bib
 
