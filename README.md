@@ -1,4 +1,5 @@
 [![pyOpenSci](https://tinyurl.com/y22nb8up)](https://github.com/pyOpenSci/software-review/issues/37)
+[![status](https://joss.theoj.org/papers/3abafc8a04e02d7c61d0bf4fb714af28/status.svg)](https://joss.theoj.org/papers/3abafc8a04e02d7c61d0bf4fb714af28)
 [![PyPI version](https://badge.fury.io/py/devicely.svg)](https://badge.fury.io/py/devicely)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/devicely.svg)](https://pypi.python.org/pypi/devicely/)
 [![Actions Status: test](https://github.com/hpi-dhc/devicely/workflows/test/badge.svg)](https://github.com/hpi-dhc/devicely/actions/workflows/test.yml)
