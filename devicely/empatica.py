@@ -162,8 +162,11 @@ class EmpaticaReader:
         try:
             if os.stat(path).st_size > 0:
                 with open(path, 'r') as file:
-                    self.start_times['IBI'] = pd.Timestamp(float(file.readline().split(',')[0]), unit='s')
-                    dataframe = pd.read_csv(file, names=['seconds_since_start', 'IBI'], header=None)
+                    start_time = pd.Timestamp(float(file.readline().split(',')[0]), unit='s')
+                    self.start_times['IBI'] = start_time
+                    dataframe = pd.read_csv(file, names=['time', 'IBI'], header=None)
+                    
+
                     return dataframe
             else:
                 print(f"Not reading signal because the file {path} is empty.")
