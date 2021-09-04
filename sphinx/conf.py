@@ -17,7 +17,7 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'devicely'
-copyright = '2020, Digital Health Center (Hasso Plattner Institute)'
+copyright = '2021, Digital Health Center (Hasso Plattner Institute)'
 author = 'Ariane Sasso, Jost Morgenstern, Felix Musmann, Bert Arnrich'
 
 # The full version, including alpha/beta/rc tags
