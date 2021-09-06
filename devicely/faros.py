@@ -217,10 +217,10 @@ class FarosReader:
         with open(os.path.join(path, 'meta.json'), 'w') as meta_file:
             json.dump(meta, meta_file)
 
-        self.ECG.to_csv(os.path.join(path, 'ECG.csv'), index=None)
-        self.ACC.to_csv(os.path.join(path, 'ACC.csv'), index=None)
-        self.Marker.to_csv(os.path.join(path, 'Marker.csv'), index=None)
-        self.HRV.to_csv(os.path.join(path, 'HRV.csv'), index=None)
+        self.ECG.to_csv(os.path.join(path, 'ECG.csv'), index=None, line_terminator='\n')
+        self.ACC.to_csv(os.path.join(path, 'ACC.csv'), index=None, line_terminator='\n')
+        self.Marker.to_csv(os.path.join(path, 'Marker.csv'), index=None, line_terminator='\n')
+        self.HRV.to_csv(os.path.join(path, 'HRV.csv'), index=None, line_terminator='\n')
 
     def timeshift(self, shift='random'):
         """
