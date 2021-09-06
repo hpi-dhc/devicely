@@ -100,20 +100,21 @@
 <li class="toctree-l1"><a class="reference internal" href="#Use-devicely">Use devicely</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#Empatica-E4">Empatica E4</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Read-the-data">Read the data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Timeshift-the-data:">Timeshift the data:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Write-the-data:">Write the data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Timeshift-the-data">Timeshift the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Write-the-data">Write the data</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Spacelabs-Blood-Pressure-Monitor">Spacelabs Blood Pressure Monitor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id1">Read the data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">Timeshift the data:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Write the data:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Timeshift the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Remove-metadata">Remove metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Write-the-data:">Write the data:</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Bittium-Faros">Bittium Faros</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Read-the-data:">Read the data:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Timeshift-the-data">Timeshift the data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Write-the-data">Write the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Read the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Timeshift the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Write the data</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Biovotion-Everion">Biovotion Everion</a><ul>
@@ -677,8 +678,8 @@ Name: HR, dtype: float64
 </div>
 <p>The dataframe contains nan values because the individual signals have different sampling frequencies.</p>
 </div>
-<div class="section" id="Timeshift-the-data:">
-<h3>Timeshift the data:<a class="headerlink" href="#Timeshift-the-data:" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Timeshift-the-data">
+<h3>Timeshift the data<a class="headerlink" href="#Timeshift-the-data" title="Permalink to this headline">¶</a></h3>
 <p>Apply a timeshift:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -696,18 +697,18 @@ Name: HR, dtype: float64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;ACC&#39;: Timestamp(&#39;2020-07-16 07:39:02.846765745&#39;),
- &#39;BVP&#39;: Timestamp(&#39;2020-07-16 07:39:02.846765745&#39;),
- &#39;EDA&#39;: Timestamp(&#39;2020-07-16 07:39:02.846765745&#39;),
- &#39;HR&#39;: Timestamp(&#39;2020-07-16 07:39:12.846765745&#39;),
- &#39;TEMP&#39;: Timestamp(&#39;2020-07-16 07:39:02.846765745&#39;),
- &#39;IBI&#39;: Timestamp(&#39;2020-07-16 07:39:02.846765745&#39;)}
+{&#39;ACC&#39;: Timestamp(&#39;2019-11-04 07:51:28.209658892&#39;),
+ &#39;BVP&#39;: Timestamp(&#39;2019-11-04 07:51:28.209658892&#39;),
+ &#39;EDA&#39;: Timestamp(&#39;2019-11-04 07:51:28.209658892&#39;),
+ &#39;HR&#39;: Timestamp(&#39;2019-11-04 07:51:38.209658892&#39;),
+ &#39;TEMP&#39;: Timestamp(&#39;2019-11-04 07:51:28.209658892&#39;),
+ &#39;IBI&#39;: Timestamp(&#39;2019-11-04 07:51:28.209658892&#39;)}
 </pre></div></div>
 </div>
 <p>By providing no parameter to <code class="docutils literal notranslate"><span class="pre">timeshift</span></code> the data is shifted by a random time interval between one month and two years to the past. You can also provide a <code class="docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> object to shift the data by that timedelta or a <code class="docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object to shift the data such that this timestamp is the earliest entry.</p>
 </div>
-<div class="section" id="Write-the-data:">
-<h3>Write the data:<a class="headerlink" href="#Write-the-data:" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Write-the-data">
+<h3>Write the data<a class="headerlink" href="#Write-the-data" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -902,7 +903,7 @@ Name: HR, dtype: float64
 </div>
 </div>
 <div class="section" id="id2">
-<h3>Timeshift the data:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<h3>Timeshift the data<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>Apply a timeshift:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
@@ -960,9 +961,9 @@ Name: HR, dtype: float64
   </thead>
   <tbody>
     <tr>
-      <th>2017-05-12 09:42:00</th>
-      <td>2017-05-12</td>
-      <td>09:42:00</td>
+      <th>2018-12-25 00:45:00</th>
+      <td>2018-12-25</td>
+      <td>00:45:00</td>
       <td>107</td>
       <td>76</td>
       <td>78.0</td>
@@ -971,9 +972,9 @@ Name: HR, dtype: float64
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2017-05-12 09:43:00</th>
-      <td>2017-05-12</td>
-      <td>09:43:00</td>
+      <th>2018-12-25 00:46:00</th>
+      <td>2018-12-25</td>
+      <td>00:46:00</td>
       <td>96</td>
       <td>62</td>
       <td>63.0</td>
@@ -982,9 +983,9 @@ Name: HR, dtype: float64
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2017-05-12 09:46:00</th>
-      <td>2017-05-12</td>
-      <td>09:46:00</td>
+      <th>2018-12-25 00:49:00</th>
+      <td>2018-12-25</td>
+      <td>00:49:00</td>
       <td>100</td>
       <td>68</td>
       <td>64.0</td>
@@ -993,9 +994,9 @@ Name: HR, dtype: float64
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2017-05-12 09:47:00</th>
-      <td>2017-05-12</td>
-      <td>09:47:00</td>
+      <th>2018-12-25 00:50:00</th>
+      <td>2018-12-25</td>
+      <td>00:50:00</td>
       <td>103</td>
       <td>68</td>
       <td>68.0</td>
@@ -1004,9 +1005,9 @@ Name: HR, dtype: float64
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2017-05-12 09:49:00</th>
-      <td>2017-05-12</td>
-      <td>09:49:00</td>
+      <th>2018-12-25 00:52:00</th>
+      <td>2018-12-25</td>
+      <td>00:52:00</td>
       <td>101</td>
       <td>67</td>
       <td>65.0</td>
@@ -1020,10 +1021,36 @@ Name: HR, dtype: float64
 </div>
 <p>By providing no parameter to <code class="docutils literal notranslate"><span class="pre">timeshift</span></code> the data is shifted by a random time interval between one month and two years to the past. You can also provide a <code class="docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> object to shift the data by that timedelta or a <code class="docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object to shift the data such that this timestamp is the earliest entry.</p>
 </div>
-<div class="section" id="id3">
-<h3>Write the data:<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Remove-metadata">
+<h3>Remove metadata<a class="headerlink" href="#Remove-metadata" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">spacelabs_reader</span><span class="o">.</span><span class="n">deidentify</span><span class="p">(</span><span class="s1">&#39;001&#39;</span><span class="p">)</span>
+<span class="n">spacelabs_reader</span><span class="o">.</span><span class="n">metadata</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;PATIENTINFO&#39;: {&#39;DOB&#39;: &#39;&#39;, &#39;RACE&#39;: &#39;&#39;},
+ &#39;REPORTINFO&#39;: {&#39;PHYSICIAN&#39;: &#39;&#39;,
+  &#39;NURSETECH&#39;: &#39;&#39;,
+  &#39;STATUS&#39;: &#39;&#39;,
+  &#39;CALIPERSUMMARY&#39;: {&#39;COUNT&#39;: &#39;&#39;}}}
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Write-the-data:">
+<h3>Write the data:<a class="headerlink" href="#Write-the-data:" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1038,7 +1065,7 @@ Name: HR, dtype: float64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1051,10 +1078,10 @@ Name: HR, dtype: float64
 <div class="section" id="Bittium-Faros">
 <h2>Bittium Faros<a class="headerlink" href="#Bittium-Faros" title="Permalink to this headline">¶</a></h2>
 <p>The Faros device outpus data in <a class="reference external" href="https://www.edfplus.info/specs/edf.html">EDF files</a>. These are specifically made for health sensor data and not human-readable.</p>
-<div class="section" id="Read-the-data:">
-<h3>Read the data:<a class="headerlink" href="#Read-the-data:" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Read the data<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1064,7 +1091,7 @@ Name: HR, dtype: float64
 </div>
 <p>Access metadata:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1073,7 +1100,7 @@ Name: HR, dtype: float64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1082,7 +1109,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1091,7 +1118,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1100,7 +1127,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1109,7 +1136,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1119,7 +1146,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 <p>You can access the individual signals via the <code class="docutils literal notranslate"><span class="pre">ECG</span></code>, <code class="docutils literal notranslate"><span class="pre">ACC</span></code>, <code class="docutils literal notranslate"><span class="pre">HRV</span></code> and <code class="docutils literal notranslate"><span class="pre">Marker</span></code> attributes:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1128,7 +1155,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1192,7 +1219,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 <p>Access a joined dataframe of all signals:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1201,7 +1228,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1288,11 +1315,11 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div></div>
 </div>
 </div>
-<div class="section" id="Timeshift-the-data">
-<h3>Timeshift the data<a class="headerlink" href="#Timeshift-the-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>Timeshift the data<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <p>Apply a timeshift:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1302,7 +1329,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1335,7 +1362,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
   </thead>
   <tbody>
     <tr>
-      <th>2018-07-26 05:18:21.000</th>
+      <th>2018-02-27 18:59:45.000</th>
       <td>26.0</td>
       <td>164.0</td>
       <td>23.0</td>
@@ -1345,7 +1372,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>0.0</td>
     </tr>
     <tr>
-      <th>2018-07-26 05:18:21.001</th>
+      <th>2018-02-27 18:59:45.001</th>
       <td>-6.0</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1355,7 +1382,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-07-26 05:18:21.002</th>
+      <th>2018-02-27 18:59:45.002</th>
       <td>-31.0</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1365,7 +1392,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-07-26 05:18:21.003</th>
+      <th>2018-02-27 18:59:45.003</th>
       <td>-39.0</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1375,7 +1402,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-07-26 05:18:21.004</th>
+      <th>2018-02-27 18:59:45.004</th>
       <td>-17.0</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1390,11 +1417,11 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 <p>By providing no parameter to <code class="docutils literal notranslate"><span class="pre">timeshift</span></code> the data is shifted by a random time interval between one month and two years to the past. You can also provide a <code class="docutils literal notranslate"><span class="pre">pandas.Timedelta</span></code> object to shift the data by that timedelta or a <code class="docutils literal notranslate"><span class="pre">pandas.Timestamp</span></code> object to shift the data such that this timestamp is the earliest entry.</p>
 </div>
-<div class="section" id="Write-the-data">
-<h3>Write the data<a class="headerlink" href="#Write-the-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>Write the data<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p>You can write back the data in the original EDF format or to a directory of individual signal files. Writing to a directory is the preferred method. You can find out why this is the case in our <a class="reference external" href="https://hpi-dhc.github.io/devicely/moduleref.html#module-devicely.faros">module reference</a>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1405,17 +1432,17 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;Marker.csv&#39;, &#39;HRV.csv&#39;, &#39;ACC.csv&#39;, &#39;ECG.csv&#39;, &#39;meta.json&#39;]
+[&#39;Marker.csv&#39;, &#39;faros.edf&#39;, &#39;HRV.csv&#39;, &#39;ACC.csv&#39;, &#39;ECG.csv&#39;, &#39;meta.json&#39;]
 </pre></div></div>
 </div>
 <p>You can also create a FarosReader from a written directory:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1425,7 +1452,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1513,7 +1540,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 <p>You can also save files as EDF if the necessary metadata are still present.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1524,7 +1551,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1538,7 +1565,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 <h2>Biovotion Everion<a class="headerlink" href="#Biovotion-Everion" title="Permalink to this headline">¶</a></h2>
 <p>The Everion device outputs data in <a class="reference external" href="https://github.com/hpi-dhc/devicely-example/tree/main/Everion">multiple csv files</a>. Each csv file has a <code class="docutils literal notranslate"><span class="pre">tag</span></code> column which specifies the type of measurement. You can see the different tags and what they mean by looking at <code class="docutils literal notranslate"><span class="pre">EverionReader.SIGNAL_TAGS</span></code>, <code class="docutils literal notranslate"><span class="pre">EverionReader.SENSOR_TAGS</span></code> and <code class="docutils literal notranslate"><span class="pre">EverionReader.FEATURE_TAGS</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1547,7 +1574,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1563,7 +1590,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 <div class="section" id="id7">
 <h3>Read the data<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1574,7 +1601,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 <p>If you would like to specify which tags to keep, you can specify this when initializing the reader.</p>
 <p>Access the individual dataframes via aggregates, analytics_events, attributes_dailys, everion_events, features, sensors and signals attributes:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1583,7 +1610,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1665,7 +1692,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 <p>Access a joined dataframe of all signals:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1674,7 +1701,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1874,7 +1901,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 <h3>Timeshift the data<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <p>Apply a timeshift:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1884,7 +1911,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1955,7 +1982,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
   </thead>
   <tbody>
     <tr>
-      <th>2018-12-14 04:20:34.000000000</th>
+      <th>2017-08-15 18:02:52.000000000</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1979,7 +2006,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>4126.976617</td>
     </tr>
     <tr>
-      <th>2018-12-14 04:20:34.019607808</th>
+      <th>2017-08-15 18:02:52.019607808</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -2003,7 +2030,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>4316.324362</td>
     </tr>
     <tr>
-      <th>2018-12-14 04:20:34.039215872</th>
+      <th>2017-08-15 18:02:52.039215872</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -2027,7 +2054,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>4376.489918</td>
     </tr>
     <tr>
-      <th>2018-12-14 04:20:34.058823680</th>
+      <th>2017-08-15 18:02:52.058823680</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -2051,7 +2078,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
       <td>4301.292829</td>
     </tr>
     <tr>
-      <th>2018-12-14 04:20:34.078431488</th>
+      <th>2017-08-15 18:02:52.078431488</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -2085,7 +2112,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 <h3>Write the data<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <p>Write the data to a directory while keeping the same format as the original. If you used only a subset of tags when initializing the reader, only these tags will be written.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2096,7 +2123,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2118,7 +2145,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 <div class="section" id="id10">
 <h3>Read the data<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2128,7 +2155,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2304,7 +2331,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 <h3>Timeshift the data<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <p>Apply a timeshift:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2314,7 +2341,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2362,7 +2389,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
   <tbody>
     <tr>
       <th>0</th>
-      <td>2020-01-12 08:57:51.814</td>
+      <td>2019-12-01 21:04:43.790</td>
       <td>-1.434783</td>
       <td>10.0</td>
       <td>0.554348</td>
@@ -2386,7 +2413,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
     </tr>
     <tr>
       <th>1</th>
-      <td>2020-01-12 08:57:51.837</td>
+      <td>2019-12-01 21:04:43.813</td>
       <td>-1.402174</td>
       <td>10.0</td>
       <td>0.554348</td>
@@ -2410,7 +2437,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
     </tr>
     <tr>
       <th>2</th>
-      <td>2020-01-12 08:57:51.854</td>
+      <td>2019-12-01 21:04:43.830</td>
       <td>-1.434783</td>
       <td>10.0</td>
       <td>0.554348</td>
@@ -2434,7 +2461,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
     </tr>
     <tr>
       <th>3</th>
-      <td>2020-01-12 08:57:51.879</td>
+      <td>2019-12-01 21:04:43.855</td>
       <td>-1.413043</td>
       <td>10.0</td>
       <td>0.521739</td>
@@ -2458,7 +2485,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
     </tr>
     <tr>
       <th>4</th>
-      <td>2020-01-12 08:57:51.891</td>
+      <td>2019-12-01 21:04:43.867</td>
       <td>-1.445652</td>
       <td>10.0</td>
       <td>0.510870</td>
@@ -2490,7 +2517,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 <div class="section" id="id12">
 <h3>Write the data<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2505,7 +2532,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2521,7 +2548,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 <div class="section" id="id13">
 <h3>Read the data<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2531,7 +2558,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2597,7 +2624,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 <h3>Timeshif the data<a class="headerlink" href="#Timeshif-the-data" title="Permalink to this headline">¶</a></h3>
 <p>Apply a timeshift:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2607,7 +2634,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2640,27 +2667,27 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
   </thead>
   <tbody>
     <tr>
-      <th>2018-12-24 21:11:00</th>
+      <th>2018-09-29 19:02:23</th>
       <td>1</td>
       <td>Shake</td>
     </tr>
     <tr>
-      <th>2018-12-24 21:12:06</th>
+      <th>2018-09-29 19:03:29</th>
       <td>2</td>
       <td>Start</td>
     </tr>
     <tr>
-      <th>2018-12-24 21:12:43</th>
+      <th>2018-09-29 19:04:06</th>
       <td>3</td>
       <td>BP Measurement</td>
     </tr>
     <tr>
-      <th>2018-12-24 21:14:14</th>
+      <th>2018-09-29 19:05:37</th>
       <td>4</td>
       <td>BP Measurement</td>
     </tr>
     <tr>
-      <th>2018-12-24 21:16:23</th>
+      <th>2018-09-29 19:07:46</th>
       <td>5</td>
       <td>BP Measurement</td>
     </tr>
@@ -2673,7 +2700,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 <div class="section" id="id14">
 <h3>Write the data<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2688,7 +2715,7 @@ Timestamp(&#39;2019-03-01 16:12:43&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
