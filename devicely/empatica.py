@@ -126,9 +126,9 @@ class EmpaticaReader:
         try:
             if os.stat(path).st_size > 0:
                 with open(path, 'r') as file:
-                    start_time_str = file.readline().split(',')[0]
+                    start_time_str = file.readline().split(', ')[0]
                     self.start_times[signal_name] = pd.Timestamp(float(start_time_str), unit='s')
-                    sample_freq_str = file.readline().split(',')[0]
+                    sample_freq_str = file.readline().split(', ')[0]
                     self.sample_freqs[signal_name] = float(sample_freq_str)
                     col_names = [signal_name] if col_names is None else col_names
                     dataframe = pd.read_csv(file, header=None, names=col_names)
@@ -153,9 +153,8 @@ class EmpaticaReader:
         n_cols = len(dataframe.columns) if isinstance(dataframe, pd.DataFrame) else 1
         meta = np.array([[self.start_times[signal_name].value / 1e9] * n_cols,
                             [self.sample_freqs[signal_name]] * n_cols])
-        meta_dataframe = pd.DataFrame(meta)
         with open(path, 'w') as file:
-            meta_dataframe.to_csv(file, index=None, header=None, line_terminator='\n')
+            np.savetxt(file, meta, fmt='%s', delimiter=', ', newline='\n')
             dataframe.to_csv(file, index=None, header=None, line_terminator='\n')
 
     def _read_ibi(self, path):
