@@ -110,7 +110,10 @@ For all wearables, the written data can be read again using the same reader
 class. \autoref{fig:devicely_structure} depicts the class structure of the **devicely**
 package and serves as a guide for future implementation.
 
-![Shows the structure of the devicely package and currently supported devices.\label{fig:devicely_structure}](devicely_structure.png)
+![On the left side, the structure of the files in the **devicely** package is
+depicted. Each device should have a separate file. On the right side at the top
+we show how to import a class from a device file into \_\_init\_\_.py. At the right bottom side there is
+an example of one device class and its methods.\label{fig:devicely_structure}](devicely_structure.png)
 
 # Availability
 
