@@ -107,10 +107,10 @@ If no parameter is provided, the data is shifted by a random time interval to th
 The timeshifted data can be written back using the _write_ method.
 
 For all wearables, the written data can be read again using the same reader
-class. Figure 1 depicts the class structure of the **devicely**
+class. \autoref{fig:devicely_structure} depicts the class structure of the **devicely**
 package and serves as a guide for future implementation.
 
-![Figure 1. Shows the structure of the devicely package and currently supported devices.](devicely_structure.png)
+![Shows the structure of the devicely package and currently supported devices.\label{fig:devicely_structure}](devicely_structure.png)
 
 # Availability
 
