@@ -118,7 +118,8 @@ an example of one device class and its methods.\label{fig:devicely_structure}](d
 # Availability
 
 The software can be obtained through the [Python Package Index
-(PyPI)](https://pypi.org/project/devicely), [Conda-forge](https://github.com/conda-forge/devicely-feedstock) and on
+(PyPI)](https://pypi.org/project/devicely),
+[Conda-forge](https://github.com/conda-forge/devicely-feedstock), [Zenodo](https://zenodo.org/record/5243494) and on
 [GitHub](https://github.com/hpi-dhc/devicely) under the MIT License.
 
 # Mention
