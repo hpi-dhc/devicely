@@ -38,7 +38,7 @@ COVID-19 onset [@Mishra2020]. Therefore, there is a great need for scientists to
 easily go through data acquired from different wearables and to be able to share
 them while protecting user privacy.
 In order to solve this problem and empower scientists working with biosignals,
-we developed the **devicely** package. It processes the data into a science-friendly
+we developed the **devicely** package. It processes the data into a tabular
 format and contains tools for data de-identification. It allows scientists to focus
 on what they want: the analysis of biosignals guided by privacy principles.
 
@@ -87,7 +87,7 @@ existing pipeline and easy for developers to add a new wearable to the
 **devicely** package. To achieve both **devicely** encapsulates data preparation for
 each wearable behind three common methods: _read_, _timeshift_ and _write_.
 
-After reading, the data is accessible through the reader in common formats such as dataframes.
+After reading, the data is accessible through the reader in common formats such as Pandas DataFrames.
 De-identification is achieved by timeshifting the data, either by providing a shifting interval or randomly.
 For writing back de-identified data **devicely** focuses on keeping a format that can be read again using the same reader class.
 In almost all cases, this is the same format as the one the wearable originaly provides.
@@ -99,7 +99,7 @@ All reader classes support three core functions: reading data created by a weara
 To _read_ data the corresponding reader class can be initialized using as a
 parameter a path to the data created by the wearable. After reading, data can
 be accessed through the reader in convenient formats such as dictionaries
-and dataframes.
+and Pandas DataFrames.
 
 After creating a reader object the method _timeshift_ can be applied upon it. This assures de-identification by shifting all time-related data points.
 To control the shifting interval, a parameter can be provided to _timeshift_.
