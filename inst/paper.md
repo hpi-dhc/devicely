@@ -117,16 +117,21 @@ an example of one device class and its methods.\label{fig:devicely_structure}](d
 
 # Availability
 
-The software can be obtained through pip and on GitHub at:
-https://github.com/hpi-dhc/devicely under the MIT License.
+The software can be obtained through the [Python Package Index
+(PyPI)](https://pypi.org/project/devicely), [Conda-forge](https://github.com/conda-forge/devicely-feedstock) and on
+[GitHub](https://github.com/hpi-dhc/devicely) under the MIT License.
 
 # Mention
 
 This package was used in the following paper:
 
-Morassi Sasso A. et al. (2020) HYPE: Predicting Blood Pressure from Photoplethysmograms in a Hypertensive Population. In: Michalowski M., Moskovitch R. (eds) Artificial Intelligence in Medicine. AIME 2020. Lecture Notes in Computer Science, vol 12299. Springer, Cham. https://doi.org/10.1007/978-3-030-59137-3_29
+Morassi Sasso A. et al. (2020) HYPE: Predicting Blood Pressure from
+Photoplethysmograms in a Hypertensive Population. In: Michalowski M., Moskovitch
+R. (eds) Artificial Intelligence in Medicine. AIME 2020. Lecture Notes in
+Computer Science, vol 12299. Springer, Cham.
+https://doi.org/10.1007/978-3-030-59137-3_29
 
-GitHub: https://github.com/arianesasso/aime-2020
+[GitHub Repository](https://github.com/arianesasso/aime-2020)
 
 # Acknowledgements
 
