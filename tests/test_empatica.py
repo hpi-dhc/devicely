@@ -102,7 +102,6 @@ class EmpaticaTestCase(unittest.TestCase):
         pd.testing.assert_series_equal(reader.EDA.head(), expected_EDA_head, check_dtype=False, check_freq=False)
         pd.testing.assert_series_equal(reader.HR.head(), expected_HR_head, check_dtype=False, check_freq=False)
         pd.testing.assert_series_equal(reader.TEMP.head(), expected_TEMP_head, check_dtype=False, check_freq=False)
-#        breakpoint()
         pd.testing.assert_frame_equal(reader.IBI.head(), expected_IBI_head, check_dtype=False, check_freq=False)
         pd.testing.assert_series_equal(reader.tags, expected_tags, check_freq=False)
 
@@ -126,7 +125,6 @@ class EmpaticaTestCase(unittest.TestCase):
         # test the writing capability by writing, reading with a new reader and comparing the old to the new data
 
         self.reader.write(self.WRITE_PATH)
-       # breakpoint()
         new_reader = devicely.EmpaticaReader(self.WRITE_PATH)
         self._test_compare_real_and_expected(new_reader, self.expected_start_times, self.expected_sample_freqs,
                                                          self.expected_ACC_head, self.expected_BVP_head,
