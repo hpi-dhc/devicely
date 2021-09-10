@@ -556,6 +556,13 @@ Since the signals have different sampling frequencies, many values will be NaN.<
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="devicely.faros.FarosReader.join_dataframes">
+<span class="sig-name descname"><span class="pre">join_dataframes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicely.faros.FarosReader.join_dataframes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join the individual signal dataframes by timestamp.
+The resulting dataframe is saved in the attribute reader.data.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="devicely.faros.FarosReader.timeshift">
 <span class="sig-name descname"><span class="pre">timeshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicely.faros.FarosReader.timeshift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Timeshift the data by shifting all time related values (i.e. start_time

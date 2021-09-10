@@ -23,7 +23,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": 85,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -57,7 +57,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 86,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -73,7 +73,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 87,
    "metadata": {},
    "outputs": [
     {
@@ -87,7 +87,7 @@
        " 'IBI': Timestamp('2020-10-16 17:04:29')}"
       ]
      },
-     "execution_count": 3,
+     "execution_count": 87,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -98,7 +98,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 88,
    "metadata": {},
    "outputs": [
     {
@@ -107,7 +107,7 @@
        "{'ACC': 32.0, 'BVP': 64.0, 'EDA': 4.0, 'HR': 1.0, 'TEMP': 4.0}"
       ]
      },
-     "execution_count": 4,
+     "execution_count": 88,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -125,7 +125,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": 89,
    "metadata": {},
    "outputs": [
     {
@@ -139,7 +139,7 @@
        "Name: HR, dtype: float64"
       ]
      },
-     "execution_count": 5,
+     "execution_count": 89,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -157,7 +157,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 90,
    "metadata": {},
    "outputs": [
     {
@@ -254,7 +254,7 @@
        "2020-10-16 17:04:29.062500   -2.0   11.0   60.0 -0.0  NaN NaN    NaN"
       ]
      },
-     "execution_count": 6,
+     "execution_count": 90,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -277,21 +277,21 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 91,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "{'ACC': Timestamp('2018-11-02 01:32:42.176015200'),\n",
-       " 'BVP': Timestamp('2018-11-02 01:32:42.176015200'),\n",
-       " 'EDA': Timestamp('2018-11-02 01:32:42.176015200'),\n",
-       " 'HR': Timestamp('2018-11-02 01:32:52.176015200'),\n",
-       " 'TEMP': Timestamp('2018-11-02 01:32:42.176015200'),\n",
-       " 'IBI': Timestamp('2018-11-02 01:32:42.176015200')}"
+       "{'ACC': Timestamp('2018-11-14 13:20:16.439132912'),\n",
+       " 'BVP': Timestamp('2018-11-14 13:20:16.439132912'),\n",
+       " 'EDA': Timestamp('2018-11-14 13:20:16.439132912'),\n",
+       " 'HR': Timestamp('2018-11-14 13:20:26.439132912'),\n",
+       " 'TEMP': Timestamp('2018-11-14 13:20:16.439132912'),\n",
+       " 'IBI': Timestamp('2018-11-14 13:20:16.439132912')}"
       ]
      },
-     "execution_count": 7,
+     "execution_count": 91,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -317,16 +317,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 92,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "['TEMP.csv', 'tags.csv', 'HR.csv', 'ACC.csv', 'IBI.csv', 'EDA.csv', 'BVP.csv']"
+       "['EDA.csv', 'HR.csv', 'IBI.csv', 'TEMP.csv', 'tags.csv', 'BVP.csv', 'ACC.csv']"
       ]
      },
-     "execution_count": 8,
+     "execution_count": 92,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -357,7 +357,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 9,
+   "execution_count": 93,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -373,7 +373,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
+   "execution_count": 94,
    "metadata": {},
    "outputs": [
     {
@@ -382,7 +382,7 @@
        "'001V0'"
       ]
      },
-     "execution_count": 10,
+     "execution_count": 94,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -393,7 +393,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 11,
+   "execution_count": 95,
    "metadata": {},
    "outputs": [
     {
@@ -406,7 +406,7 @@
        "  'CALIPERSUMMARY': {'COUNT': '0'}}}"
       ]
      },
-     "execution_count": 11,
+     "execution_count": 95,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -424,7 +424,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": 96,
    "metadata": {},
    "outputs": [
     {
@@ -547,7 +547,7 @@
        "2019-03-01 16:25:00      65.0       NaN  NaN  "
       ]
      },
-     "execution_count": 12,
+     "execution_count": 96,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -567,7 +567,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
+   "execution_count": 97,
    "metadata": {},
    "outputs": [
     {
@@ -614,9 +614,9 @@
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>2017-12-13 14:36:00</th>\n",
-       "      <td>2017-12-13</td>\n",
-       "      <td>14:36:00</td>\n",
+       "      <th>2018-03-06 11:36:00</th>\n",
+       "      <td>2018-03-06</td>\n",
+       "      <td>11:36:00</td>\n",
        "      <td>107</td>\n",
        "      <td>76</td>\n",
        "      <td>78.0</td>\n",
@@ -625,9 +625,9 @@
        "      <td>NaN</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-12-13 14:37:00</th>\n",
-       "      <td>2017-12-13</td>\n",
-       "      <td>14:37:00</td>\n",
+       "      <th>2018-03-06 11:37:00</th>\n",
+       "      <td>2018-03-06</td>\n",
+       "      <td>11:37:00</td>\n",
        "      <td>96</td>\n",
        "      <td>62</td>\n",
        "      <td>63.0</td>\n",
@@ -636,9 +636,9 @@
        "      <td>NaN</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-12-13 14:40:00</th>\n",
-       "      <td>2017-12-13</td>\n",
-       "      <td>14:40:00</td>\n",
+       "      <th>2018-03-06 11:40:00</th>\n",
+       "      <td>2018-03-06</td>\n",
+       "      <td>11:40:00</td>\n",
        "      <td>100</td>\n",
        "      <td>68</td>\n",
        "      <td>64.0</td>\n",
@@ -647,9 +647,9 @@
        "      <td>NaN</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-12-13 14:41:00</th>\n",
-       "      <td>2017-12-13</td>\n",
-       "      <td>14:41:00</td>\n",
+       "      <th>2018-03-06 11:41:00</th>\n",
+       "      <td>2018-03-06</td>\n",
+       "      <td>11:41:00</td>\n",
        "      <td>103</td>\n",
        "      <td>68</td>\n",
        "      <td>68.0</td>\n",
@@ -658,9 +658,9 @@
        "      <td>NaN</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-12-13 14:43:00</th>\n",
-       "      <td>2017-12-13</td>\n",
-       "      <td>14:43:00</td>\n",
+       "      <th>2018-03-06 11:43:00</th>\n",
+       "      <td>2018-03-06</td>\n",
+       "      <td>11:43:00</td>\n",
        "      <td>101</td>\n",
        "      <td>67</td>\n",
        "      <td>65.0</td>\n",
@@ -675,22 +675,22 @@
       "text/plain": [
        "                           date      time  SYS(mmHg)  DIA(mmHg)  UNKNOW_1  \\\n",
        "timestamp                                                                   \n",
-       "2017-12-13 14:36:00  2017-12-13  14:36:00        107         76      78.0   \n",
-       "2017-12-13 14:37:00  2017-12-13  14:37:00         96         62      63.0   \n",
-       "2017-12-13 14:40:00  2017-12-13  14:40:00        100         68      64.0   \n",
-       "2017-12-13 14:41:00  2017-12-13  14:41:00        103         68      68.0   \n",
-       "2017-12-13 14:43:00  2017-12-13  14:43:00        101         67      65.0   \n",
+       "2018-03-06 11:36:00  2018-03-06  11:36:00        107         76      78.0   \n",
+       "2018-03-06 11:37:00  2018-03-06  11:37:00         96         62      63.0   \n",
+       "2018-03-06 11:40:00  2018-03-06  11:40:00        100         68      64.0   \n",
+       "2018-03-06 11:41:00  2018-03-06  11:41:00        103         68      68.0   \n",
+       "2018-03-06 11:43:00  2018-03-06  11:43:00        101         67      65.0   \n",
        "\n",
        "                     UNKNOW_2  UNKNOW_3 CODE  \n",
        "timestamp                                     \n",
-       "2017-12-13 14:36:00      78.0       NaN  NaN  \n",
-       "2017-12-13 14:37:00      63.0       NaN  NaN  \n",
-       "2017-12-13 14:40:00      64.0       NaN  NaN  \n",
-       "2017-12-13 14:41:00      68.0       NaN  NaN  \n",
-       "2017-12-13 14:43:00      65.0       NaN  NaN  "
+       "2018-03-06 11:36:00      78.0       NaN  NaN  \n",
+       "2018-03-06 11:37:00      63.0       NaN  NaN  \n",
+       "2018-03-06 11:40:00      64.0       NaN  NaN  \n",
+       "2018-03-06 11:41:00      68.0       NaN  NaN  \n",
+       "2018-03-06 11:43:00      65.0       NaN  NaN  "
       ]
      },
-     "execution_count": 13,
+     "execution_count": 97,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -716,7 +716,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 14,
+   "execution_count": 98,
    "metadata": {},
    "outputs": [
     {
@@ -729,7 +729,7 @@
        "  'CALIPERSUMMARY': {'COUNT': ''}}}"
       ]
      },
-     "execution_count": 14,
+     "execution_count": 98,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -748,7 +748,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 15,
+   "execution_count": 99,
    "metadata": {},
    "outputs": [
     {
@@ -757,7 +757,7 @@
        "['spacelabs.abp']"
       ]
      },
-     "execution_count": 15,
+     "execution_count": 99,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -790,7 +790,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 16,
+   "execution_count": 100,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -806,7 +806,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 17,
+   "execution_count": 101,
    "metadata": {},
    "outputs": [
     {
@@ -815,7 +815,7 @@
        "Timestamp('2019-03-01 16:12:43')"
       ]
      },
-     "execution_count": 17,
+     "execution_count": 101,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -826,7 +826,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 18,
+   "execution_count": 102,
    "metadata": {},
    "outputs": [
     {
@@ -835,7 +835,7 @@
        "{'ECG': 1000.0, 'ACC': 100.0, 'Marker': 1.0, 'HRV': 5.0}"
       ]
      },
-     "execution_count": 18,
+     "execution_count": 102,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -846,7 +846,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 19,
+   "execution_count": 103,
    "metadata": {},
    "outputs": [
     {
@@ -855,7 +855,7 @@
        "{'ECG': 'uV', 'ACC': 'mg', 'HRV': 'ms'}"
       ]
      },
-     "execution_count": 19,
+     "execution_count": 103,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -873,7 +873,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 20,
+   "execution_count": 104,
    "metadata": {},
    "outputs": [
     {
@@ -946,7 +946,7 @@
        "2019-03-01 16:12:43.040  -47.0  246.0 -1125.0"
       ]
      },
-     "execution_count": 20,
+     "execution_count": 104,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -959,12 +959,12 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Access a joined dataframe of all signals:"
+    "Join the dataframes:"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 21,
+   "execution_count": 105,
    "metadata": {},
    "outputs": [
     {
@@ -1061,12 +1061,13 @@
        "2019-03-01 16:12:43.004 -17.0    NaN   NaN     NaN     NaN    NaN  NaN"
       ]
      },
-     "execution_count": 21,
+     "execution_count": 105,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
+    "faros_reader.join_dataframes()\n",
     "faros_reader.data.head()"
    ]
   },
@@ -1081,7 +1082,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 22,
+   "execution_count": 106,
    "metadata": {},
    "outputs": [
     {
@@ -1116,7 +1117,7 @@
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>2017-03-16 12:15:57.000</th>\n",
+       "      <th>2018-07-31 19:57:47.000</th>\n",
        "      <td>26.0</td>\n",
        "      <td>164.0</td>\n",
        "      <td>23.0</td>\n",
@@ -1126,7 +1127,7 @@
        "      <td>0.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-03-16 12:15:57.001</th>\n",
+       "      <th>2018-07-31 19:57:47.001</th>\n",
        "      <td>-6.0</td>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
@@ -1136,7 +1137,7 @@
        "      <td>NaN</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-03-16 12:15:57.002</th>\n",
+       "      <th>2018-07-31 19:57:47.002</th>\n",
        "      <td>-31.0</td>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
@@ -1146,7 +1147,7 @@
        "      <td>NaN</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-03-16 12:15:57.003</th>\n",
+       "      <th>2018-07-31 19:57:47.003</th>\n",
        "      <td>-39.0</td>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
@@ -1156,7 +1157,7 @@
        "      <td>NaN</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-03-16 12:15:57.004</th>\n",
+       "      <th>2018-07-31 19:57:47.004</th>\n",
        "      <td>-17.0</td>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
@@ -1171,14 +1172,14 @@
       ],
       "text/plain": [
        "                          ECG  ACC_X ACC_Y   ACC_Z ACC_mag Marker  HRV\n",
-       "2017-03-16 12:15:57.000  26.0  164.0  23.0 -1172.0     NaN    0.0  0.0\n",
-       "2017-03-16 12:15:57.001  -6.0    NaN   NaN     NaN     NaN    NaN  NaN\n",
-       "2017-03-16 12:15:57.002 -31.0    NaN   NaN     NaN     NaN    NaN  NaN\n",
-       "2017-03-16 12:15:57.003 -39.0    NaN   NaN     NaN     NaN    NaN  NaN\n",
-       "2017-03-16 12:15:57.004 -17.0    NaN   NaN     NaN     NaN    NaN  NaN"
+       "2018-07-31 19:57:47.000  26.0  164.0  23.0 -1172.0     NaN    0.0  0.0\n",
+       "2018-07-31 19:57:47.001  -6.0    NaN   NaN     NaN     NaN    NaN  NaN\n",
+       "2018-07-31 19:57:47.002 -31.0    NaN   NaN     NaN     NaN    NaN  NaN\n",
+       "2018-07-31 19:57:47.003 -39.0    NaN   NaN     NaN     NaN    NaN  NaN\n",
+       "2018-07-31 19:57:47.004 -17.0    NaN   NaN     NaN     NaN    NaN  NaN"
       ]
      },
-     "execution_count": 22,
+     "execution_count": 106,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1206,16 +1207,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 23,
+   "execution_count": 107,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "['Marker.csv', 'faros.edf', 'HRV.csv', 'ACC.csv', 'ECG.csv', 'meta.json']"
+       "['Marker.csv', 'ECG.csv', 'HRV.csv', 'faros.edf', 'meta.json', 'ACC.csv']"
       ]
      },
-     "execution_count": 23,
+     "execution_count": 107,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1235,111 +1236,28 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 24,
+   "execution_count": 108,
    "metadata": {},
    "outputs": [
     {
      "data": {
-      "text/html": [
-       "<div>\n",
-       "<style scoped>\n",
-       "    .dataframe tbody tr th:only-of-type {\n",
-       "        vertical-align: middle;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe tbody tr th {\n",
-       "        vertical-align: top;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe thead th {\n",
-       "        text-align: right;\n",
-       "    }\n",
-       "</style>\n",
-       "<table border=\"1\" class=\"dataframe\">\n",
-       "  <thead>\n",
-       "    <tr style=\"text-align: right;\">\n",
-       "      <th></th>\n",
-       "      <th>ECG</th>\n",
-       "      <th>ACC_X</th>\n",
-       "      <th>ACC_Y</th>\n",
-       "      <th>ACC_Z</th>\n",
-       "      <th>ACC_mag</th>\n",
-       "      <th>Marker</th>\n",
-       "      <th>HRV</th>\n",
-       "    </tr>\n",
-       "  </thead>\n",
-       "  <tbody>\n",
-       "    <tr>\n",
-       "      <th>2019-03-01 16:12:43.000</th>\n",
-       "      <td>26.0</td>\n",
-       "      <td>164.0</td>\n",
-       "      <td>23.0</td>\n",
-       "      <td>-1172.0</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>0.0</td>\n",
-       "      <td>0.0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2019-03-01 16:12:43.001</th>\n",
-       "      <td>-6.0</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2019-03-01 16:12:43.002</th>\n",
-       "      <td>-31.0</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2019-03-01 16:12:43.003</th>\n",
-       "      <td>-39.0</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2019-03-01 16:12:43.004</th>\n",
-       "      <td>-17.0</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "      <td>NaN</td>\n",
-       "    </tr>\n",
-       "  </tbody>\n",
-       "</table>\n",
-       "</div>"
-      ],
       "text/plain": [
-       "                          ECG  ACC_X ACC_Y   ACC_Z ACC_mag Marker  HRV\n",
-       "2019-03-01 16:12:43.000  26.0  164.0  23.0 -1172.0     NaN    0.0  0.0\n",
-       "2019-03-01 16:12:43.001  -6.0    NaN   NaN     NaN     NaN    NaN  NaN\n",
-       "2019-03-01 16:12:43.002 -31.0    NaN   NaN     NaN     NaN    NaN  NaN\n",
-       "2019-03-01 16:12:43.003 -39.0    NaN   NaN     NaN     NaN    NaN  NaN\n",
-       "2019-03-01 16:12:43.004 -17.0    NaN   NaN     NaN     NaN    NaN  NaN"
+       "2019-03-01 16:12:43.000    26.0\n",
+       "2019-03-01 16:12:43.001    -6.0\n",
+       "2019-03-01 16:12:43.002   -31.0\n",
+       "2019-03-01 16:12:43.003   -39.0\n",
+       "2019-03-01 16:12:43.004   -17.0\n",
+       "Freq: L, Name: ECG, dtype: float64"
       ]
      },
-     "execution_count": 24,
+     "execution_count": 108,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
     "new_faros_reader = devicely.FarosReader(faros_write_path)\n",
-    "new_faros_reader.data.head()"
+    "new_faros_reader.ECG.head()"
    ]
   },
   {
@@ -1351,16 +1269,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 25,
+   "execution_count": 109,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "['Marker.csv', 'faros.edf', 'HRV.csv', 'ACC.csv', 'ECG.csv', 'meta.json']"
+       "['Marker.csv', 'ECG.csv', 'HRV.csv', 'faros.edf', 'meta.json', 'ACC.csv']"
       ]
      },
-     "execution_count": 25,
+     "execution_count": 109,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1382,7 +1300,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 26,
+   "execution_count": 110,
    "metadata": {},
    "outputs": [
     {
@@ -1396,7 +1314,7 @@
        " 79: 'pid_quality'}"
       ]
      },
-     "execution_count": 26,
+     "execution_count": 110,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1414,7 +1332,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 27,
+   "execution_count": 111,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -1432,7 +1350,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 28,
+   "execution_count": 112,
    "metadata": {},
    "outputs": [
     {
@@ -1523,7 +1441,7 @@
        "4  806132           2   12 2019-03-01 15:39:58  18.000000     93.0"
       ]
      },
-     "execution_count": 28,
+     "execution_count": 112,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1541,7 +1459,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 29,
+   "execution_count": 113,
    "metadata": {},
    "outputs": [
     {
@@ -1822,7 +1740,7 @@
        "[5 rows x 25 columns]"
       ]
      },
-     "execution_count": 29,
+     "execution_count": 113,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1842,7 +1760,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 30,
+   "execution_count": 114,
    "metadata": {},
    "outputs": [
     {
@@ -1915,7 +1833,7 @@
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>2017-06-21 16:33:05.000000000</th>\n",
+       "      <th>2017-07-27 20:50:05.000000000</th>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
@@ -1939,7 +1857,7 @@
        "      <td>4126.976617</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-06-21 16:33:05.019607808</th>\n",
+       "      <th>2017-07-27 20:50:05.019607808</th>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
@@ -1963,7 +1881,7 @@
        "      <td>4316.324362</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-06-21 16:33:05.039215872</th>\n",
+       "      <th>2017-07-27 20:50:05.039215872</th>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
@@ -1987,7 +1905,7 @@
        "      <td>4376.489918</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-06-21 16:33:05.058823680</th>\n",
+       "      <th>2017-07-27 20:50:05.058823680</th>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
@@ -2011,7 +1929,7 @@
        "      <td>4301.292829</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2017-06-21 16:33:05.078431488</th>\n",
+       "      <th>2017-07-27 20:50:05.078431488</th>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
        "      <td>NaN</td>\n",
@@ -2042,88 +1960,88 @@
       "text/plain": [
        "                               heart_rate  heart_rate_quality  \\\n",
        "time                                                            \n",
-       "2017-06-21 16:33:05.000000000         NaN                 NaN   \n",
-       "2017-06-21 16:33:05.019607808         NaN                 NaN   \n",
-       "2017-06-21 16:33:05.039215872         NaN                 NaN   \n",
-       "2017-06-21 16:33:05.058823680         NaN                 NaN   \n",
-       "2017-06-21 16:33:05.078431488         NaN                 NaN   \n",
+       "2017-07-27 20:50:05.000000000         NaN                 NaN   \n",
+       "2017-07-27 20:50:05.019607808         NaN                 NaN   \n",
+       "2017-07-27 20:50:05.039215872         NaN                 NaN   \n",
+       "2017-07-27 20:50:05.058823680         NaN                 NaN   \n",
+       "2017-07-27 20:50:05.078431488         NaN                 NaN   \n",
        "\n",
        "                               oxygen_saturation  oxygen_saturation_quality  \\\n",
        "time                                                                          \n",
-       "2017-06-21 16:33:05.000000000                NaN                        NaN   \n",
-       "2017-06-21 16:33:05.019607808                NaN                        NaN   \n",
-       "2017-06-21 16:33:05.039215872                NaN                        NaN   \n",
-       "2017-06-21 16:33:05.058823680                NaN                        NaN   \n",
-       "2017-06-21 16:33:05.078431488                NaN                        NaN   \n",
+       "2017-07-27 20:50:05.000000000                NaN                        NaN   \n",
+       "2017-07-27 20:50:05.019607808                NaN                        NaN   \n",
+       "2017-07-27 20:50:05.039215872                NaN                        NaN   \n",
+       "2017-07-27 20:50:05.058823680                NaN                        NaN   \n",
+       "2017-07-27 20:50:05.078431488                NaN                        NaN   \n",
        "\n",
        "                               heart_rate_variability  \\\n",
        "time                                                    \n",
-       "2017-06-21 16:33:05.000000000                     NaN   \n",
-       "2017-06-21 16:33:05.019607808                     NaN   \n",
-       "2017-06-21 16:33:05.039215872                     NaN   \n",
-       "2017-06-21 16:33:05.058823680                     NaN   \n",
-       "2017-06-21 16:33:05.078431488                     NaN   \n",
+       "2017-07-27 20:50:05.000000000                     NaN   \n",
+       "2017-07-27 20:50:05.019607808                     NaN   \n",
+       "2017-07-27 20:50:05.039215872                     NaN   \n",
+       "2017-07-27 20:50:05.058823680                     NaN   \n",
+       "2017-07-27 20:50:05.078431488                     NaN   \n",
        "\n",
        "                               heart_rate_variability_quality  \\\n",
        "time                                                            \n",
-       "2017-06-21 16:33:05.000000000                             NaN   \n",
-       "2017-06-21 16:33:05.019607808                             NaN   \n",
-       "2017-06-21 16:33:05.039215872                             NaN   \n",
-       "2017-06-21 16:33:05.058823680                             NaN   \n",
-       "2017-06-21 16:33:05.078431488                             NaN   \n",
+       "2017-07-27 20:50:05.000000000                             NaN   \n",
+       "2017-07-27 20:50:05.019607808                             NaN   \n",
+       "2017-07-27 20:50:05.039215872                             NaN   \n",
+       "2017-07-27 20:50:05.058823680                             NaN   \n",
+       "2017-07-27 20:50:05.078431488                             NaN   \n",
        "\n",
        "                               respiration_rate  respiration_rate_quality  \\\n",
        "time                                                                        \n",
-       "2017-06-21 16:33:05.000000000               NaN                       NaN   \n",
-       "2017-06-21 16:33:05.019607808               NaN                       NaN   \n",
-       "2017-06-21 16:33:05.039215872               NaN                       NaN   \n",
-       "2017-06-21 16:33:05.058823680               NaN                       NaN   \n",
-       "2017-06-21 16:33:05.078431488               NaN                       NaN   \n",
+       "2017-07-27 20:50:05.000000000               NaN                       NaN   \n",
+       "2017-07-27 20:50:05.019607808               NaN                       NaN   \n",
+       "2017-07-27 20:50:05.039215872               NaN                       NaN   \n",
+       "2017-07-27 20:50:05.058823680               NaN                       NaN   \n",
+       "2017-07-27 20:50:05.078431488               NaN                       NaN   \n",
        "\n",
        "                               ctemp  ctemp_quality  ...  \\\n",
        "time                                                 ...   \n",
-       "2017-06-21 16:33:05.000000000    NaN            NaN  ...   \n",
-       "2017-06-21 16:33:05.019607808    NaN            NaN  ...   \n",
-       "2017-06-21 16:33:05.039215872    NaN            NaN  ...   \n",
-       "2017-06-21 16:33:05.058823680    NaN            NaN  ...   \n",
-       "2017-06-21 16:33:05.078431488    NaN            NaN  ...   \n",
+       "2017-07-27 20:50:05.000000000    NaN            NaN  ...   \n",
+       "2017-07-27 20:50:05.019607808    NaN            NaN  ...   \n",
+       "2017-07-27 20:50:05.039215872    NaN            NaN  ...   \n",
+       "2017-07-27 20:50:05.058823680    NaN            NaN  ...   \n",
+       "2017-07-27 20:50:05.078431488    NaN            NaN  ...   \n",
        "\n",
        "                               inter_pulse_interval  \\\n",
        "time                                                  \n",
-       "2017-06-21 16:33:05.000000000                   NaN   \n",
-       "2017-06-21 16:33:05.019607808                   NaN   \n",
-       "2017-06-21 16:33:05.039215872                   NaN   \n",
-       "2017-06-21 16:33:05.058823680                   NaN   \n",
-       "2017-06-21 16:33:05.078431488                   NaN   \n",
+       "2017-07-27 20:50:05.000000000                   NaN   \n",
+       "2017-07-27 20:50:05.019607808                   NaN   \n",
+       "2017-07-27 20:50:05.039215872                   NaN   \n",
+       "2017-07-27 20:50:05.058823680                   NaN   \n",
+       "2017-07-27 20:50:05.078431488                   NaN   \n",
        "\n",
        "                               inter_pulse_interval_deviation  led1_data  \\\n",
        "time                                                                       \n",
-       "2017-06-21 16:33:05.000000000                             NaN     3028.0   \n",
-       "2017-06-21 16:33:05.019607808                             NaN     3309.0   \n",
-       "2017-06-21 16:33:05.039215872                             NaN     3454.0   \n",
-       "2017-06-21 16:33:05.058823680                             NaN     3207.0   \n",
-       "2017-06-21 16:33:05.078431488                             NaN     3079.0   \n",
+       "2017-07-27 20:50:05.000000000                             NaN     3028.0   \n",
+       "2017-07-27 20:50:05.019607808                             NaN     3309.0   \n",
+       "2017-07-27 20:50:05.039215872                             NaN     3454.0   \n",
+       "2017-07-27 20:50:05.058823680                             NaN     3207.0   \n",
+       "2017-07-27 20:50:05.078431488                             NaN     3079.0   \n",
        "\n",
        "                               led2_data  led3_data  led4_data  accx_data  \\\n",
        "time                                                                        \n",
-       "2017-06-21 16:33:05.000000000     2989.0     2924.0     3340.0      368.0   \n",
-       "2017-06-21 16:33:05.019607808     3336.0     3231.0     3417.0      256.0   \n",
-       "2017-06-21 16:33:05.039215872     3443.0     3390.0     3492.0      144.0   \n",
-       "2017-06-21 16:33:05.058823680     3217.0     3126.0     3543.0       96.0   \n",
-       "2017-06-21 16:33:05.078431488     3092.0     2994.0     3538.0        0.0   \n",
+       "2017-07-27 20:50:05.000000000     2989.0     2924.0     3340.0      368.0   \n",
+       "2017-07-27 20:50:05.019607808     3336.0     3231.0     3417.0      256.0   \n",
+       "2017-07-27 20:50:05.039215872     3443.0     3390.0     3492.0      144.0   \n",
+       "2017-07-27 20:50:05.058823680     3217.0     3126.0     3543.0       96.0   \n",
+       "2017-07-27 20:50:05.078431488     3092.0     2994.0     3538.0        0.0   \n",
        "\n",
        "                               accy_data  accz_data      acc_mag  \n",
        "time                                                              \n",
-       "2017-06-21 16:33:05.000000000     2096.0    -3536.0  4126.976617  \n",
-       "2017-06-21 16:33:05.019607808     2016.0    -3808.0  4316.324362  \n",
-       "2017-06-21 16:33:05.039215872     2288.0    -3728.0  4376.489918  \n",
-       "2017-06-21 16:33:05.058823680     2352.0    -3600.0  4301.292829  \n",
-       "2017-06-21 16:33:05.078431488     2384.0    -3904.0  4574.349353  \n",
+       "2017-07-27 20:50:05.000000000     2096.0    -3536.0  4126.976617  \n",
+       "2017-07-27 20:50:05.019607808     2016.0    -3808.0  4316.324362  \n",
+       "2017-07-27 20:50:05.039215872     2288.0    -3728.0  4376.489918  \n",
+       "2017-07-27 20:50:05.058823680     2352.0    -3600.0  4301.292829  \n",
+       "2017-07-27 20:50:05.078431488     2384.0    -3904.0  4574.349353  \n",
        "\n",
        "[5 rows x 25 columns]"
       ]
      },
-     "execution_count": 30,
+     "execution_count": 114,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -2151,22 +2069,22 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 31,
+   "execution_count": 115,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "['aggregates.csv',\n",
-       " 'sensor_data.csv',\n",
+       "['sensor_data.csv',\n",
        " 'analytics_events.csv',\n",
+       " 'aggregates.csv',\n",
        " 'everion_events.csv',\n",
        " 'attributes_dailys.csv',\n",
-       " 'features.csv',\n",
-       " 'signals.csv']"
+       " 'signals.csv',\n",
+       " 'features.csv']"
       ]
      },
-     "execution_count": 31,
+     "execution_count": 115,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -2195,7 +2113,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 32,
+   "execution_count": 116,
    "metadata": {},
    "outputs": [
     {
@@ -2442,7 +2360,7 @@
        "[5 rows x 22 columns]"
       ]
      },
-     "execution_count": 32,
+     "execution_count": 116,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -2463,7 +2381,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 33,
+   "execution_count": 117,
    "metadata": {},
    "outputs": [
     {
@@ -2513,7 +2431,7 @@
        "  <tbody>\n",
        "    <tr>\n",
        "      <th>0</th>\n",
-       "      <td>2019-12-11 03:30:43.718</td>\n",
+       "      <td>2019-04-01 10:58:37.213</td>\n",
        "      <td>-1.434783</td>\n",
        "      <td>10.0</td>\n",
        "      <td>0.554348</td>\n",
@@ -2537,7 +2455,7 @@
        "    </tr>\n",
        "    <tr>\n",
        "      <th>1</th>\n",
-       "      <td>2019-12-11 03:30:43.741</td>\n",
+       "      <td>2019-04-01 10:58:37.236</td>\n",
        "      <td>-1.402174</td>\n",
        "      <td>10.0</td>\n",
        "      <td>0.554348</td>\n",
@@ -2561,7 +2479,7 @@
        "    </tr>\n",
        "    <tr>\n",
        "      <th>2</th>\n",
-       "      <td>2019-12-11 03:30:43.758</td>\n",
+       "      <td>2019-04-01 10:58:37.253</td>\n",
        "      <td>-1.434783</td>\n",
        "      <td>10.0</td>\n",
        "      <td>0.554348</td>\n",
@@ -2585,7 +2503,7 @@
        "    </tr>\n",
        "    <tr>\n",
        "      <th>3</th>\n",
-       "      <td>2019-12-11 03:30:43.783</td>\n",
+       "      <td>2019-04-01 10:58:37.278</td>\n",
        "      <td>-1.413043</td>\n",
        "      <td>10.0</td>\n",
        "      <td>0.521739</td>\n",
@@ -2609,7 +2527,7 @@
        "    </tr>\n",
        "    <tr>\n",
        "      <th>4</th>\n",
-       "      <td>2019-12-11 03:30:43.795</td>\n",
+       "      <td>2019-04-01 10:58:37.290</td>\n",
        "      <td>-1.445652</td>\n",
        "      <td>10.0</td>\n",
        "      <td>0.510870</td>\n",
@@ -2638,11 +2556,11 @@
       ],
       "text/plain": [
        "  Shimmer_40AC_Timestamp_Unix_CAL  Shimmer_40AC_Accel_LN_X_CAL  \\\n",
-       "0         2019-12-11 03:30:43.718                    -1.434783   \n",
-       "1         2019-12-11 03:30:43.741                    -1.402174   \n",
-       "2         2019-12-11 03:30:43.758                    -1.434783   \n",
-       "3         2019-12-11 03:30:43.783                    -1.413043   \n",
-       "4         2019-12-11 03:30:43.795                    -1.445652   \n",
+       "0         2019-04-01 10:58:37.213                    -1.434783   \n",
+       "1         2019-04-01 10:58:37.236                    -1.402174   \n",
+       "2         2019-04-01 10:58:37.253                    -1.434783   \n",
+       "3         2019-04-01 10:58:37.278                    -1.413043   \n",
+       "4         2019-04-01 10:58:37.290                    -1.445652   \n",
        "\n",
        "   Shimmer_40AC_Accel_LN_Y_CAL  Shimmer_40AC_Accel_LN_Z_CAL  \\\n",
        "0                         10.0                     0.554348   \n",
@@ -2710,7 +2628,7 @@
        "[5 rows x 22 columns]"
       ]
      },
-     "execution_count": 33,
+     "execution_count": 117,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -2736,7 +2654,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 34,
+   "execution_count": 118,
    "metadata": {},
    "outputs": [
     {
@@ -2745,7 +2663,7 @@
        "['shimmer_write.csv']"
       ]
      },
-     "execution_count": 34,
+     "execution_count": 118,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -2778,7 +2696,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 35,
+   "execution_count": 119,
    "metadata": {},
    "outputs": [
     {
@@ -2851,7 +2769,7 @@
        "2019-03-01 16:22:00           5  BP Measurement"
       ]
      },
-     "execution_count": 35,
+     "execution_count": 119,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -2872,7 +2790,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 36,
+   "execution_count": 120,
    "metadata": {},
    "outputs": [
     {
@@ -2907,27 +2825,27 @@
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>2018-11-17 07:42:33</th>\n",
+       "      <th>2017-04-26 18:30:16</th>\n",
        "      <td>1</td>\n",
        "      <td>Shake</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2018-11-17 07:43:39</th>\n",
+       "      <th>2017-04-26 18:31:22</th>\n",
        "      <td>2</td>\n",
        "      <td>Start</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2018-11-17 07:44:16</th>\n",
+       "      <th>2017-04-26 18:31:59</th>\n",
        "      <td>3</td>\n",
        "      <td>BP Measurement</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2018-11-17 07:45:47</th>\n",
+       "      <th>2017-04-26 18:33:30</th>\n",
        "      <td>4</td>\n",
        "      <td>BP Measurement</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2018-11-17 07:47:56</th>\n",
+       "      <th>2017-04-26 18:35:39</th>\n",
        "      <td>5</td>\n",
        "      <td>BP Measurement</td>\n",
        "    </tr>\n",
@@ -2938,14 +2856,14 @@
       "text/plain": [
        "                     tag_number             tag\n",
        "time                                           \n",
-       "2018-11-17 07:42:33           1           Shake\n",
-       "2018-11-17 07:43:39           2           Start\n",
-       "2018-11-17 07:44:16           3  BP Measurement\n",
-       "2018-11-17 07:45:47           4  BP Measurement\n",
-       "2018-11-17 07:47:56           5  BP Measurement"
+       "2017-04-26 18:30:16           1           Shake\n",
+       "2017-04-26 18:31:22           2           Start\n",
+       "2017-04-26 18:31:59           3  BP Measurement\n",
+       "2017-04-26 18:33:30           4  BP Measurement\n",
+       "2017-04-26 18:35:39           5  BP Measurement"
       ]
      },
-     "execution_count": 36,
+     "execution_count": 120,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -2971,7 +2889,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 37,
+   "execution_count": 121,
    "metadata": {},
    "outputs": [
     {
@@ -2980,7 +2898,7 @@
        "['tags_write.csv']"
       ]
      },
-     "execution_count": 37,
+     "execution_count": 121,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -2998,9 +2916,9 @@
  ],
  "metadata": {
   "kernelspec": {
-   "display_name": "Python 3 (ipykernel)",
+   "display_name": "devicely",
    "language": "python",
-   "name": "python3"
+   "name": "devicely"
   },
   "language_info": {
    "codemirror_mode": {
@@ -3012,7 +2930,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.8.5"
+   "version": "3.9.6"
   }
  },
  "nbformat": 4,
