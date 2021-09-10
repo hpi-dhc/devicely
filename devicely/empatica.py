@@ -167,7 +167,6 @@ class EmpaticaReader:
                     df = pd.read_csv(file, names=['time', 'IBI'], header=None)
                     df['time'] = pd.to_timedelta(df['time'], unit='s')
                     df['time'] = start_time + df['time']
-#                    breakpoint()
                     return df.set_index('time') 
             else:
                 print(f"Not reading signal because the file {path} is empty.")
