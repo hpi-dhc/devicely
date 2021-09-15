@@ -318,7 +318,7 @@ class EverionReader:
             writing_dataframe.loc[quality_col.index, 'values'] += ';' + quality_col
             writing_dataframe.drop(columns=['quality'], inplace=True)
 
-        writing_dataframe.to_csv(filepath, index=None)
+        writing_dataframe.to_csv(filepath, index=None, line_terminator='\n')
 
     def timeshift(self, shift='random'):
         """

@@ -45,7 +45,7 @@ class TimeStampReader:
 
         df_to_write = self.data.reset_index()[['tag_number', 'time', 'tag']]
         df_to_write.time = df_to_write.time.dt.strftime("%Y/%-m/%-d(%a)\u3000%H:%M:%S").str.lower()
-        df_to_write.to_csv(path, header=None, index=None)
+        df_to_write.to_csv(path, header=None, index=None, line_terminator='\n')
 
     def timeshift(self, shift='random'):
         """

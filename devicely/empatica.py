@@ -155,8 +155,8 @@ class EmpaticaReader:
                             [self.sample_freqs[signal_name]] * n_cols])
         meta_dataframe = pd.DataFrame(meta)
         with open(path, 'w') as file:
-            meta_dataframe.to_csv(file, index=None, header=None)
-            dataframe.to_csv(file, index=None, header=None)
+            meta_dataframe.to_csv(file, index=None, header=None, line_terminator='\n')
+            dataframe.to_csv(file, index=None, header=None, line_terminator='\n')
 
     def _read_ibi(self, path):
         try:
@@ -180,8 +180,7 @@ class EmpaticaReader:
             file.write(f"{self.start_times['IBI'].value // 1e9}, IBI\n")
             write_df = self.IBI.copy()
             write_df.index = (write_df.index - self.start_times['IBI']).values.astype(int) / 1e9
-            write_df.to_csv(file, header=None)
-
+            write_df.to_csv(file, header=None, line_terminator='\n')
 
     def _read_tags(self, path):
         try:
@@ -202,7 +201,7 @@ class EmpaticaReader:
     def _write_tags(self, path):
         if self.tags is not None:
             tags_write_series = self.tags.map(lambda x: x.value / 1e9)
-            tags_write_series.to_csv(path, header=None, index=None)
+            tags_write_series.to_csv(path, header=None, index=None, line_terminator='\n')
 
     def timeshift(self, shift='random'):
         """
