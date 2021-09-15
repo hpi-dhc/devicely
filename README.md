@@ -22,13 +22,13 @@ You can also de-identify data and write them back using their original data form
 
 ## Installation
 
-### PyPi
+### PyPi (current release)
 
 Installing `devicely` is as easy as executing:
 
 `pip install devicely`
 
-### Conda-forge
+### Conda-forge (current release)
 
 To install `devicely`through `conda-forge`:
 
@@ -45,7 +45,7 @@ List all of the versions of `devicely` available on your platform with:
 
 `conda search devicely --channel conda-forge`
 
-### Locally
+### Locally (development version)
 
 ```
 git clone git@github.com:hpi-dhc/devicely.git
