@@ -162,9 +162,12 @@ class EmpaticaReader:
         try:
             if os.stat(path).st_size > 0:
                 with open(path, 'r') as file:
-                    self.start_times['IBI'] = pd.Timestamp(float(file.readline().split(',')[0]), unit='s')
-                    dataframe = pd.read_csv(file, names=['seconds_since_start', 'IBI'], header=None)
-                    return dataframe
+                    start_time = pd.Timestamp(float(file.readline().split(',')[0]), unit='s')
+                    self.start_times['IBI'] = start_time
+                    df = pd.read_csv(file, names=['time', 'IBI'], header=None)
+                    df['time'] = pd.to_timedelta(df['time'], unit='s')
+                    df['time'] = start_time + df['time']
+                    return df.set_index('time') 
             else:
                 print(f"Not reading signal because the file {path} is empty.")
         except OSError:
@@ -174,8 +177,10 @@ class EmpaticaReader:
 
     def _write_ibi(self, path):
         with open(path, 'w') as file:
-            file.write(f"{float(self.start_times['IBI'].value / 1e9)}, IBI\n")
-            file.write(self.IBI.to_csv(index=None, header=None, line_terminator='\n'))
+            file.write(f"{self.start_times['IBI'].value // 1e9}, IBI\n")
+            write_df = self.IBI.copy()
+            write_df.index = (write_df.index - self.start_times['IBI']).values.astype(int) / 1e9
+            write_df.to_csv(file, header=None, line_terminator='\n')
 
     def _read_tags(self, path):
         try:

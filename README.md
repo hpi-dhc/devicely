@@ -18,13 +18,44 @@ You can also de-identify data and write them back using their original data form
 
 [PyPi](https://pypi.org/project/devicely/)
 
-## Sneak Peek
+[Conda-forge](https://github.com/conda-forge/devicely-feedstock)
 
-Installing devicely is as easy as executing:
+## Installation
+
+### PyPi
+
+Installing `devicely` is as easy as executing:
 
 `pip install devicely`
 
-All devices contain the following methods as exemplified through Empatica:
+### Conda-forge
+
+To install `devicely`through `conda-forge`:
+
+```
+conda config --add channels conda-forge
+conda config --set channel_priority strict
+```
+
+Once the `conda-forge` channel has been enabled, `devicely` can be installed with:
+
+`conda install devicely`
+
+List all of the versions of `devicely` available on your platform with:
+
+`conda search devicely --channel conda-forge`
+
+### Locally
+
+```
+git clone git@github.com:hpi-dhc/devicely.git
+cd devicely
+pip install .
+```
+
+## Sneak Peek
+
+All devices contain the following methods as exemplified through the `EmpaticaReader`:
 
 ```
 empatica_reader = devicely.EmpaticaReader(path_to_empatica_files)

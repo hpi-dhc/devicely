@@ -126,9 +126,11 @@ class FarosTestCase(unittest.TestCase):
 
 
     def _compare_reader_with_expected_attrs(self, reader, expected_start_time, expected_sample_freqs,
-                                                   expected_units, expected_ECG_head,
-                                                   expected_ACC_head, expected_Marker_head,
-                                                   expected_HRV_head, expected_edf_metadata=None):
+                                                          expected_units, expected_ECG_head,
+                                                          expected_ACC_head, expected_Marker_head,
+                                                          expected_HRV_head,
+                                                          expected_edf_metadata=None,
+                                                          check_joined=False):
         self.assertEqual(reader.start_time, expected_start_time)
         self.assertEqual(reader.sample_freqs, expected_sample_freqs)
         self.assertEqual(reader.units, expected_units)
@@ -139,26 +141,14 @@ class FarosTestCase(unittest.TestCase):
         pd.testing.assert_series_equal(reader.HRV.head(), expected_HRV_head, check_freq=False, check_dtype=False)
 
         # test if the reader's joined dataframe is correct
-        pd.testing.assert_series_equal(
-            reader.data['ECG'].dropna().head(), expected_ECG_head,
-            check_freq=False, check_dtype=False
-        )
-        pd.testing.assert_frame_equal(
-            reader.data[['ACC_X', 'ACC_Y', 'ACC_Z']].dropna().head(),
-            expected_ACC_head.rename(columns={'X': 'ACC_X',
-                                              'Y': 'ACC_Y',
-                                              'Z': 'ACC_Z'}),
-                                     check_freq=False,
-                                     check_dtype=False
-        )
-        pd.testing.assert_series_equal(
-            reader.data['Marker'].dropna().head(),
-            expected_Marker_head, check_freq=False, check_dtype=False
-        )
-        pd.testing.assert_series_equal(
-            reader.data['HRV'].dropna().head(),
-            expected_HRV_head, check_freq=False, check_dtype=False
-        )
+        if check_joined:
+            pd.testing.assert_series_equal(reader.data['ECG'].dropna().head(), expected_ECG_head, check_freq=False, check_dtype=False)
+            pd.testing.assert_frame_equal(reader.data[['ACC_X', 'ACC_Y', 'ACC_Z']].dropna().head(),
+                                         expected_ACC_head.rename(columns={'X': 'ACC_X', 'Y': 'ACC_Y', 'Z': 'ACC_Z'}),
+                                         check_freq=False,
+                                         check_dtype=False)
+            pd.testing.assert_series_equal(reader.data['Marker'].dropna().head(), expected_Marker_head, check_freq=False, check_dtype=False)
+            pd.testing.assert_series_equal(reader.data['HRV'].dropna().head(), expected_HRV_head, check_freq=False, check_dtype=False)
 
     def test_read_from_edf(self):
         """
@@ -237,6 +227,7 @@ class FarosTestCase(unittest.TestCase):
         # to not change any of their attributes.
         reader = devicely.FarosReader(self.EDF_READ_PATH)
         reader.timeshift(timestamp)
+        reader.join_dataframes()
 
         self.assertEqual(reader.start_time, timestamp)
         pd.testing.assert_index_equal(reader.ECG.head().index, expected_shifted_ecg_index_head)
@@ -267,6 +258,7 @@ class FarosTestCase(unittest.TestCase):
 
         reader = devicely.FarosReader(self.EDF_READ_PATH)
         reader.timeshift(timedelta)
+        reader.join_dataframes()
 
         pd.testing.assert_index_equal(reader.ECG.head().index, expected_shifted_ecg_index_head)
         pd.testing.assert_index_equal(reader.ACC.head().index, expected_shifted_acc_index_head)
@@ -283,10 +275,21 @@ class FarosTestCase(unittest.TestCase):
                                                                  '2016-10-12 16:54:12.008000'])
 
         reader = devicely.FarosReader(self.EDF_READ_PATH)
+        reader.join_dataframes()
         reader.timeshift()
 
         self.assertTrue((earliest_possible_shifted_data_index <= reader.data.head().index).all())
         self.assertTrue((reader.data.head().index <= latest_possible_shifted_data_index).all())
+
+    def test_joined_dataframe(self):
+        self.reader_from_edf.join_dataframes()
+        self._compare_reader_with_expected_attrs(self.reader_from_edf,
+                                          self.expected_start_time, self.expected_sample_freqs,
+                                          self.expected_units, self.expected_ECG_head,
+                                          self.expected_ACC_head, self.expected_Marker_head,
+                                          self.expected_HRV_head,
+                                          expected_edf_metadata=self.expected_edf_metadata)
+
 
 if __name__ == '__main__':
     unittest.main()

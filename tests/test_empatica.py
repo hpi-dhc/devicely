@@ -76,9 +76,11 @@ class EmpaticaTestCase(unittest.TestCase):
         )
 
         self.expected_IBI_head = pd.DataFrame(
-            {'seconds_since_start': [145.631666, 146.522332, 151.725695, 152.835121, 153.710161],
-             'IBI': [0.62509, 0.890666, 1.062549, 1.109426, 0.875040]}
-        )
+            {'IBI': [0.62509, 0.890666, 1.062549, 1.109426, 0.875040]},
+            index=pd.DatetimeIndex(['2019-03-01 15:17:26.631666', '2019-03-01 15:17:27.522332',
+                                    '2019-03-01 15:17:32.725695', '2019-03-01 15:17:33.835121',
+                                    '2019-03-01 15:17:34.710161'], name='time') 
+            )
 
         self.expected_tags = pd.Series(pd.to_datetime([1551453311.68, 1551453318.17, 1551453319.49, 1551453328.04], unit='s'), name='tags')
 
@@ -113,7 +115,6 @@ class EmpaticaTestCase(unittest.TestCase):
 
     def test_read(self):
         # tests the basic reading capability by comparing the read data to the expected values
-
         self._test_compare_real_and_expected(self.reader, self.expected_start_times, self.expected_sample_freqs,
                                                           self.expected_ACC_head, self.expected_BVP_head,
                                                           self.expected_EDA_head, self.expected_HR_head,

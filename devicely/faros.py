@@ -63,13 +63,12 @@ class FarosReader:
         self.ACC = None
         self.Marker = None
         self.HRV = None
+        self.data = None
 
         if os.path.isfile(path):
             self._read_from_edf_file(path)
         if os.path.isdir(path):
             self._read_from_directory(path)
-
-        self.data = self._get_joined_df()
 
     def _read_from_edf_file(self, path):
         reader = edf.EdfReader(path)
@@ -140,7 +139,11 @@ class FarosReader:
 
         return dataframe.squeeze()
 
-    def _get_joined_df(self):
+    def join_dataframes(self):
+        """
+        Join the individual signal dataframes by timestamp.
+        The resulting dataframe is saved in the attribute reader.data.
+        """
         # get index for joined dataframe
         joined_idx = pd.concat(map(pd.Series, [self.ECG.index, self.ACC.index, self.Marker.index, self.HRV.index]))
         joined_idx = pd.Index(joined_idx.drop_duplicates().sort_values())
@@ -157,7 +160,7 @@ class FarosReader:
         joined_df.loc[self.Marker.index, 'Marker'] = self.Marker
         joined_df.loc[self.HRV.index, 'HRV'] = self.HRV
 
-        return joined_df
+        self.data = joined_df
 
     def write(self, path, file_format='directory'):
         """
@@ -244,11 +247,16 @@ class FarosReader:
             two_years = pd.Timedelta('730 days').value
             random_timedelta = - pd.Timedelta(random.uniform(one_month, two_years)).round('s')
             self.timeshift(random_timedelta)
+
+        dfs_to_shift = [self.ECG, self.ACC, self.Marker, self.HRV]
+        if self.data is not None:
+            dfs_to_shift.append(self.data)
+
         if isinstance(shift, pd.Timestamp):
             self.start_time = shift
-            for dataframe in [self.ECG, self.ACC, self.Marker, self.HRV, self.data]:
+            for dataframe in dfs_to_shift:
                 timedeltas = dataframe.index - dataframe.index.min()
                 dataframe.index = shift + timedeltas
         if isinstance(shift, pd.Timedelta):
-            for dataframe in [self.ECG, self.ACC, self.Marker, self.HRV, self.data]:
+            for dataframe in dfs_to_shift: 
                 dataframe.index += shift
