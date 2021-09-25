@@ -20,10 +20,13 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install
+        apt-get install pandoc
+
 
     - name: Build documentation
       run: |
         cd sphinx
+
         poetry run make html
         cd ..
         rm -rf docs
