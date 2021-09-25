@@ -33,6 +33,10 @@ jobs:
         mv sphinx/_build/html docs
         touch docs/.nojekyll
 
+    - name: View untracked files
+      run: |
+        git status
+
     - name: Push built docs
       run: |
         git config --global user.name 'Jost Morgenstern'
