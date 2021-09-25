@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install
-        apt-get install pandoc
+        sudo apt-get install pandoc
 
 
     - name: Build documentation
