@@ -2,7 +2,7 @@ name: "Sphinx Build"
 on:
   push:
     branches:
-    - test-ci-pypi
+    - test-ci-docs
 jobs:
   docs:
     runs-on: ubuntu-latest
@@ -20,5 +20,19 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install
-        poetry build
+
+    - name: Build documentation
+      run: |
+        cd sphinx
+        make html
+        cd ..
+        rm -rf docs/*
+        mv sphinx/_build/html/* docs
+        touch docs/.nojekyll
+
+    - name: Push built docs
+      run: |
+        
+
+
 
