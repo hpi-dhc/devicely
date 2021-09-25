@@ -26,10 +26,11 @@ jobs:
     - name: Build documentation
       run: |
         cd sphinx
-
         poetry run make html
+        ls _build/html
         cd ..
         rm -rf docs
+        ls sphinx/_build/html
         mv sphinx/_build/html docs
         touch docs/.nojekyll
 
