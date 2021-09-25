@@ -34,11 +34,10 @@ jobs:
 
     - name: Push built docs
       run: |
-        ls docs
-        git status
+        git add . 
         git config --global user.name 'Jost Morgenstern'
         git config --global user.email 'jostmorgenstern@users.noreply.github.com'
-        git commit -am "automatic docs generation on release"
+        git commit -m "automatic docs generation on release"
         git push
         
 
