@@ -1,0 +1,42 @@
+name: "Sphinx Build"
+on:
+  release:
+    types: [published]
+    branches:
+      - main
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+
+    - name: Install dependencies
+      run: |
+        poetry install
+        sudo apt-get install pandoc
+
+    - name: Build documentation
+      run: |
+        cd sphinx
+        poetry run make html
+        ls _build/html
+        cd ..
+        rm -rf docs
+        mv sphinx/_build/html docs
+        touch docs/.nojekyll
+
+    - name: Push built docs
+      run: |
+        git add .
+        git config --global user.name 'Jost Morgenstern'
+        git config --global user.email 'jostmorgenstern@users.noreply.github.com'
+        git commit -m "automatic docs generation on release"
+        git push
