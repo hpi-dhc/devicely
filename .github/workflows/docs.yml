@@ -22,7 +22,6 @@ jobs:
         poetry install
         sudo apt-get install pandoc
 
-
     - name: Build documentation
       run: |
         cd sphinx
@@ -30,16 +29,13 @@ jobs:
         ls _build/html
         cd ..
         rm -rf docs
-        ls sphinx/_build/html
         mv sphinx/_build/html docs
         touch docs/.nojekyll
 
-    - name: View untracked files
-      run: |
-        git status
-
     - name: Push built docs
       run: |
+        ls docs
+        git status
         git config --global user.name 'Jost Morgenstern'
         git config --global user.email 'jostmorgenstern@users.noreply.github.com'
         git commit -am "automatic docs generation on release"
