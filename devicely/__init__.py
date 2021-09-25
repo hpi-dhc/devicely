@@ -7,3 +7,11 @@ from .faros import FarosReader
 from .time_stamp import TimeStampReader
 from .spacelabs import SpacelabsReader
 from .shimmer_plus import ShimmerPlusReader
+
+try:
+    import importlib.metadata as importlib_metadata
+except ModuleNotFoundError:
+    import importlib_metadata
+
+__version__ = importlib_metadata.version(__name__)
+
