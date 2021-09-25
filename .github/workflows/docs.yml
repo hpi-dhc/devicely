@@ -24,10 +24,10 @@ jobs:
     - name: Build documentation
       run: |
         cd sphinx
-        make html
+        poetry run make html
         cd ..
-        rm -rf docs/*
-        mv sphinx/_build/html/* docs
+        rm -rf docs
+        mv sphinx/_build/html docs
         touch docs/.nojekyll
 
     - name: Push built docs
