@@ -7,6 +7,7 @@ from .faros import FarosReader
 from .time_stamp import TimeStampReader
 from .spacelabs import SpacelabsReader
 from .shimmer_plus import ShimmerPlusReader
+from .muse import MuseReader
 
 try:
     import importlib.metadata as importlib_metadata
