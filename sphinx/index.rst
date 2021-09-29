@@ -11,8 +11,7 @@ The devicely package is made for reading, writing and de-identifying health sens
 * `Shimmer Consensys GSR <https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab>`_ is a device that is used to collect sensor data in real time and it contains sensors such as GSR / EDA, photoplethysmography (PPG), 3-axis accelerometer, 3-axis gyroscope, 3-axis magnetometer & integrated altimeter.
 
 
-* `Muse S <https://choosemuse.com/de/muse-s/>`_
-* `Mind Monitor <https://mind-monitor.com>`_
+* `Muse S <https://choosemuse.com/de/muse-s/>`_ is a consumer grade headband consisting of 4 electrodes electroencephalography (EEG) sensors, 3-axis accelerometer (ACC), gyroscope, and photoplethysmography (PPG) sensors.
 
 devicely makes it easy to read sensor data and access it in common formats such as dataframes.
 

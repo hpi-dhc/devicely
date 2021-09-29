@@ -89,6 +89,8 @@ Or check the full documentation: https://hpi-dhc.github.io/devicely/
 
 - [Shimmer Consensys GSR](https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab) is a device that is used to collect sensor data in real time and it contains sensors such as GSR / EDA, photoplethysmography (PPG), 3-axis accelerometer, 3-axis gyroscope, 3-axis magnetometer & integrated altimeter.
 
+- [Muse S headband](https://choosemuse.com/muse-s/) is a consumer grade headband consisting of 4 electrodes electroencephalography (EEG) sensors, 3-axis accelerometer (ACC), gyroscope, and photoplethysmography (PPG) sensors.
+
 ## How to Contribute
 
 If you want to be part of this mission, please check our documentation on how to contribute [here](https://hpi-dhc.github.io/devicely/contribution.html).
