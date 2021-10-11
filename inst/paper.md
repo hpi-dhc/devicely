@@ -44,7 +44,7 @@ on what they want: the analysis of biosignals guided by privacy principles.
 
 # Related Work
 
-The first example of a package working with wearable data is mhealthtools [@Snyder2020], which is developed in R and focus on
+The first example of a package working with wearable data is mhealthtools [@Snyder2020], which is developed in R and focuses on
 extracting features from sensors such as inertial measurement units (IMUs). Its main difference from **devicely**
 is firstly the language (R versus Python) and secondly their complementary
 nature. Mhealthtools offers functionalities for feature extraction and
@@ -76,7 +76,7 @@ friendly way we developed the **devicely** package. The package also contains tw
 is called timeshift and the other is a write method. The idea behind them is
 that researchers can timeshift all their time series data to a different time from the one the
 actual experiments occurred and then write this new de-identified dataset back to
-the original or a similar data format. This will empower scientists to keep user privacy
+the original or a similar data format. This will empower scientists to maintain user privacy
 and hopefully share more data to increase research reproducibility.
 
 # Design
@@ -84,12 +84,12 @@ and hopefully share more data to increase research reproducibility.
 Different wearables provide incompatible data formats which require specific preprocessing steps.
 However, it should be easy for scientists to add data from a new wearable to an
 existing pipeline and easy for developers to add a new wearable to the
-**devicely** package. To achieve both **devicely** encapsulates data preparation for
+**devicely** package. To achieve both, **devicely** encapsulates data preparation for
 each wearable behind three common methods: _read_, _timeshift_ and _write_.
 
 After reading, the data is accessible through the reader in common formats such as Pandas DataFrames.
 De-identification is achieved by timeshifting the data, either by providing a shifting interval or randomly.
-For writing back de-identified data **devicely** focuses on keeping a format that can be read again using the same reader class.
+For writing back de-identified data, **devicely** focuses on keeping a format that can be read again using the same reader class.
 In almost all cases, this is the same format as the one the wearable originaly provides.
 This enables sharing data with the community while maintaining user privacy.
 
