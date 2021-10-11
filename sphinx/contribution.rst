@@ -73,3 +73,10 @@ Provide example data
 If you want people to try out your reader class, you need to provide example data.
 For this purpose we maintain this `example repository with examples and data <https://github.com/hpi-dhc/devicely-example/>`_,
 to which you can create a PR to supply example data for your sensor.
+
+
+License and Copyright
+---------------------
+
+Currently **devicely** is licensed under the `MIT license <https://github.com/hpi-dhc/devicely/blob/main/LICENSE>`_
+and all copyright is attributed to the Digital Health Center (Hasso Plattner Institute).
