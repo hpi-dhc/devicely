@@ -26,8 +26,9 @@ jobs:
       run: |
         cd sphinx
         poetry run make clean
-        ls _build
+        ls
         poetry run make html
+        ls
         ls _build/html
         cd ..
         rm -rf docs
