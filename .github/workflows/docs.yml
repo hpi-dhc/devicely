@@ -34,11 +34,6 @@ jobs:
         mv sphinx/_build/html docs
         touch docs/.nojekyll
 
-        #     - name: Push built docs
-        #      uses: EndBug/add-and-commit@v7
-        #with:
-        #message: Automatic documentation generation on release
-        #
      - name: Push built docs
        run: |
          git config --global user.name 'jostmorgenstern'
