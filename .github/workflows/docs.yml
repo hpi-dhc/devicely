@@ -1,8 +1,9 @@
 name: "Sphinx Build"
 on:
-  push:
-    branch:
-      - main
+  release:
+    types: [published]
+    branches: [main]
+
 jobs:
   docs:
     runs-on: ubuntu-latest
