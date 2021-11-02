@@ -10,6 +10,9 @@ The devicely package is made for reading, writing and de-identifying health sens
 * `TimeStamp for Android <https://play.google.com/store/apps/details?id=gj.timestamp&hl=en>`_ allows you to record the timestamp of an event at the time it occurs. It also allows you to create specific tags such as "Running" or "Walking" and timestamp those specific activities.
 * `Shimmer Consensys GSR <https://www.shimmersensing.com/products/gsr-optical-pulse-development-kit#specifications-tab>`_ is a device that is used to collect sensor data in real time and it contains sensors such as GSR / EDA, photoplethysmography (PPG), 3-axis accelerometer, 3-axis gyroscope, 3-axis magnetometer & integrated altimeter.
 
+
+* `Muse S <https://choosemuse.com/de/muse-s/>`_ is a consumer grade headband consisting of 4 electrodes electroencephalography (EEG) sensors, 3-axis accelerometer (ACC), gyroscope, and photoplethysmography (PPG) sensors.
+
 devicely makes it easy to read sensor data and access it in common formats such as dataframes.
 
 We provide a custom reader class for each sensor which has three core methods: read, timeshift and write.

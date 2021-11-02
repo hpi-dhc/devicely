@@ -31,6 +31,12 @@ devicely.ShimmerReader
 .. automodule:: devicely.shimmer_plus
     :members:
 
+devicely.MuseReader
+------------------------
+
+.. automodule:: devicely.muse
+    :members:
+
 devicely.TimeStampReader
 ------------------------
 
