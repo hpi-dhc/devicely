@@ -114,3 +114,23 @@ If you want to be part of this mission, please check our documentation on how to
 * Philipp Hildebrandt
 * Sidratul Moontaha
 ```
+
+## Citation
+
+Sasso, A., Morgenstern, J., Musmann, F., & Arnrich, B. (2021). Devicely: A Python package for reading, timeshifting and writing sensor data. Journal of Open Source Software, 6(66), 3679. https://doi.org/10.21105/joss.03679
+
+### BibTeX
+```
+@article{Sasso2021,
+  doi = {10.21105/joss.03679},
+  url = {https://doi.org/10.21105/joss.03679},
+  year = {2021},
+  publisher = {The Open Journal},
+  volume = {6},
+  number = {66},
+  pages = {3679},
+  author = {Ariane Sasso and Jost Morgenstern and Felix Musmann and Bert Arnrich},
+  title = {Devicely: A Python package for reading, timeshifting and writing sensor data},
+  journal = {Journal of Open Source Software}
+}
+```
