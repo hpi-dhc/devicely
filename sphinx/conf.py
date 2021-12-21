@@ -11,6 +11,11 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import sphinx_rtd_theme
+import sys
+import os
+
+# This step ensures that the source package is imported
+sys.path.insert(0, os.path.abspath("../"))
 
 import devicely
 
