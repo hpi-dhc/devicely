@@ -11,6 +11,8 @@ import numpy as np
 import pandas as pd
 import pyedflib as edf
 
+from ._compat import _to_csv_line_terminator
+
 
 class FarosReader:
     """
@@ -220,10 +222,14 @@ class FarosReader:
         with open(os.path.join(path, 'meta.json'), 'w') as meta_file:
             json.dump(meta, meta_file)
 
-        self.ECG.to_csv(os.path.join(path, 'ECG.csv'), index=None, line_terminator='\n')
-        self.ACC.to_csv(os.path.join(path, 'ACC.csv'), index=None, line_terminator='\n')
-        self.Marker.to_csv(os.path.join(path, 'Marker.csv'), index=None, line_terminator='\n')
-        self.HRV.to_csv(os.path.join(path, 'HRV.csv'), index=None, line_terminator='\n')
+        self.ECG.to_csv(os.path.join(path, 'ECG.csv'), index=None,
+                        **{_to_csv_line_terminator: '\n'})
+        self.ACC.to_csv(os.path.join(path, 'ACC.csv'), index=None,
+                        **{_to_csv_line_terminator: '\n'})
+        self.Marker.to_csv(os.path.join(path, 'Marker.csv'), index=None,
+                           **{_to_csv_line_terminator: '\n'})
+        self.HRV.to_csv(os.path.join(path, 'HRV.csv'), index=None,
+                        **{_to_csv_line_terminator: '\n'})
 
     def timeshift(self, shift='random'):
         """

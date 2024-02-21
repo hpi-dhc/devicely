@@ -10,6 +10,8 @@ from xml.etree import ElementTree as ET
 
 import pandas as pd
 
+from ._compat import _to_csv_line_terminator
+
 
 class SpacelabsReader:
     """
@@ -147,7 +149,8 @@ class SpacelabsReader:
             printing_df.replace('-9999', '""', inplace=True)
             printing_df.replace('-9998', '"EB"', inplace=True)
             printing_df.replace('-9997', '"AB"', inplace=True)
-            printing_df.to_csv(file, header=None, index=None, quoting=csv.QUOTE_NONE, line_terminator='\n')
+            printing_df.to_csv(file, header=None, index=None, quoting=csv.QUOTE_NONE,
+                               **{_to_csv_line_terminator: '\n'})
 
             xml_node = ET.Element('XML')
             xml_node.extend(self._dict_to_etree(self.metadata))
