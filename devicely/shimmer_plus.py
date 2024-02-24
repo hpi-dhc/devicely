@@ -11,6 +11,8 @@ import re
 import numpy as np
 import pandas as pd
 
+from ._compat import _to_csv_line_terminator
+
 
 class ShimmerPlusReader:
     """
@@ -69,7 +71,8 @@ class ShimmerPlusReader:
 
         with open(path, 'w') as f:
             f.write(f'"sep={self.delimiter}"\n')
-            write_df.to_csv(f, index=False, sep=self.delimiter, line_terminator=f"{self.delimiter}\n")
+            write_df.to_csv(f, index=False, sep=self.delimiter,
+                            **{_to_csv_line_terminator: f"{self.delimiter}\n"})
 
     def timeshift(self, shift='random'):
         """
